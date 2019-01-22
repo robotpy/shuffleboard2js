@@ -1,2 +1,2 @@
 # webdashboard
-Web bashed HTML dashboard for FRC
+Web based HTML dashboard for FRC
