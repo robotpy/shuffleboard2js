@@ -27,4 +27,27 @@ import './sources.tag';
       </div>
     </div>
   </div>
+
+  <style>
+    .card-body {
+      padding: 10px;
+    }
+
+    .card-header {
+      overflow: hidden;
+      border-bottom: none;
+    }
+
+    > .card {
+      border-bottom: none;
+    }
+
+    .card {
+      border-radius: 0;
+    }
+
+    .card:first-child {
+      border-bottom: none;
+    }
+  </style>
 </side-panel>

@@ -46,7 +46,7 @@ import * as _ from 'lodash';
             
             <virtual if={typeof value === 'boolean'}>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked={value} value={opts.ntKey + key.replace('/', '')} id={opts.ntKey + key.replace('/', '')}>
+                <input class="form-check-input" disabled={true} type="checkbox" checked={value} value={opts.ntKey + key.replace('/', '')} id={opts.ntKey + key.replace('/', '')}>
                 <label class="form-check-label" for={opts.ntKey + key.replace('/', '')}>
                   {value.toString()}
                 </label>
@@ -54,11 +54,11 @@ import * as _ from 'lodash';
             </virtual>
 
             <virtual if={typeof value === 'string'}>
-              <input type="text" class="form-control" id={opts.ntKey + key.replace('/', '')} value={value}>
+              <input type="text" class="form-control" disabled={true} id={opts.ntKey + key.replace('/', '')} value={value}>
             </virtual>
 
             <virtual if={typeof value === 'number'}>
-              <input type="number" class="form-control" id={opts.ntKey + key.replace('/', '')} value={value}>
+              <input type="number" class="form-control" disabled={true} id={opts.ntKey + key.replace('/', '')} value={value}>
             </virtual>
 
           </span>

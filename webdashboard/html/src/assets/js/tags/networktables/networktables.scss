@@ -80,4 +80,8 @@ subtable {
       border: none;
       box-shadow: none;
     }
+
+    .form-control:disabled {
+      background-color: white;
+    }
 }
