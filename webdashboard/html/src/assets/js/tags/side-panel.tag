@@ -1,4 +1,5 @@
 import './sources.tag';
+import './widget-menu.tag';
 
 <side-panel>
   <div class="card ">
@@ -22,15 +23,21 @@ import './sources.tag';
           <sources />
         </div>
         <div class="tab-pane fade" id="widgets" role="tabpanel" aria-labelledby="widgets-tab">
-          ...
+          <widget-menu />
         </div>
       </div>
     </div>
   </div>
 
   <style>
+
+    side-panel {
+      height: 100%;
+    }
+
     .card-body {
       padding: 10px;
+      overflow: auto;
     }
 
     .card-header {
@@ -40,14 +47,16 @@ import './sources.tag';
 
     > .card {
       border-bottom: none;
+      height: 100%;
     }
 
     .card {
       border-radius: 0;
+      border-bottom: none;
     }
 
-    .card:first-child {
-      border-bottom: none;
+    .card:last-child {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.125);;
     }
   </style>
 </side-panel>

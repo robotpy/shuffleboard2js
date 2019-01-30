@@ -49,7 +49,7 @@ const rootReducer = (state = initialState, action) => {
 
     case ActionTypes.REGISTER_WIDGET:
 
-      let categories = state.layout.categories;
+      let categories = state.widgets.categories;
       let category = action.payload.config.category;
 
       if (categories.indexOf(category) < 0) {

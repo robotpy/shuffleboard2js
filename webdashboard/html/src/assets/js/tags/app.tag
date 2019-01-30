@@ -5,6 +5,7 @@ import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import "./module-menu.tag";
 import './user-modules.tag';
 import './side-panel.tag';
+import './widgets.tag';
 import axios from 'axios';
 import * as _ from 'lodash';
 
@@ -26,8 +27,9 @@ import * as _ from 'lodash';
          ondrag={onDragResizer}
          ondragend={onDragResizerEnd}>
     </div>
-    <div class="widgets">
-
+    <div class="widget-container">
+      <div class="widgets" ref="widgets"></div>
+      <widgets />
     </div>
   </div>
 
@@ -38,9 +40,11 @@ import * as _ from 'lodash';
       height: 100%;
     }
 
-    .main .widgets {
+    .main .widget-container {
       flex: 1;
       background: #eee;
+      overflow: auto;
+      position: relative;
     }
 
     side-panel {
