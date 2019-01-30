@@ -130,7 +130,8 @@ module.exports = (env = {}) => {
       }
     },
     externals: {
-      riot: 'riot'
+      riot: 'riot',
+      jquery: 'jQuery'
     },
     devtool: 'inline-source-map'
   };

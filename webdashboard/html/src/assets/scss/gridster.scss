@@ -1,0 +1,51 @@
+
+
+
+.gridster {
+  margin: 0 auto;
+  opacity: .8;
+  -webkit-transition: opacity .6s;
+  -moz-transition: opacity .6s;
+  -o-transition: opacity .6s;
+  -ms-transition: opacity .6s;
+  transition: opacity .6s;
+
+  .gs-w {
+    background: #61A9CF;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .player {
+    -webkit-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+    background: #BBB;
+  }
+
+  .preview-holder {
+    border: none !important;
+    border-radius: 0 !important;
+    background: red !important;
+  }
+
+  ul {
+    background-color: #EFEFEF;
+    list-style-type: none;
+  }
+
+  li {
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 100%;
+    list-style: none;
+    font-weight: bold;
+  }
+
+  .gridster-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+}
+
