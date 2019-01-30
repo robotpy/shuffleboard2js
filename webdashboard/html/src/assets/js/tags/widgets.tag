@@ -7,7 +7,7 @@ import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
 
   <div class="gridster">
     <ul class="task-card-list" ref="grid">
-        <li data-row="1" data-col="1" data-sizex="1" data-sizey="1" class="task-card">
+        <li data-row="1" data-col="1" data-minx="3" data-miny="2" data-sizex="3" data-sizey="2" class="task-card">
           <div class="dragger"></div>
           0
         </li>
@@ -89,7 +89,30 @@ import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
             wait_for_mouseup: true
         },
         resize: {
-          enabled: true
+          enabled: true,
+          start: function (event, uiWidget, $widget) {
+            let minX = $widget.data('minx') || 1;
+            let minY = $widget.data('miny') || 1;
+            let minWidth = minX * 50 + (minX - 1) * 5;
+            let minHeight = minY * 50 + (minY - 1) * 5;
+            $widget.css('min-width', minWidth);
+            $widget.css('min-height', minHeight);
+          },
+          stop: function(e, ui, $widget) {
+            let sizeX = parseInt($widget.attr('data-sizex'));
+            let sizeY = parseInt($widget.attr('data-sizey'));
+            let minX = parseInt($widget.attr('data-minx')) || 1;
+            let minY = parseInt($widget.attr('data-miny')) || 1;
+
+            if (sizeX < minX || sizeY < minY) {
+              let newX = Math.max(minX, sizeX);
+              let newY = Math.max(minY, sizeY);
+
+              setTimeout(() => {
+                gridster.resize_widget($widget, newX, newY);
+              });
+            }
+          }
         },
         draggable: {
           handle: '.dragger'
