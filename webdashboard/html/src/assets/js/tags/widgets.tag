@@ -3,6 +3,7 @@ import 'assets/scss/gridster.scss';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.css';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
 import uuidv1 from "uuid";
+import './widget.tag';
 
 <widgets>
 
@@ -49,49 +50,40 @@ import uuidv1 from "uuid";
 
   <script>
 
-    this.widgets = [
-      {
-        row: 1,
-        col: 1,
-        minX: 3,
-        minY: 2,
-        sizeX: 3,
-        sizeY: 2
-      },
-      {
-        row: 1,
-        col: 1,
-        minX: 3,
-        minY: 2,
-        sizeX: 3,
-        sizeY: 2
-      },
-      {
-        row: 1,
-        col: 1,
-        minX: 3,
-        minY: 2,
-        sizeX: 3,
-        sizeY: 2
-      }
-    ];
+    this.widgets = [];
 
+    this.getWidgets = (x, y) => {
 
+      let widgets = [];
+
+      let $widgets = $(this.refs.grid).find('li').each(function() {
+        let viewportOffset = this.getBoundingClientRect();
+        let top = viewportOffset.top;
+        let left = viewportOffset.left;
+        let width = $(this).width();
+        let height = $(this).height();
+
+        if (x > left && x < (left + width) && y > top && y < (top + height)) {
+          let widget = $(this).find('widget')[0]._tag;
+          widgets.push(widget);
+        }
+      });
+
+      return widgets;
+    };
 
     this.addWidget = (x, y, config) => {
       let gridster = $(this.refs.grid).data('gridster');
       let id = `widget-${uuidv1()}`; 
       let gridPos = this.cordsToGridPosition(x, y + config.minY * 55);
-
       let $widget = gridster.add_widget(`
         <li data-minx="${config.minX}" data-miny="${config.minY}">
-          <div class="dragger"></div>
-          <${config.type} id="${id}"></${config.type}>
-        </li>`, config.minX, config.minY, gridPos.x, gridPos.y);
+          <widget></widget>
+        </li>
+      `, config.minX, config.minY, gridPos.x, gridPos.y);
 
-
-      
-      riot.mount($widget.find(`#${id}`)[0], config.type);
+      let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
+      widget.setWidgetType(config.type);
 
       this.cordsToGridPosition(x, y);
     };

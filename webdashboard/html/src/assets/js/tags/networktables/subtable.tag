@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 
 <subtable>
   <div class="wrapper {expanded ? 'expanded' : 'collapsed'}">
-    <div class="table-row subtable-header">
+    <div class="table-row subtable-header" draggable="true">
       <span class="row-item key">
         <span class="level-space" each={value in _.range(level)}></span>
           <span class="caret" onclick={toggleExpand}>
@@ -24,7 +24,7 @@ import * as _ from 'lodash';
       </virtual>
 
       <virtual if={_.isArray(value)}>
-        <div class="table-row" data-nt-key={opts.ntKey + key.replace('/', '')}>
+        <div class="table-row" data-nt-key={opts.ntKey + key.replace('/', '')} draggable="true">
           <span class="row-item key">
             <span class="level-space" each={value in _.range(level + 1)}></span>
             {key.replace('/', '')}
@@ -37,7 +37,7 @@ import * as _ from 'lodash';
       </virtual>
 
       <virtual if={typeof value !== 'object'}>
-        <div class="table-row" data-nt-key={opts.ntKey + key.replace('/', '')}>
+        <div class="table-row" data-nt-key={opts.ntKey + key.replace('/', '')} draggable="true">
           <span class="row-item key">
             <span class="level-space" each={value in _.range(level + 1)}></span>
             {key.replace('/', '')}
@@ -54,11 +54,11 @@ import * as _ from 'lodash';
             </virtual>
 
             <virtual if={typeof value === 'string'}>
-              <input type="text" class="form-control" disabled={true} id={opts.ntKey + key.replace('/', '')} value={value}>
+              {value}
             </virtual>
 
             <virtual if={typeof value === 'number'}>
-              <input type="number" class="form-control" disabled={true} id={opts.ntKey + key.replace('/', '')} value={value}>
+              {value}
             </virtual>
 
           </span>

@@ -11,6 +11,17 @@ networktables .table-row {
   display: flex;
   justify-content: space-around;
   border-bottom: 1px solid #bbb;
+  user-select: none;
+
+  &:hover:not(.header) {
+    background-color: cornflowerblue;
+    cursor: grab;
+  }
+
+  &:active:not(.header) {
+    cursor: grabbing;
+  }
+
 }
 
 networktables .table-row.header > .row-item {
