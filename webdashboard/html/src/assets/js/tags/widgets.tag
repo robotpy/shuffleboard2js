@@ -2,51 +2,24 @@
 import 'assets/scss/gridster.scss';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.css';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
+import uuidv1 from "uuid";
 
 <widgets>
 
-  <div class="gridster">
+  <div class="gridster" ondragend={onDragEnd}>
     <ul class="task-card-list" ref="grid">
-        <li data-row="1" data-col="1" data-minx="3" data-miny="2" data-sizex="3" data-sizey="2" class="task-card">
-          <div class="dragger"></div>
-          0
-        </li>
-        <li data-row="1" data-col="2" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          1
-        </li>
-        <li data-row="1" data-col="3" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          2
-        </li>
-        <li data-row="1" data-col="4" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          3
-        </li>
-        <li data-row="2" data-col="1" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          4
-        </li>
-        <li data-row="2" data-col="3" data-sizex="1" data-sizey="2" class="task-card">
-          <div class="dragger"></div>
-          5
-        </li>
-        <li data-row="2" data-col="4" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          6
-        </li>
-        <li data-row="3" data-col="1" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          7
-        </li>
-        <li data-row="3" data-col="2" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          8
-        </li>
-        <li data-row="3" data-col="4" data-sizex="1" data-sizey="1" class="task-card">
-          <div class="dragger"></div>
-          9
-        </li>
+        <virtual each={widget in widgets}>
+          <li data-row="{widget.row}" 
+              data-col="{widget.col}" 
+              data-minx="{widget.minX}" 
+              data-miny="{widget.minY}" 
+              data-sizex="{Math.max(widget.sizeX, widget.minX)}" 
+              data-sizey="{Math.max(widget.sizeY, widget.minY)}" 
+              class="task-card">
+            <div class="dragger"></div>
+          </li>
+        </virtual>
+
 		</ul>
   </div>
 
@@ -75,6 +48,74 @@ import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
   </style>
 
   <script>
+
+    this.widgets = [
+      {
+        row: 1,
+        col: 1,
+        minX: 3,
+        minY: 2,
+        sizeX: 3,
+        sizeY: 2
+      },
+      {
+        row: 1,
+        col: 1,
+        minX: 3,
+        minY: 2,
+        sizeX: 3,
+        sizeY: 2
+      },
+      {
+        row: 1,
+        col: 1,
+        minX: 3,
+        minY: 2,
+        sizeX: 3,
+        sizeY: 2
+      }
+    ];
+
+
+
+    this.addWidget = (x, y, config) => {
+      let gridster = $(this.refs.grid).data('gridster');
+      let id = `widget-${uuidv1()}`; 
+      let gridPos = this.cordsToGridPosition(x, y + config.minY * 55);
+
+      let $widget = gridster.add_widget(`
+        <li data-minx="${config.minX}" data-miny="${config.minY}">
+          <div class="dragger"></div>
+          <${config.type} id="${id}"></${config.type}>
+        </li>`, config.minX, config.minY, gridPos.x, gridPos.y);
+
+
+      
+      riot.mount($widget.find(`#${id}`)[0], config.type);
+
+      this.cordsToGridPosition(x, y);
+    };
+
+    this.cordsToGridPosition = (x, y) => {
+      let rect = this.root.getBoundingClientRect();
+      let top = rect.top;
+      let left = rect.left;
+      let scrollTop = this.root.scrollTop;
+      let scrollLeft = this.root.scrollLeft;
+
+      let relativeX = x - left + scrollLeft;
+      let relativeY = y - top + scrollTop;
+
+      let gridX = Math.max(1, Math.floor(relativeX / 55) + 1);
+      let gridY = Math.max(1, Math.floor(relativeY / 55) + 1);
+      return {
+        x: gridX,
+        y: gridY
+      };
+
+    }
+
+
     this.on('mount', () => {
       $(this.root).width(screen.width - 20);
 

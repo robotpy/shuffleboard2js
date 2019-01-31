@@ -2,7 +2,6 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
-import "./module-menu.tag";
 import './user-modules.tag';
 import './side-panel.tag';
 import './widgets.tag';

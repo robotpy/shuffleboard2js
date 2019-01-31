@@ -17,7 +17,7 @@ import * as _ from 'lodash';
       <div id="{_.kebabCase(category.label)}-body" class="collapse" aria-labelledby="{_.kebabCase(category.label)}-header" data-parent="#accordion">
         <div class="card-body">
           <virtual each={type in category.types}>
-            <widget-menu-item type={type.widgetType} label={type.label} image={type.image} />
+            <widget-menu-item type={type.widgetType} label={type.label} image={type.image} minx={type.minX} miny={type.minY} />
           </virtual>
         </div>
       </div>
