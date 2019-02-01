@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { getSubtable, getType } from 'assets/js/networktables';
 
 
 <widget>
@@ -28,19 +29,11 @@ import _ from 'lodash';
 
     const mapStateToOpts = (state) => {
 
-      let ntKeys = Object.keys(state.networktables.rawValues).filter(key => {
-        return key.startsWith(this.ntRoot);
-      });
+      if (!this.ntRoot) {
+        return {};
+      }
 
-      if (ntKeys.length === 1) {
-        var ntValue = state.networktables.rawValues[ntKeys];
-      }
-      else {
-        let value = _.pick(state.networktables.rawValues, ntKeys);
-        var ntValue = _.mapKeys(value, (value, key) => {
-          return key.substring(this.ntRoot.length);
-        });
-      }
+      let ntValue = getSubtable(this.ntRoot);
 
       if (this.refs.widgetType) {
         this.refs.widgetType._tag.opts.table = ntValue;
