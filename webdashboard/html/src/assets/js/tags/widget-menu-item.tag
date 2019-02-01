@@ -32,11 +32,6 @@
 
   <script>
 
-    let offset = {
-      x: 0,
-      y: 0
-    };
-
     this.addWidget = (x, y, config) => {
       let widgetsElement = document.getElementsByTagName('widgets')[0]; 
       let widgets = widgetsElement._tag;
@@ -44,18 +39,18 @@
     }
 
     this.onDragStart = (ev) => {
-      let element = ev.target;
-      var rect = element.getBoundingClientRect();
-      let imageTop = rect.top;
-      let imageLeft = rect.left;
-      let clickX = ev.clientX;
-      let clickY = ev.clientY;
-      offset.x = (clickX - imageLeft) / element.offsetWidth * (55 * this.opts.minx);
-      offset.y = (clickY - imageTop) / element.offsetHeight * (55 * this.opts.miny);
+
+      let $dragImage = $(`
+        <span class="oi oi-file" style="display: inline-block; font-size: 50px;"></span>
+      `).appendTo('body');
+      
+      ev.dataTransfer.setDragImage($dragImage[0], 0, 0);
+
+      console.log('client:', ev.clientX, ev.clientY);
     };
 
     this.onDragEnd = (ev) => {
-      this.addWidget(ev.clientX - offset.x, ev.clientY - offset.y, {
+      this.addWidget(ev.clientX, ev.clientY, {
         type: this.opts.type,
         minX: this.opts.minx,
         minY: this.opts.miny

@@ -75,7 +75,7 @@ import './widget.tag';
     this.addWidget = (x, y, config) => {
       let gridster = $(this.refs.grid).data('gridster');
       let id = `widget-${uuidv1()}`; 
-      let gridPos = this.cordsToGridPosition(x, y + config.minY * 55);
+      let gridPos = this.cordsToGridPosition(x, y);
       let $widget = gridster.add_widget(`
         <li data-minx="${config.minX}" data-miny="${config.minY}">
           <widget></widget>
@@ -99,7 +99,7 @@ import './widget.tag';
       let relativeY = y - top + scrollTop;
 
       let gridX = Math.max(1, Math.floor(relativeX / 55) + 1);
-      let gridY = Math.max(1, Math.floor(relativeY / 55) + 1);
+      let gridY = Math.max(1, Math.floor(relativeY / 55) + 2);
       return {
         x: gridX,
         y: gridY

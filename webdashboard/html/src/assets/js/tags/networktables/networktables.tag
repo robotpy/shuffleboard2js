@@ -21,15 +21,15 @@ import './networktables.scss';
 
     this.on('mount', () => {
       $(this.root).on('dragstart', '.table-row:not(.header)', (ev) => {
-        console.log('ev:', ev);
-        //let $dragImage = $('<img src="https://static.thenounproject.com/png/47347-200.png"/>');
-
-        //let $dragElement = $('<span class="oi" data-glyph="file"></span>');
         let $dragImage = $(`
-          <div style="width: 100px; height: 100px; background: green;"></div>
-        `)
-        ev.originalEvent.dataTransfer.setData('text/plain', 'Data to Drag');
+          <span class="oi oi-file" style="display: inline-block; font-size: 50px;"></span>
+        `).appendTo('body');
+        
         ev.originalEvent.dataTransfer.setDragImage($dragImage[0], 0, 0);
+      });
+
+      $(this.root).on('drag', '.table-row:not(.header)', (ev) => {
+       
       });
 
       $(this.root).on('dragend', '.table-row:not(.header)', (ev) => {
