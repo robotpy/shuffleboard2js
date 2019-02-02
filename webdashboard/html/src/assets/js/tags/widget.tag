@@ -12,29 +12,57 @@ import { getSubtable, getType } from 'assets/js/networktables';
     this.ntRoot = null;
     this.widgetType = null;
 
+    this.isAcceptedType = (ntType, widgetType = this.widgetType) => {
+      let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+
+      if (!widgetConfig) {
+        return false;
+      }
+
+      return widgetConfig.acceptedTypes.indexOf(ntType) > -1;
+    }
+
     this.setNtRoot = (root) => {
-      this.ntRoot = root;
-    };
+      let ntType = getType(root);
 
-    this.getNtValue = () => {
-
+      if (this.isAcceptedType(ntType)) {
+        this.ntRoot = root;
+        this.manuallyUpdate();
+      }
     };
 
     this.setWidgetType = (type) => {
-      this.widgetType = type;
-      riot.mount(this.refs.widgetType, type, {
-        table: {}
-      });
+
+      let ntType = getType(this.ntRoot);
+
+      if (!ntType || this.isAcceptedType(ntType, type)) {
+        this.widgetType = type;
+        riot.mount(this.refs.widgetType, type, {
+          table: {}
+        });
+
+        this.manuallyUpdate();
+      }
     };
 
-    const mapStateToOpts = (state) => {
+    this.manuallyUpdate = () => {
+      this.opts = {
+        ...this.opts,
+        ...this.mapStateToOpts(dashboard.store.getState())
+      };
+
+      this.update();
+      this.refs.widgetType._tag.update();
+    }
+
+    this.mapStateToOpts = (state) => {
 
       if (!this.ntRoot) {
         return {};
       }
 
       let ntValue = getSubtable(this.ntRoot);
-
+      
       if (this.refs.widgetType) {
         this.refs.widgetType._tag.opts.table = ntValue;
         this.refs.widgetType._tag.update();
@@ -46,7 +74,7 @@ import { getSubtable, getType } from 'assets/js/networktables';
       };
     };
 
-    this.reduxConnect(mapStateToOpts, null);
+    this.reduxConnect(this.mapStateToOpts, null);
 
 
   </script>

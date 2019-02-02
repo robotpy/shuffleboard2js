@@ -44,6 +44,10 @@ export function getSubtable(root) {
 
 export function getType(key) {
 
+  if (!key) {
+    return null;
+  }
+
   // Check if value has a primitive or array type
   let value = NetworkTables.getValue(key, null);
 

@@ -6,6 +6,7 @@ export function registerWidget(widgetType, config = {}) {
   config = { 
     label: widgetType,
     category: 'Unknown',
+    acceptedTypes: [],
     minX: 1,
     minY: 1,
     ...config

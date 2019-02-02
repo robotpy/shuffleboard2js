@@ -4,10 +4,13 @@ import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.css';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
 import uuidv1 from "uuid";
 import './widget.tag';
+import './components';
+import _ from 'lodash';
+import { getType } from 'assets/js/networktables';
 
 <widgets>
 
-  <div class="gridster" ondragend={onDragEnd}>
+  <div class="gridster" ondragend={onDragEnd} oncontextmenu={onContextMenu}>
     <ul class="task-card-list" ref="grid">
         <virtual each={widget in widgets}>
           <li data-row="{widget.row}" 
@@ -20,8 +23,27 @@ import './widget.tag';
             <div class="dragger"></div>
           </li>
         </virtual>
-
 		</ul>
+
+    <context-menu onclick={onContextMenuClick} container={root} menu={menu} show-as={contextMenuShowAs}>
+      <virtual if={opts.menu === 'allWidgets'}>
+        <a class="dropdown-item" href="#" data-action="clear">Clear</a>
+      </virtual>
+
+      <virtual if={opts.menu === 'widget'}>
+        <a class="dropdown-item" href="#" data-action="remove">Remove</a>
+        <form class="px-4 py-3" if={opts.showAs.show}>
+          <div class="form-group">
+            <label for="exampleFormControlSelect1">Show as:</label>
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option value={type.type} each={type in opts.showAs.types}> 
+                {type.label}
+              </option>
+            </select>
+          </div>
+        </form>
+      </virtual>
+    </context-menu>
   </div>
 
 
@@ -44,6 +66,23 @@ import './widget.tag';
       padding-top: 0;
     }
 
+    context-menu .dropdown-menu .dropdown-item {
+      padding: .25rem 15px;
+    }
+
+    context-menu .dropdown-menu h6 {
+      padding: .25rem 15px;
+    }
+
+    context-menu .dropdown-menu form {
+      padding: .25rem 15px !important;
+      margin-bottom: 0;
+    }
+
+    context-menu .dropdown-menu form label {
+     color: gray;
+    }
+
 
 
   </style>
@@ -51,6 +90,57 @@ import './widget.tag';
   <script>
 
     this.widgets = [];
+    this.menu = 'allWidgets';
+    this.contextMenuWidget = null;
+    this.contextMenuShowAs = {
+      show: true,
+      types: [],
+      defaultOption: null
+    };
+
+    this.getShowAsOptions = (ntType) => {
+      let registeredWidgets = dashboard.store.getState().widgets.registered;
+      let allOptions = _.map(registeredWidgets, (widget, type) => {
+        return {
+          type,
+          label: widget.label,
+          acceptedTypes: widget.acceptedTypes
+        };
+      });
+
+      return allOptions.filter(option => {
+        return option.acceptedTypes.indexOf(ntType) > -1;
+      });
+    };
+
+    this.onContextMenu = (ev) => {
+      let widgets = this.getWidgets(ev.clientX, ev.clientY);
+      
+      if (widgets.length === 0) {
+        this.menu = 'allWidgets';
+      }
+      else {
+        this.menu = 'widget';
+        this.contextMenuWidget = widgets[0];
+        let ntType = getType(this.contextMenuWidget.ntRoot);
+        this.contextMenuShowAs.types = this.getShowAsOptions(ntType);
+      }
+    };
+
+    this.onContextMenuClick = (ev) => {
+      ev.preventDefault();
+
+      const gridster = $(this.refs.grid).data('gridster');
+      const $el = $(ev.target);
+      const action = $el.attr('data-action');
+
+      if (action === 'clear') {
+        gridster.remove_all_widgets();
+      }
+      else if (action === 'remove') {
+        gridster.remove_widget(this.contextMenuWidget.$widget, true);
+      } 
+    }
 
     this.getWidgets = (x, y) => {
 
@@ -65,7 +155,10 @@ import './widget.tag';
 
         if (x > left && x < (left + width) && y > top && y < (top + height)) {
           let widget = $(this).find('widget')[0]._tag;
-          widgets.push(widget);
+          widgets.push({
+            ...widget,
+            $widget: $(this)
+          });
         }
       });
 
