@@ -20,7 +20,8 @@ module.exports = (env = {}) => {
       'widget-b': ['./widgets/b/index.js'],
       'widget-c': ['./widgets/c/index.js'],
       'widget-d': ['./widgets/d/index.js'],
-      'gyro': ['./widgets/gyro/index.js']
+      'gyro': ['./widgets/gyro/index.js'],
+      'pid-tuner': ['./widgets/pid-tuner/index.js'],
     },
     output: {
       filename: "[name].bundle.js",

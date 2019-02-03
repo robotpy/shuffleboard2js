@@ -1,0 +1,2 @@
+recursive-include webdashboard/html/dist *
+recursive-include webdashboard/html/vendor *
