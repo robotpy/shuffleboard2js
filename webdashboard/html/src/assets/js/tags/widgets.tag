@@ -25,19 +25,19 @@ import { getType } from 'assets/js/networktables';
         </virtual>
 		</ul>
 
-    <context-menu onclick={onContextMenuClick} container={root} menu={menu} show-as={contextMenuShowAs}>
+    <context-menu onclick={onContextMenuClick} onchange={onContextMenuChange} container={root} menu={menu} show-as={contextMenuShowAs}>
       <virtual if={opts.menu === 'allWidgets'}>
         <a class="dropdown-item" href="#" data-action="clear">Clear</a>
       </virtual>
 
       <virtual if={opts.menu === 'widget'}>
         <a class="dropdown-item" href="#" data-action="remove">Remove</a>
-        <form class="px-4 py-3" if={opts.showAs.show}>
+        <form class="px-4 py-3" if={opts.showAs.options.length > 0}>
           <div class="form-group">
             <label for="exampleFormControlSelect1">Show as:</label>
             <select class="form-control" id="exampleFormControlSelect1">
-              <option value={type.type} each={type in opts.showAs.types}> 
-                {type.label}
+              <option value={option.type} selected={option.current} each={option in opts.showAs.options}> 
+                {option.label}
               </option>
             </select>
           </div>
@@ -93,16 +93,17 @@ import { getType } from 'assets/js/networktables';
     this.menu = 'allWidgets';
     this.contextMenuWidget = null;
     this.contextMenuShowAs = {
-      show: true,
-      types: [],
+      options: [],
       defaultOption: null
     };
 
     this.getShowAsOptions = (ntType) => {
+      let currentType = this.contextMenuWidget.widgetType;
       let registeredWidgets = dashboard.store.getState().widgets.registered;
       let allOptions = _.map(registeredWidgets, (widget, type) => {
         return {
           type,
+          current: type === currentType,
           label: widget.label,
           acceptedTypes: widget.acceptedTypes
         };
@@ -123,7 +124,7 @@ import { getType } from 'assets/js/networktables';
         this.menu = 'widget';
         this.contextMenuWidget = widgets[0];
         let ntType = getType(this.contextMenuWidget.ntRoot);
-        this.contextMenuShowAs.types = this.getShowAsOptions(ntType);
+        this.contextMenuShowAs.options = this.getShowAsOptions(ntType);
       }
     };
 
@@ -141,6 +142,11 @@ import { getType } from 'assets/js/networktables';
         gridster.remove_widget(this.contextMenuWidget.$widget, true);
       } 
     }
+
+    this.onContextMenuChange = (ev) => {
+      let widgetType = ev.target.value;
+      this.contextMenuWidget.setWidgetType(widgetType);
+    };
 
     this.getWidgets = (x, y) => {
 

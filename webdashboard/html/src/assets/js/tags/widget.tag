@@ -6,6 +6,12 @@ import { getSubtable, getType } from 'assets/js/networktables';
   <div class="dragger"></div>
   <div class="widget-type" ref="widgetType" tables="{opts.ntValue}"></div>
 
+  <style>
+    .widget-type {
+      overflow: auto;
+    }
+
+  </style>
 
   <script>
 
