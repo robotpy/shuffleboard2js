@@ -230,6 +230,11 @@ import { getType } from 'assets/js/networktables';
             $widget.css('min-width', minWidth);
             $widget.css('min-height', minHeight);
           },
+          resize: function(e, ui, $widget) {
+            let widget = $widget.find('widget')[0]._tag;
+            console.log('widget:', widget);
+            widget.onResize();
+          },
           stop: function(e, ui, $widget) {
             let sizeX = parseInt($widget.attr('data-sizex'));
             let sizeY = parseInt($widget.attr('data-sizey'));

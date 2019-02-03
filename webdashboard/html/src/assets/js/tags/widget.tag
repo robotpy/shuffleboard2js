@@ -20,6 +20,11 @@ import { getSubtable, getType } from 'assets/js/networktables';
     this.ntRoot = null;
     this.widgetType = null;
 
+    this.onResize = () => {
+      this.refs.widgetType._tag.trigger('resize');
+      this.refs.widgetType._tag.update();
+    }
+
     this.isAcceptedType = (ntType, widgetType = this.widgetType) => {
       let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
 
