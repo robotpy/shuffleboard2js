@@ -9,6 +9,8 @@ import { getSubtable, getType } from 'assets/js/networktables';
   <style>
     .widget-type {
       overflow: auto;
+      width: 100%;
+      height: calc(100% - 10px);
     }
 
   </style>

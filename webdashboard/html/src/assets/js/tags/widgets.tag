@@ -24,7 +24,7 @@ import { getType } from 'assets/js/networktables';
           </li>
         </virtual>
 		</ul>
-
+    <!--
     <context-menu onclick={onContextMenuClick} onchange={onContextMenuChange} container={root} menu={menu} show-as={contextMenuShowAs}>
       <virtual if={opts.menu === 'allWidgets'}>
         <a class="dropdown-item" href="#" data-action="clear">Clear</a>
@@ -44,6 +44,7 @@ import { getType } from 'assets/js/networktables';
         </form>
       </virtual>
     </context-menu>
+    -->
   </div>
 
 
