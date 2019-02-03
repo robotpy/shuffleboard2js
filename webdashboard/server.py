@@ -47,41 +47,35 @@ class Main:
 
 
     def __init__(self, parser):
-        pass
 
-    def run(self, options, robot_class, **kwargs):
-
-        # Setup options here
-        parser = OptionParser()
-
-        parser.add_option(
-            "-p", "--port", type=int, default=8888, help="Port to run web server on"
+        parser.add_argument(
+            "--port", type=int, default=8888, help="Port to run web server on"
         )
 
-        parser.add_option(
-            "-v",
-            "--verbose",
-            default=False,
-            action="store_true",
-            help="Enable verbose logging",
+        parser.add_argument(
+            '--verbose', type=bool, default=False, help='Enable verbose logging'
         )
 
-        parser.add_option("--robot", default="127.0.0.1", help="Robot's IP address")
+        parser.add_argument(
+            "--robot", default="127.0.0.1", help="Robot's IP address"
+        )
 
-        parser.add_option("--team", type=int, help="Team number of robot to connect to")
+        parser.add_argument(
+            "--team", type=int, help="Team number of robot to connect to"
+        )
 
-        parser.add_option(
+        parser.add_argument(
             "--dashboard",
+            type=bool,
             default=False,
-            action="store_true",
             help="Use this instead of --robot to receive the IP from the driver station. WARNING: It will not work if you are not on the same host as the DS!",
         )
 
-        parser.add_option(
+        parser.add_argument(
             "--identity", default="pynetworktables2js", help="Identity to send to NT server"
         )
 
-        options, args = parser.parse_args()
+    def run(self, options, robot_class, **kwargs):
 
         # Setup logging
         logging.basicConfig(
@@ -91,7 +85,7 @@ class Main:
         )
 
         if options.team and options.robot != "127.0.0.1":
-            parser.error("--robot and --team are mutually exclusive")
+            raise Exception("--robot and --team are mutually exclusive")
 
         # Setup NetworkTables
         init_networktables(options)
@@ -99,6 +93,7 @@ class Main:
         # setup tornado application with static handler + networktables support
         html_dir = abspath(join(dirname(__file__), "html", "dist"))
         index_html = join(html_dir, "index.html")
+        vendor_dir = abspath(join(dirname(__file__), "html", "vendor"))
 
         # Path where user files are served from
         robot_file = abspath(inspect.getfile(robot_class))
@@ -113,6 +108,7 @@ class Main:
             + [
                 #(r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
                 (r"/()", NonCachingStaticFileHandler, {"path": index_html}),
+                (r"/vendor/(.*)", NonCachingStaticFileHandler, {"path": vendor_dir}),
                 (r"/(.*)", NonCachingStaticFileHandler, {"path": html_dir}),
             ]
         )
