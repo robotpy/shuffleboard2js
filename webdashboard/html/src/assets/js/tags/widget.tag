@@ -78,6 +78,7 @@ import { getSubtable, getType } from 'assets/js/networktables';
       
       if (this.refs.widgetType) {
         this.refs.widgetType._tag.opts.table = ntValue;
+        this.refs.widgetType._tag.opts.ntRoot = this.ntRoot;
         this.refs.widgetType._tag.update();
       }
 
