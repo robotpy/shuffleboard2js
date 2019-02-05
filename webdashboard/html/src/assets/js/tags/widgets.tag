@@ -57,9 +57,10 @@ import { getType } from 'assets/js/networktables';
     }
 
     .dragger {
-      height: 10px;
       width: 100%;
       cursor: grab;
+      padding: 7px 10px;
+      background: cornflowerblue;
     }
 
     .task-card {
@@ -163,7 +164,8 @@ import { getType } from 'assets/js/networktables';
           sizeX: parseInt($(this).attr('data-sizex')),
           sizeY: parseInt($(this).attr('data-sizey')),
           ntRoot: widget.ntRoot,
-          widgetType: widget.widgetType
+          widgetType: widget.widgetType,
+          widgetTitle: widget.widgetTitle
         });
       });
 
@@ -219,9 +221,10 @@ import { getType } from 'assets/js/networktables';
 
       let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
       widget.setWidgetType(config.widgetType);
+      widget.setTitle(config.widgetTitle);
 
       if (config.ntRoot) {
-        widget.setNtRoot(ntRoot);
+        widget.setNtRoot(config.ntRoot);
       }
     };
 

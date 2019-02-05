@@ -3,14 +3,29 @@ import { getSubtable, getType } from 'assets/js/networktables';
 
 
 <widget>
-  <div class="dragger"></div>
+  <div class="dragger">
+    <input type="text" name="widget-title" class="widget-title" onchange={onTitleChange} value="{this.opts.title}" />
+  </div>
   <div class="widget-type" ref="widgetType" tables="{opts.ntValue}"></div>
 
   <style>
     .widget-type {
       overflow: auto;
       width: 100%;
-      height: calc(100% - 10px);
+      height: calc(100% - 38px);
+    }
+
+    .widget-title {
+      text-align: center;
+      width: 100%;
+      border: none;
+      text-overflow: ellipsis;
+      background: cornflowerblue;
+      font-weight: bold;
+    }
+
+    .widget-title:focus {
+      outline: none;
     }
 
   </style>
@@ -19,6 +34,19 @@ import { getSubtable, getType } from 'assets/js/networktables';
 
     this.ntRoot = null;
     this.widgetType = null;
+    this.widgetTitle = null;
+
+    this.onTitleChange = (ev) => {
+      this.widgetTitle = ev.target.value;
+      this.opts.title = this.widgetTitle || this.ntRoot;
+      this.update();
+    };
+
+    this.setTitle = (title) => {
+      this.widgetTitle = title || '';
+      this.opts.title = this.widgetTitle || this.ntRoot;
+      this.update();
+    }
 
     this.onResize = () => {
       this.refs.widgetType._tag.trigger('resize');
@@ -38,9 +66,13 @@ import { getSubtable, getType } from 'assets/js/networktables';
     this.setNtRoot = (root) => {
       let ntType = getType(root);
 
+      console.log("WEEEEE");
+
       if (this.isAcceptedType(ntType)) {
         this.ntRoot = root;
         this.manuallyUpdate();
+
+        console.log("WOOOO");
       }
     };
 
@@ -82,9 +114,9 @@ import { getSubtable, getType } from 'assets/js/networktables';
         this.refs.widgetType._tag.update();
       }
 
-
       return {
-        ntValue
+        ntValue,
+        title: this.widgetTitle || this.ntRoot
       };
     };
 

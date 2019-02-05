@@ -3,14 +3,10 @@
 
 <gyro>
 
-    <p>Gyro</p>
-
     <svg ref="svg"></svg>
 
 
     <script>
-
-        console.log("THIS:", this);
 
         this.line = null;
         this.text = null;
