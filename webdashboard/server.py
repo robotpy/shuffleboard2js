@@ -18,12 +18,20 @@ from tornado.ioloop import IOLoop
 from networktables import NetworkTables
 from pynetworktables2js import get_handlers, NonCachingStaticFileHandler
 
+try:
+    import ujson as json
+except ImportError:
+    import json
+
 import logging
 
 logger = logging.getLogger("dashboard")
 
 log_datefmt = "%H:%M:%S"
 log_format = "%(asctime)s:%(msecs)03d %(levelname)-8s: %(name)-20s: %(message)s"
+
+def pretty_json(d):
+    return json.dumps(d, sort_keys=True, indent=4, separators=(',', ': '))
 
 
 def init_networktables(options):
@@ -41,6 +49,74 @@ def init_networktables(options):
         NetworkTables.startDSClient()
 
     logger.info("Networktables Initialized")
+
+
+class ApiHandler(tornado.web.RequestHandler):
+
+    def initialize(self, dashboard_path):
+
+        self.dashboard_path = dashboard_path
+        
+
+    def set_default_headers(self):
+        '''Allow CORS requests from websim running on a different port in webpack'''
+        
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Headers",
+            "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control")
+        self.set_header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
+
+    def options(self, options):
+        # no body
+        self.set_status(204)
+        self.finish()
+
+    def get(self, param):
+        '''
+            GET handler
+            
+            Don't call this often, as it may block the tornado ioloop, which
+            would be bad.. 
+            
+            :param param: The matching parameter for /api/(.*)
+        '''
+        
+        if param == 'layout':
+            layout = {}
+            try: 
+                with open(join(self.dashboard_path, 'layout.json'), 'r') as fp:
+                    try:
+                        layout = json.loads(fp.read())
+                    except:
+                        logger.error("Error reading config.json")
+            except:
+                pass
+
+            self.write(layout)
+        else:
+            raise tornado.web.HTTPError(404)
+
+    def post(self, param):
+
+        '''
+            POST handler
+            
+            Don't call this often, as it may block the tornado ioloop, which
+            would be bad..
+            
+            :param param: The matching parameter for /api/(.*)
+        '''
+        
+        if param == 'layout/save':
+            
+            data = json.loads(self.request.body.decode('utf-8'))
+            
+            with open(join(self.dashboard_path, 'layout.json'), 'w') as fp:
+                fp.write(pretty_json(data))
+            
+        else:
+            raise tornado.web.HTTPError(404)
 
 class Main:
     '''Entrypoint called from wpilib.run'''
@@ -107,6 +183,7 @@ class Main:
             get_handlers()
             + [
                 #(r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
+                (r'/api/(.*)', ApiHandler, {'dashboard_path': dashboard_path}),
                 (r"/()", NonCachingStaticFileHandler, {"path": index_html}),
                 (r"/vendor/(.*)", NonCachingStaticFileHandler, {"path": vendor_dir}),
                 (r"/(.*)", NonCachingStaticFileHandler, {"path": html_dir}),

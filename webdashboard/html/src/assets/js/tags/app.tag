@@ -27,8 +27,7 @@ import * as _ from 'lodash';
          ondragend={onDragResizerEnd}>
     </div>
     <div class="widget-container">
-      <div class="widgets" ref="widgets"></div>
-      <widgets />
+      <widgets ref="widgets" />
     </div>
   </div>
 
@@ -71,22 +70,24 @@ import * as _ from 'lodash';
 
   <script>
     this.onSave = (ev) => {
-      saveLayout();
+      let widgetJson = this.refs.widgets.getWidgetJson();
+      console.log('widgetJson', widgetJson);
+      saveLayout(widgetJson);
     };
 
     this.onConfigNetworkTables = (ev) => {
 
     };
 
-    async function saveLayout() {
+    async function saveLayout(widgetJson) {
       try {
         let l = window.location;
         let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/save_layout";
+        let url = "http://" + l.hostname + ":" + port + "/api/layout/save";
         const response = await axios.post(url, {
-          layout: localStorage.getItem('layout')
+          widgets: widgetJson
         });
-        return response.data.modules;
+        return response;
       }
       catch(e) {
         console.error('error', e);

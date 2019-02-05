@@ -56,7 +56,7 @@
         });
 
         this.on('resize', () => {
-            console.log("RESIZED!");
+            
         });
 
         this.trigger('resize');

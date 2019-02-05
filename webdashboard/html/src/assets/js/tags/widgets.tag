@@ -1,5 +1,6 @@
 
 import 'assets/scss/gridster.scss';
+import axios from 'axios';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.css';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
 import uuidv1 from "uuid";
@@ -148,6 +149,27 @@ import { getType } from 'assets/js/networktables';
       this.contextMenuWidget.setWidgetType(widgetType);
     };
 
+    this.getWidgetJson = () => {
+      let widgets = [];
+
+      $(this.refs.grid).find('li').each(function() {
+
+        let $widget = $(this).find('widget')[0];
+        let widget = $widget._tag;
+        
+        widgets.push({
+          col: parseInt($(this).attr('data-col')),
+          row: parseInt($(this).attr('data-row')),
+          sizeX: parseInt($(this).attr('data-sizex')),
+          sizeY: parseInt($(this).attr('data-sizey')),
+          ntRoot: widget.ntRoot,
+          widgetType: widget.widgetType
+        });
+      });
+
+      return widgets;
+    };
+
     this.getWidgets = (x, y) => {
 
       let widgets = [];
@@ -183,8 +205,24 @@ import { getType } from 'assets/js/networktables';
 
       let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
       widget.setWidgetType(config.type);
+    };
 
-      this.cordsToGridPosition(x, y);
+    this.addSavedWidget = (config) => {
+      let gridster = $(this.refs.grid).data('gridster');
+      let id = `widget-${uuidv1()}`; 
+      let { minX, minY } = dashboard.store.getState().widgets.registered[config.widgetType];
+      let $widget = gridster.add_widget(`
+        <li data-minx="${minX}" data-miny="${minY}">
+          <widget></widget>
+        </li>
+      `, config.sizeX, config.sizeY, config.col, config.row);
+
+      let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
+      widget.setWidgetType(config.widgetType);
+
+      if (config.ntRoot) {
+        widget.setNtRoot(ntRoot);
+      }
     };
 
     this.cordsToGridPosition = (x, y) => {
@@ -232,7 +270,6 @@ import { getType } from 'assets/js/networktables';
           },
           resize: function(e, ui, $widget) {
             let widget = $widget.find('widget')[0]._tag;
-            console.log('widget:', widget);
             widget.onResize();
           },
           stop: function(e, ui, $widget) {
@@ -255,7 +292,29 @@ import { getType } from 'assets/js/networktables';
           handle: '.dragger'
         }
       }).data('gridster');
+
+      $(() => {
+        getSavedLayout().then(widgets => {
+          widgets.forEach(widgetConfig => {
+            this.addSavedWidget(widgetConfig);
+          });
+        });
+      });
     });
+
+    async function getSavedLayout() {
+      try {
+        let l = window.location;
+        let port = process.env.socket_port || l.port;
+        let url = "http://" + l.hostname + ":" + port + "/api/layout";
+        const response = await axios.get(url);
+        return response.data.widgets || [];
+      }
+      catch(e) {
+        console.error('error', e);
+        return [];
+      }
+    }
 
   </script>
 
