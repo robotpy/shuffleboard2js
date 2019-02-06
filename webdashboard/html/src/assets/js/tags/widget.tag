@@ -65,14 +65,10 @@ import { getSubtable, getType } from 'assets/js/networktables';
 
     this.setNtRoot = (root) => {
       let ntType = getType(root);
-
-      console.log("WEEEEE");
-
+      
       if (this.isAcceptedType(ntType)) {
         this.ntRoot = root;
         this.manuallyUpdate();
-
-        console.log("WOOOO");
       }
     };
 

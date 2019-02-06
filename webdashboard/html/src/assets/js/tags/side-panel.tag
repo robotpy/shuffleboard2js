@@ -40,9 +40,10 @@ import './widget-menu.tag';
       overflow: auto;
     }
 
-    .card-header {
+    > .card > .card-header {
       overflow: hidden;
       border-bottom: none;
+      padding: 0 1.25rem .75rem;
     }
 
     > .card {
@@ -57,6 +58,12 @@ import './widget-menu.tag';
 
     .card:last-child {
       border-bottom: 1px solid rgba(0, 0, 0, 0.125);;
+    }
+    
+    > .card > .card-header .nav-item .nav-link {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-top: 0;
     }
   </style>
 </side-panel>

@@ -33,20 +33,19 @@
   <script>
 
     this.addWidget = (x, y, config) => {
-      let widgetsElement = document.getElementsByTagName('widgets')[0]; 
-      let widgets = widgetsElement._tag;
+      let widgetTabsElement = document.getElementsByTagName('widget-tabs')[0]; 
+      let widgetTabs = widgetTabsElement._tag;
+      let widgets = widgetTabs.getActiveWidgetTab();
       widgets.addWidget(x, y, config);
     }
 
     this.onDragStart = (ev) => {
 
       let $dragImage = $(`
-        <span class="oi oi-file" style="display: inline-block; font-size: 50px;"></span>
-      `).appendTo('body');
+        <span class="oi oi-file drag-image" style="display: inline-block; font-size: 50px;"></span>
+      `).appendTo('body .drag-image-container');
       
       ev.dataTransfer.setDragImage($dragImage[0], 0, 0);
-
-      console.log('client:', ev.clientX, ev.clientY);
     };
 
     this.onDragEnd = (ev) => {
@@ -55,6 +54,8 @@
         minX: this.opts.minx,
         minY: this.opts.miny
       });
+
+      $('.drag-image').remove();
     };
 
 

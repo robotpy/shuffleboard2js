@@ -1,6 +1,5 @@
 
 import 'assets/scss/gridster.scss';
-import axios from 'axios';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.css';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
 import uuidv1 from "uuid";
@@ -57,8 +56,9 @@ import { getType } from 'assets/js/networktables';
     widgets {
       position: relative;
       width: 100vw;
-      height: 100%;
+      height: calc(100% - 60px);
       display: block;
+      background: #EFEFEF;
     }
 
     .dragger {
@@ -311,27 +311,11 @@ import { getType } from 'assets/js/networktables';
       }).data('gridster');
 
       $(() => {
-        getSavedLayout().then(widgets => {
-          widgets.forEach(widgetConfig => {
-            this.addSavedWidget(widgetConfig);
-          });
+        this.opts.savedWidgets.forEach(widgetConfig => {
+          this.addSavedWidget(widgetConfig);
         });
       });
     });
-
-    async function getSavedLayout() {
-      try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/layout";
-        const response = await axios.get(url);
-        return response.data.widgets || [];
-      }
-      catch(e) {
-        console.error('error', e);
-        return [];
-      }
-    }
 
   </script>
 

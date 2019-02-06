@@ -22,8 +22,8 @@ import './networktables.scss';
     this.on('mount', () => {
       $(this.root).on('dragstart', '.table-row:not(.header)', (ev) => {
         let $dragImage = $(`
-          <span class="oi oi-file" style="display: inline-block; font-size: 50px;"></span>
-        `).appendTo('body');
+          <span class="oi oi-file drag-image" style="display: inline-block; font-size: 50px;"></span>
+        `).appendTo('body .drag-image-container');
         
         ev.originalEvent.dataTransfer.setDragImage($dragImage[0], 0, 0);
       });
@@ -42,6 +42,8 @@ import './networktables.scss';
         widgets.forEach(widget => {
           widget.setNtRoot(ntKey);
         });
+
+        $('.drag-image').remove();
       });
     });
 

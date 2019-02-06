@@ -4,9 +4,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-modules.tag';
 import './side-panel.tag';
-import './widgets.tag';
 import axios from 'axios';
 import * as _ from 'lodash';
+import './widget-tabs.tag';
 
 <app>
   <div class="menu">
@@ -27,9 +27,11 @@ import * as _ from 'lodash';
          ondragend={onDragResizerEnd}>
     </div>
     <div class="widget-container">
-      <widgets ref="widgets" />
+      <widget-tabs ref="widgetTabs" />
     </div>
   </div>
+
+  <div class="drag-image-container"></div>
 
 
   <style>
@@ -70,7 +72,7 @@ import * as _ from 'lodash';
 
   <script>
     this.onSave = (ev) => {
-      let widgetJson = this.refs.widgets.getWidgetJson();
+      let widgetJson = this.refs.widgetTabs.getWidgetTabsJson();
       console.log('widgetJson', widgetJson);
       saveLayout(widgetJson);
     };
@@ -85,7 +87,7 @@ import * as _ from 'lodash';
         let port = process.env.socket_port || l.port;
         let url = "http://" + l.hostname + ":" + port + "/api/layout/save";
         const response = await axios.post(url, {
-          widgets: widgetJson
+          tabs: widgetJson
         });
         return response;
       }

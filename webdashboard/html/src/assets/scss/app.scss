@@ -4,15 +4,8 @@ body .lm_content {
   overflow: auto;
 }
 
-.golden-layout {
-  width: 100%;
-  height: 100%;
-
-
-  .lm_controls {
-    .lm_popout {
-      display: none;
-    }
-  }
+body .drag-image-container {
+  position: absolute;
+  top: 1000000px;
 }
 
