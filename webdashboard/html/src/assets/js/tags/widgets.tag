@@ -26,7 +26,12 @@ import { getType } from 'assets/js/networktables';
         </virtual>
 		</ul>
 
-    <context-menu onclick={onContextMenuClick} onchange={onContextMenuChange} container={root} menu={menu} show-as={contextMenuShowAs}>
+    <context-menu should-show={shouldShowContextMenu} 
+                  onclick={onContextMenuClick} 
+                  onchange={onContextMenuChange} 
+                  container={root} 
+                  menu={menu} 
+                  show-as={contextMenuShowAs}>
       <virtual if={opts.menu === 'allWidgets'}>
         <a class="dropdown-item" href="#" data-action="clear">Clear</a>
       </virtual>
@@ -129,6 +134,15 @@ import { getType } from 'assets/js/networktables';
         this.contextMenuShowAs.options = this.getShowAsOptions(ntType);
       }
     };
+
+    this.shouldShowContextMenu = (ev) => {
+
+      if (this.getWidgets(ev.clientX, ev.clientY).length === 0) {
+        return true;
+      }
+
+      return $(ev.target).hasClass('dragger') || $(ev.target).parents('.dragger').length > 0;
+    }
 
     this.onContextMenuClick = (ev) => {
       ev.preventDefault();

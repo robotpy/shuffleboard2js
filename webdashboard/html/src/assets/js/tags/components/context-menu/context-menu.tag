@@ -67,7 +67,6 @@
           this.hide();
         }
         else if (!clickedOnContextMenu && !clickedOnModal) { 
-          ev.preventDefault();
 
           if (typeof this.opts.shouldShow === 'function') {
             var show = this.opts.shouldShow(ev);
@@ -77,6 +76,7 @@
           }
 
           if (show) {
+            ev.preventDefault();
             this.show(ev.clientX, ev.clientY);
           }
           else {
