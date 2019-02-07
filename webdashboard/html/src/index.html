@@ -1,5 +1,7 @@
 <html>
   <head>
+      <link href="http://localhost:8888/vendor/bootstrap.min.css" rel="stylesheet" />
+
       <!-- select2 -->
       <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
 
@@ -18,6 +20,19 @@
   
       <!-- d3 -->
       <script src="http://localhost:8888/vendor/d3.v4.min.js"></script>
+
+      <script>
+        // https://codepen.io/Momciloo/pen/bpyMbB
+        $.fn.textWidth = function(text, font) {  
+            if (!$.fn.textWidth.fakeEl) {
+              $.fn.textWidth.fakeEl = $('<span class="fake-text-width">').hide().appendTo(document.body);
+            } 
+            var fakeElText = text || this.val() || this.text() || this.attr('placeholder');
+            $.fn.textWidth.fakeEl.text(fakeElText).css('font', font || this.css('font'));
+            
+            return $.fn.textWidth.fakeEl.width();
+        };    
+      </script>
   </head>
   <body>
     <App></App>

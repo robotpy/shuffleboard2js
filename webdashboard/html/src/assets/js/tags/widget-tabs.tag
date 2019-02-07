@@ -7,15 +7,25 @@ import axios from 'axios';
   <div class="card">
     <div class="card-header"> 
       <ul class="nav nav-tabs card-header-tabs pull-right" id="widget-tabs" role="tablist">
-        <li class="nav-item" each={tab, index in widgetTabs}>
+        <li class="nav-item tab" each={tab, index in widgetTabs}>
           <a class="nav-link {index === 0 ? 'active' : ''}" 
              id="{_.kebabCase(tab.header)}-tab" 
              data-toggle="tab" 
              href="#{_.kebabCase(tab.header)}" 
              role="tab" aria-controls="{_.kebabCase(tab.header)}" 
              aria-selected="{index === 0 ? 'true' : 'false'}">
-            {tab.header}
+
+            <input data-tab-index={index} 
+                   type="text" class="tab-header-input" 
+                   onchange={onHeaderChange} 
+                   onfocusout={onHeaderChange} 
+                   oninput={onHeaderChange} 
+                   value={tab.header} />
+            <span class="oi oi-x" data-tab-index={index} onclick={removeTab}></span>
           </a>
+        </li>
+        <li class="nav-item add-tab">
+          <span class="oi oi-plus" onclick={addTab}></span>
         </li>
       </ul>
     </div>
@@ -74,10 +84,44 @@ import axios from 'axios';
     > .card > .card-header .nav-item .nav-link.active {
       background: #EFEFEF;
     }
+
+    .nav-item.add-tab .oi {
+      margin-top: 15px;
+      margin-left: 10px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .nav-item.tab .nav-link {
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-item.tab .nav-link .oi {
+      display: none;
+      margin-left: 10px;
+      font-size: 11px;
+      height: 12px;
+    }
+
+    .nav-item.tab .nav-link.active .oi {
+      display: inline-block;
+    }
+
+    .tab-header-input {
+      white-space: nowrap;
+      outline: none;
+      border: none;
+      background-color: rgba(0,0,0,0);
+      text-overflow: ellipsis;
+      max-width: 200px;
+      min-width: 30px;
+    }
   </style>
 
 
   <script>
+  
     this.widgetTabs = [];
 
     this.getActiveWidgetTab = () => {
@@ -112,10 +156,51 @@ import axios from 'axios';
       });
     };
 
+    this.addTab = () => {
+      const tabNumber = this.widgetTabs.length + 1;
+      this.widgetTabs.push({
+        header: `Tab ${tabNumber}`,
+        widgets: []
+      });
+
+      this.update();
+      this.updateTabInputWidths();
+    };
+
+    this.removeTab = (ev) => {
+      let tabIndex = $(ev.target).data('tab-index');
+      this.widgetTabs.splice(tabIndex, 1);
+      this.update();
+    };
+
+    this.onHeaderChange = (ev) => {
+      console.log('target:', ev.target);
+      var inputWidth = $(ev.target).textWidth();
+      $(ev.target).css({
+        width: inputWidth + 20
+      })
+      $(ev.target).trigger('input');
+
+      // get text
+      let header = $(ev.target).val();
+      let index = $(ev.target).data('tab-index');
+      this.widgetTabs[index].header = header;
+    };
+
+    this.updateTabInputWidths = () => {
+        $(this.root).find('.tab-header-input').each(function() {
+          var inputWidth = $(this).textWidth();
+          $(this).css({ 
+            width: inputWidth + 20
+          })
+        });
+    };
+
     this.on('mount', () => {
       getSavedLayout().then((tabs) => {
         this.widgetTabs = tabs;
         this.update();
+        this.updateTabInputWidths();
       });
     });
 

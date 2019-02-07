@@ -1,6 +1,5 @@
 
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-modules.tag';
 import './side-panel.tag';
