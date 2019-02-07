@@ -12,7 +12,7 @@ from setuptools import find_packages, setup
 
 setup_dir = dirname(__file__)
 git_dir = join(setup_dir, '.git')
-base_package = 'webdashboard'
+base_package = 'shuffleboard2js'
 version_file = join(setup_dir, base_package, 'version.py')
 
 '''
@@ -58,7 +58,7 @@ for d, folders, files in os.walk(join(setup_dir, base_package, 'html')):
         package_data.append(join(d,f))
 
 setup(
-    name='robotpy-webdashboard',
+    name='shuffleboard2js',
     version=__version__,
     description='',
     long_description=long_description,
@@ -70,7 +70,8 @@ setup(
     include_package_data=True,
     package_data={},
     zip_safe=False,
-    entry_points={'robotpy': [ 'webdashboard = webdashboard.server:Main' ]},
+    scripts=['shuffleboard2js/shuffleboard2js'],
+    #entry_points={'robotpy': [ 'webdashboard = webdashboard.server:Main' ]},
     install_requires=install_requires,
     license="BSD License",
     classifiers=[
@@ -82,5 +83,5 @@ setup(
         "Programming Language :: Python :: 3.4",
         "Topic :: Scientific/Engineering"
     ]
-    )
+)
 

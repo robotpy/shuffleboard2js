@@ -1,2 +1,2 @@
-recursive-include webdashboard/html/dist *
-recursive-include webdashboard/html/vendor *
+recursive-include shuffleboard2js/html/dist *
+recursive-include shuffleboard2js/html/vendor *
