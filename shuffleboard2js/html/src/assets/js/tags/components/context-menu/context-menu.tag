@@ -46,6 +46,7 @@
     this.on('mount', () => {
 
       $(window).on('click', (ev) => {
+
         if (!this._isLeftClick(ev)) {
           return;
         }
@@ -113,12 +114,18 @@
     };
 
     this._isLeftClick = (ev) => {
-      // https://stackoverflow.com/a/3944291
-      if ("buttons" in ev) {
-        return ev.buttons == 0;
+
+      if (navigator.userAgent.indexOf("Firefox") != -1) {
+        return ev.button === 0;
       }
-      let button = ev.which || ev.button;
-      return button == 0;
+      else {
+        // https://stackoverflow.com/a/3944291
+        if ("buttons" in ev) {
+          return ev.buttons == 0;
+        }
+        let button = ev.which || ev.button;
+        return button == 0;
+      }
     }
   </script>
 
