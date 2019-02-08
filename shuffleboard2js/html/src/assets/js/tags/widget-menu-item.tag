@@ -1,8 +1,10 @@
-
+import fileImage from 'open-iconic/png/file-8x.png';
 
 <widget-menu-item>
 
-    <img src="{opts.image || 'unknown'}" ondragstart={onDragStart} ondragend={onDragEnd} />
+    <div ondragstart={onDragStart} ondragend={onDragEnd} draggable="true">
+      <img src="{opts.image || 'unknown'}" draggable="false" />
+    </div>
     <h5>{opts.label}</h5>
 
   <style>
@@ -32,6 +34,9 @@
 
   <script>
 
+    let dragImg = document.createElement("img");
+    dragImg.src = fileImage;
+
     this.addWidget = (x, y, config) => {
       let widgetTabsElement = document.getElementsByTagName('widget-tabs')[0]; 
       let widgetTabs = widgetTabsElement._tag;
@@ -40,12 +45,8 @@
     }
 
     this.onDragStart = (ev) => {
-
-      let $dragImage = $(`
-        <span class="oi oi-file drag-image" style="display: inline-block; font-size: 50px;"></span>
-      `).appendTo('body .drag-image-container');
-      
-      ev.dataTransfer.setDragImage($dragImage[0], 0, 0);
+      ev.dataTransfer.setData("text/plain", ev.target.id);
+      ev.dataTransfer.setDragImage(dragImg, 0, 0);
     };
 
     this.onDragEnd = (ev) => {
@@ -54,8 +55,6 @@
         minX: this.opts.minx,
         minY: this.opts.miny
       });
-
-      $('.drag-image').remove();
     };
 
 

@@ -1,5 +1,6 @@
 import './subtable.tag';
 import './networktables.scss';
+import fileImage from 'open-iconic/png/file-8x.png';
 
 <networktables>  
   <div class="table">
@@ -13,6 +14,9 @@ import './networktables.scss';
 
   <script>
 
+    let dragImg = document.createElement("img");
+    dragImg.src = fileImage;
+
     this.getWidgets = (x, y) => {
       let widgetsElement = document.getElementsByTagName('widgets')[0]; 
       let widgets = widgetsElement._tag;
@@ -21,15 +25,8 @@ import './networktables.scss';
 
     this.on('mount', () => {
       $(this.root).on('dragstart', '.table-row:not(.header)', (ev) => {
-        let $dragImage = $(`
-          <span class="oi oi-file drag-image" style="display: inline-block; font-size: 50px;"></span>
-        `).appendTo('body .drag-image-container');
-        
-        ev.originalEvent.dataTransfer.setDragImage($dragImage[0], 0, 0);
-      });
-
-      $(this.root).on('drag', '.table-row:not(.header)', (ev) => {
-       
+        ev.originalEvent.dataTransfer.setData("text/plain", ev.target.id);
+        ev.originalEvent.dataTransfer.setDragImage(dragImg, 0, 0);
       });
 
       $(this.root).on('dragend', '.table-row:not(.header)', (ev) => {
@@ -42,8 +39,6 @@ import './networktables.scss';
         widgets.forEach(widget => {
           widget.setNtRoot(ntKey);
         });
-
-        $('.drag-image').remove();
       });
     });
 
