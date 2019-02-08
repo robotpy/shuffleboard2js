@@ -19,11 +19,7 @@ import './widget-tabs.tag';
 
   <div class="main">
     <side-panel ref="sidePanel" />
-    <div class="layout-resizer"
-         draggable="true" 
-         ondragstart={onDragResizerStart} 
-         ondrag={onDragResizer}
-         ondragend={onDragResizerEnd}>
+    <div class="layout-resizer" ref="layoutResizer">
     </div>
     <div class="widget-container">
       <widget-tabs ref="widgetTabs" />
@@ -96,28 +92,27 @@ import './widget-tabs.tag';
       }
     }
 
-    this.onDragResizerStart = (ev) => {
-      var crt = ev.target.cloneNode(true);
-      crt.style.display = "none";
-      document.body.appendChild(crt);
-      ev.dataTransfer.setDragImage(crt, 0, 0);
-    }
+    this.on('mount', () => {
 
-    this.onDragResizer = _.throttle(ev => {
+      let dragging = false;
 
-      // When user releases, clientX, screenX, x, etc. are always 0, which
-      // causes the dragger to jump. If both screenX and screenY are 0, 
-      // likely the user just released. https://stackoverflow.com/a/47241403
-      if (!ev.screenX && !ev.screenY) {
-        return;
-      }
+      $(this.refs.layoutResizer).on('mousedown', (ev) => {
+        dragging = true;
+      });
 
-      $(this.refs.sidePanel.root).width(Math.clamp(ev.pageX, 10, window.innerWidth - 10));
-    }, 50);
+      $(window).on('mousemove', _.throttle((ev) => {
+        if (!dragging) {
+          return;
+        }
 
-    this.onDragResizerEnd = (ev) => {
+        $(this.refs.sidePanel.root).width(Math.clamp(ev.pageX, 10, window.innerWidth - 10));
+      }, 50));
 
-    };
+      $(window).on('mouseup', (ev) => { 
+        dragging = false;
+      });
+
+    });
 
   </script>
 </app>
