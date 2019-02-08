@@ -170,11 +170,13 @@ import axios from 'axios';
     this.removeTab = (ev) => {
       let tabIndex = $(ev.target).data('tab-index');
       this.widgetTabs.splice(tabIndex, 1);
+      if (this.widgetTabs.length === 0) {
+        this.addTab();
+      }
       this.update();
     };
 
     this.onHeaderChange = (ev) => {
-      console.log('target:', ev.target);
       var inputWidth = $(ev.target).textWidth();
       $(ev.target).css({
         width: inputWidth + 20
