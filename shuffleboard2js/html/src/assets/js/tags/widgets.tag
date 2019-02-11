@@ -30,7 +30,8 @@ import { getType } from 'assets/js/networktables';
                   onchange={onContextMenuChange} 
                   container={root} 
                   menu={menu} 
-                  show-as={contextMenuShowAs}>
+                  show-as={contextMenuShowAs}
+                  has-properties={contextMenuWidgetHasProperties}>
       <virtual if={opts.menu === 'allWidgets'}>
         <a class="dropdown-item" href="#" data-action="clear">Clear</a>
       </virtual>
@@ -47,6 +48,9 @@ import { getType } from 'assets/js/networktables';
             </select>
           </div>
         </form>
+        <virtual if={opts.hasProperties}>
+          <a class="dropdown-item" href="#" data-action="properties">Properties</a>
+        </virtual>
       </virtual>
     </context-menu>
   </div>
@@ -103,6 +107,7 @@ import { getType } from 'assets/js/networktables';
       options: [],
       defaultOption: null
     };
+    this.contextMenuWidgetHasProperties = false;
 
     this.getShowAsOptions = (ntType) => {
       let currentType = this.contextMenuWidget.widgetType;
@@ -132,6 +137,7 @@ import { getType } from 'assets/js/networktables';
         this.contextMenuWidget = widgets[0];
         let ntType = getType(this.contextMenuWidget.ntRoot);
         this.contextMenuShowAs.options = this.getShowAsOptions(ntType);
+        this.contextMenuWidgetHasProperties = this.contextMenuWidget.hasProperties();
       }
     };
 
@@ -157,6 +163,9 @@ import { getType } from 'assets/js/networktables';
       else if (action === 'remove') {
         gridster.remove_widget(this.contextMenuWidget.$widget, true);
       } 
+      else if (action === 'properties') {
+        this.contextMenuWidget.openPropertiesModal();
+      }
     }
 
     this.onContextMenuChange = (ev) => {

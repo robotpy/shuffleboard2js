@@ -9,6 +9,10 @@ export function registerWidget(widgetType, config = {}) {
     acceptedTypes: [],
     minX: 1,
     minY: 1,
+    properties: {
+      tag: null,
+      defaults: {}
+    },
     ...config
   };
   return {

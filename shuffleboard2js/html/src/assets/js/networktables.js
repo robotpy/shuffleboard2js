@@ -48,6 +48,11 @@ export function getType(key) {
     return null;
   }
 
+  // Check if this is a camera source
+  if (isCameraSource(key)) {
+    return 'Camera';
+  }
+
   // Check if value has a primitive or array type
   let value = NetworkTables.getValue(key, null);
 
@@ -81,4 +86,16 @@ export function getType(key) {
 
   // Nothing in subtable, so return null
   return null;
+}
+
+function isCameraSource(key) {
+
+  if (!key.startsWith('/CameraPublisher')) {
+    return false;
+  }
+
+  // check if it's an array type
+  let value = NetworkTables.getValue(key + 'streams', null);
+
+  return _.isArray(value);
 }

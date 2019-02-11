@@ -18,8 +18,9 @@ import fileImage from 'open-iconic/png/file-8x.png';
     dragImg.src = fileImage;
 
     this.getWidgets = (x, y) => {
-      let widgetsElement = document.getElementsByTagName('widgets')[0]; 
-      let widgets = widgetsElement._tag;
+      let widgetTabsElement = document.getElementsByTagName('widget-tabs')[0]; 
+      let widgetTabs = widgetTabsElement._tag;
+      let widgets = widgetTabs.getActiveWidgetTab();
       return widgets.getWidgets(x, y);
     };
 
