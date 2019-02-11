@@ -1,4 +1,5 @@
 import './widget-a.tag';
+import './properties.tag';
 import image from "./widget-a.gif";
 
 dashboard.registerWidget('widget-a', {
@@ -7,5 +8,11 @@ dashboard.registerWidget('widget-a', {
   acceptedTypes: ['string'],
   image,
   minX: 5,
-  minY: 5
+  minY: 5,
+  properties: {
+    defaults: {
+      a: 1
+    },
+    tag: 'widget-a-properties'
+  }
 });

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { getSubtable, getType } from 'assets/js/networktables';
+import ObservableSlim from 'observable-slim';
 
 
 <widget>
@@ -7,6 +8,10 @@ import { getSubtable, getType } from 'assets/js/networktables';
     <input type="text" name="widget-title" class="widget-title" onchange={onTitleChange} value="{this.opts.title}" />
   </div>
   <div class="widget-type" ref="widgetType" tables="{opts.ntValue}"></div>
+  
+  <modal ref="propertiesModal">
+    <div class="widget-properties"></div>
+  </modal>
 
   <style>
     .widget-type {
@@ -35,6 +40,41 @@ import { getSubtable, getType } from 'assets/js/networktables';
     this.ntRoot = null;
     this.widgetType = null;
     this.widgetTitle = null;
+    this.properties = {};
+    this.propertiesTag = null;
+
+    this.getPropertiesDefaults = (widgetType) => {
+      let widgetConfig = dashboard.store.getState().widgets.registered[widgetType]
+      return ObservableSlim.create(widgetConfig.properties.defaults, false, (changes) => {
+        this.refs.widgetType._tag.trigger('propertiesUpdate');
+        this.refs.widgetType._tag.update();
+      });
+    };
+
+    this.setupPropertiesModal = (widgetType) => {
+      
+      this.propertiesTag = this.getPropertiesTag(widgetType);
+
+      if (this.propertiesTag) {
+        let propsElement = $(this.root).find('.widget-properties')[0];
+        riot.mount(propsElement, this.propertiesTag, {
+          properties: this.properties
+        });
+      }
+    };
+
+    this.getPropertiesTag = (widgetType) => {
+      let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+      return widgetConfig.properties.tag;
+    };
+
+    this.hasProperties = () => {
+      return !!this.propertiesTag;
+    };
+
+    this.openPropertiesModal = () => {
+      this.refs.propertiesModal.open();
+    };
 
     this.onTitleChange = (ev) => {
       this.widgetTitle = ev.target.value;
@@ -78,9 +118,12 @@ import { getSubtable, getType } from 'assets/js/networktables';
 
       if (!ntType || this.isAcceptedType(ntType, type)) {
         this.widgetType = type;
+        this.properties = this.getPropertiesDefaults(type);
         riot.mount(this.refs.widgetType, type, {
-          table: {}
+          table: {},
+          properties: this.properties
         });
+        this.setupPropertiesModal(type);
 
         this.manuallyUpdate();
       }

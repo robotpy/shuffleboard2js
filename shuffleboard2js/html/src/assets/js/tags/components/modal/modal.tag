@@ -3,6 +3,7 @@
 <modal>
 
   <div ref="modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-backdrop show"></div>
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -15,6 +16,12 @@
       </div>
     </div>
   </div>
+
+  <style>
+    .modal-dialog {
+      z-index: 1000000;
+    }
+  </style>
 
   <script>
 
@@ -34,6 +41,7 @@
 
     this.onShow = (callback) => {
       $(this.refs.modal).on('show.bs.modal', callback);
+
     }
 
     this.onShown = (callback) => {
@@ -53,7 +61,8 @@
       const $modal = $(this.refs.modal);
       $($modal).modal({
         keyboard: false,
-        show: false
+        show: false,
+        backdrop: false
       });
     });
     
