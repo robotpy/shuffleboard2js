@@ -2,6 +2,13 @@ import * as ActionTypes from "../constants/action-types";
 import { set } from 'lodash';
 
 const initialState = {
+  replay: {
+    state: 'RECORDING', 
+    recording: [],
+    recordingLength: 0,
+    recordingTime: 0,
+    loopRecord: false
+  },
   networktables: {
     values: {},
     rawValues: {},
@@ -120,6 +127,102 @@ const rootReducer = (state = initialState, action) => {
           }
         }
       };
+
+    case ActionTypes.STOP_RECORDING:
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          state: 'RECORDING_STOPPED'
+        }
+      };
+
+    case ActionTypes.START_RECORDING:
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          state: 'RECORDING'
+        }
+      };
+
+    case ActionTypes.RESUME_REPLAY:
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          state: 'REPLAYING'
+        }
+      };
+
+    case ActionTypes.PAUSE_REPLAY:
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          state: 'REPLAYING_PAUSED'
+        }
+      };
+
+    case ActionTypes.GO_TO_TIME:
+
+      const timePercent = Math.clamp(action.payload.timePercent, 0, 1);
+      const recordingTime = timePercent * state.replay.recordingLength;
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          recordingTime: recordingTime
+        }
+      };
+
+    case ActionTypes.STOP_REPLAY:
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          state: 'RECORDING',
+        }
+      };
+
+    case ActionTypes.LOAD_REPLAY:
+
+      const recording = action.payload.recording;
+      
+      if (recording.updates.length > 0) {
+        var recordingLength = Math.max(recording.updates[recording.updates.length - 1].time, .01);
+      }
+      else {
+        var recordingLength = .01;
+      }
+      
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          state: 'REPLAYING_PAUSED',
+          recording,
+          recordingLength,
+          recordingTime: 0
+        }
+      };
+
+    case ActionTypes.SET_LOOPING:
+
+      return {
+        ...state,
+        replay: {
+          ...state.replay,
+          loopRecord: action.payload.loop
+        }
+      };
+
     default:
       return state;
   }

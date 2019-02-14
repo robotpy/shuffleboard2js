@@ -9,16 +9,19 @@
 
 import inspect
 import os
-from os.path import abspath, dirname, exists, join
+from os.path import abspath, dirname, exists, join, basename
 from optparse import OptionParser
 
 import tornado.web
+from tornado.web import StaticFileHandler
 from tornado.ioloop import IOLoop
 
 from networktables import NetworkTables
-from pynetworktables2js import get_handlers, NonCachingStaticFileHandler
+from pynetworktables2js import get_handlers
 
 import shuffleboard2js
+
+from datetime import date, datetime
 
 try:
     import ujson as json
@@ -51,6 +54,32 @@ def init_networktables(options):
         NetworkTables.startDSClient()
 
     logger.info("Networktables Initialized")
+
+
+class NonCachingStaticFileHandler(StaticFileHandler):
+    """
+        This static file handler disables caching, to allow for easy
+        development of your Dashboard
+    """
+
+    # This is broken in tornado, disable it
+    def check_etag_header(self):
+        return False
+
+    def set_extra_headers(self, path):
+        # Disable caching
+        self.set_header(
+            "Cache-Control", "no-store, no-cache, must-revalidate, max-age=0"
+        )
+
+    def set_default_headers(self):
+        '''Allow CORS requests from websim running on a different port in webpack'''
+        
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Credentials", "true")
+        self.set_header("Access-Control-Allow-Headers",
+            "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control")
+        self.set_header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
 
 
 class ApiHandler(tornado.web.RequestHandler):
@@ -96,6 +125,19 @@ class ApiHandler(tornado.web.RequestHandler):
                 pass
 
             self.write(layout)
+
+        elif param == 'recordings':
+
+            recordings_path = join(self.dashboard_path, 'recordings')
+
+            recordings = {}
+
+            for root, dirs, files in os.walk(recordings_path):
+                if len(files) > 0:
+                    recordings[basename(root)] = files
+
+            self.write(recordings)
+
         else:
             raise tornado.web.HTTPError(404)
 
@@ -115,6 +157,27 @@ class ApiHandler(tornado.web.RequestHandler):
             data = json.loads(self.request.body.decode('utf-8'))
             
             with open(join(self.dashboard_path, 'layout.json'), 'w') as fp:
+                fp.write(pretty_json(data))
+
+        elif param == 'recording/save':
+
+            recordings_path = join(self.dashboard_path, 'recordings')
+
+            if not exists(recordings_path):
+                os.mkdir(recordings_path)
+            
+            data = json.loads(self.request.body.decode('utf-8'))
+
+            # create folder with date (YYYY-MM-DD)
+            folder_name = str(date.today())       
+            folder_path = join(recordings_path, folder_name)
+            if not exists(folder_path):
+                os.mkdir(folder_path)
+
+            now = datetime.now()
+            file_name = "recording-%s-%s-%s.json" % (now.hour, now.minute, now.microsecond)
+            
+            with open(join(folder_path, file_name), 'w') as fp:
                 fp.write(pretty_json(data))
             
         else:
@@ -183,7 +246,7 @@ def main():
     app = tornado.web.Application(
         get_handlers()
         + [
-            #(r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
+            (r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
             (r'/api/(.*)', ApiHandler, {'dashboard_path': dashboard_path}),
             (r"/()", NonCachingStaticFileHandler, {"path": index_html}),
             (r"/vendor/(.*)", NonCachingStaticFileHandler, {"path": vendor_dir}),

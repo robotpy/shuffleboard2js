@@ -1,0 +1,104 @@
+{
+    "networktablesStart": {
+        "rawValues": {},
+        "values": {}
+    },
+    "start": 1550171109611,
+    "updates": [
+        {
+            "key": "/FMSInfo/.type",
+            "time": 0.135,
+            "value": "FMSInfo"
+        },
+        {
+            "key": "/FMSInfo/GameSpecificMessage",
+            "time": 0.138,
+            "value": ""
+        },
+        {
+            "key": "/FMSInfo/EventName",
+            "time": 0.139,
+            "value": "sim-event"
+        },
+        {
+            "key": "/FMSInfo/MatchNumber",
+            "time": 0.14,
+            "value": 0
+        },
+        {
+            "key": "/FMSInfo/ReplayNumber",
+            "time": 0.141,
+            "value": 0
+        },
+        {
+            "key": "/FMSInfo/MatchType",
+            "time": 0.142,
+            "value": 0
+        },
+        {
+            "key": "/FMSInfo/IsRedAlliance",
+            "time": 0.143,
+            "value": true
+        },
+        {
+            "key": "/FMSInfo/StationNumber",
+            "time": 0.143,
+            "value": 1
+        },
+        {
+            "key": "/FMSInfo/FMSControlData",
+            "time": 0.144,
+            "value": 0
+        },
+        {
+            "key": "/LiveWindow/.status/LW Enabled",
+            "time": 0.145,
+            "value": false
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[0]/.name",
+            "time": 0.146,
+            "value": "Talon[0]"
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[0]/.type",
+            "time": 0.146,
+            "value": "Speed Controller"
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[0]/.actuator",
+            "time": 0.147,
+            "value": true
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[0]/Value",
+            "time": 0.148,
+            "value": 0
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/.type",
+            "time": 0.15,
+            "value": "LW Subsystem"
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[1]/.name",
+            "time": 0.15,
+            "value": "Talon[1]"
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[1]/.type",
+            "time": 0.152,
+            "value": "Speed Controller"
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[1]/.actuator",
+            "time": 0.152,
+            "value": true
+        },
+        {
+            "key": "/LiveWindow/Ungrouped/Talon[1]/Value",
+            "time": 0.152,
+            "value": 0
+        }
+    ]
+}

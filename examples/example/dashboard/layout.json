@@ -7,19 +7,28 @@
                     "col": 9,
                     "ntRoot": null,
                     "row": 1,
-                    "sizeX": 3,
-                    "sizeY": 3,
+                    "sizeX": 6,
+                    "sizeY": 6,
                     "widgetTitle": "",
                     "widgetType": "gyro"
                 },
                 {
-                    "col": 1,
+                    "col": 2,
                     "ntRoot": null,
-                    "row": 1,
-                    "sizeX": 3,
-                    "sizeY": 3,
+                    "row": 4,
+                    "sizeX": 6,
+                    "sizeY": 6,
                     "widgetTitle": "",
                     "widgetType": "pid-tuner"
+                },
+                {
+                    "col": 10,
+                    "ntRoot": null,
+                    "row": 8,
+                    "sizeX": 5,
+                    "sizeY": 5,
+                    "widgetTitle": "rfdfdv",
+                    "widgetType": "widget-a"
                 }
             ]
         }

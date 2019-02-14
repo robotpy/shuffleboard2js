@@ -76,6 +76,71 @@ export function ntValueChanged(key, value) {
     payload: {
       key,
       value
+    },
+    meta: {
+      record: true
+    }
+  };
+}
+
+
+/**
+ * Replay Actions
+ */
+
+ export function stopRecording() {
+   return {
+     type: ActionTypes.STOP_RECORDING
+   };
+ }
+
+ export function startRecording() {
+  return {
+    type: ActionTypes.START_RECORDING
+  };
+}
+
+export function resumeReplay() {
+  return {
+    type: ActionTypes.RESUME_REPLAY
+  };
+}
+
+export function pauseReplay() {
+  return {
+    type: ActionTypes.PAUSE_REPLAY
+  };
+}
+
+export function goToTime(timePercent) {
+  return {
+    type: ActionTypes.GO_TO_TIME,
+    payload: {
+      timePercent
+    }
+  };
+}
+
+export function setLooping(loop) {
+  return {
+    type: ActionTypes.SET_LOOPING,
+    payload: {
+      loop
+    }
+  }
+}
+
+export function stopReplay() {
+  return {
+    type: ActionTypes.STOP_REPLAY
+  };
+}
+
+export function loadReplay(recording) {
+  return {
+    type: ActionTypes.LOAD_REPLAY,
+    payload: {
+      recording
     }
   };
 }

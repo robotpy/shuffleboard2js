@@ -3,18 +3,24 @@
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-modules.tag';
 import './side-panel.tag';
+import './replay.tag';
 import axios from 'axios';
 import * as _ from 'lodash';
 import './widget-tabs.tag';
+import './load-recording-modal.tag';
 
 <app>
   <div class="menu">
     <button type="button" class="btn btn-sm btn-secondary" aria-label="Save Layout" onclick={onSave}>
       Save
     </button>
-    <button type="button" class="btn btn-sm btn-secondary" aria-label="Save Layout" onclick={onConfigNetworkTables}>
-      NetworkTables
+    <button type="button" class="btn btn-sm btn-secondary" aria-label="Load Recording" onclick={onLoadRecording}>
+      Load Recording
     </button>
+    <modal ref="loadRecordingModal" title="Load Recording">
+      <load-recording-modal recordings={opts.recordings} modal={root._tag} />
+    </modal>
+    <replay />
   </div>
 
   <div class="main">
@@ -26,10 +32,13 @@ import './widget-tabs.tag';
     </div>
   </div>
 
-  <div class="drag-image-container"></div>
-
 
   <style>
+
+    replay {
+      flex: 1;
+    }
+
     .main {
       display: flex;
       height: 100%;
@@ -56,7 +65,12 @@ import './widget-tabs.tag';
     }
 
     .menu {
+      display: flex;
       padding: 10px 15px;
+    }
+
+    .menu > button {
+      margin-right: 5px;
     }
 
   </style>
@@ -72,8 +86,13 @@ import './widget-tabs.tag';
       saveLayout(widgetJson);
     };
 
-    this.onConfigNetworkTables = (ev) => {
-
+    this.onLoadRecording = (ev) => {
+      dashboard.recorder.getRecordings()
+        .then(recordings => {
+          this.refs.loadRecordingModal.opts.recordings = recordings;
+          this.refs.loadRecordingModal.update();
+          this.refs.loadRecordingModal.open();
+        });
     };
 
     async function saveLayout(widgetJson) {
@@ -91,6 +110,7 @@ import './widget-tabs.tag';
         return [];
       }
     }
+    
 
     this.on('mount', () => {
 
@@ -113,6 +133,12 @@ import './widget-tabs.tag';
       });
 
     });
+
+    this.mapDispatchToMethods = {
+      loadReplay: dashboard.actions.loadReplay,
+    };
+
+    this.reduxConnect(null, this.mapDispatchToMethods);
 
   </script>
 </app>

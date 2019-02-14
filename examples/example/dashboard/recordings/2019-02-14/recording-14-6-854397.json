@@ -1,0 +1,60 @@
+{
+    "networktablesStart": {
+        "rawValues": {
+            "/FMSInfo/.type": "FMSInfo",
+            "/FMSInfo/EventName": "sim-event",
+            "/FMSInfo/FMSControlData": 0,
+            "/FMSInfo/GameSpecificMessage": "",
+            "/FMSInfo/IsRedAlliance": true,
+            "/FMSInfo/MatchNumber": 0,
+            "/FMSInfo/MatchType": 0,
+            "/FMSInfo/ReplayNumber": 0,
+            "/FMSInfo/StationNumber": 1,
+            "/LiveWindow/.status/LW Enabled": false,
+            "/LiveWindow/Ungrouped/.type": "LW Subsystem",
+            "/LiveWindow/Ungrouped/Talon[0]/.actuator": true,
+            "/LiveWindow/Ungrouped/Talon[0]/.name": "Talon[0]",
+            "/LiveWindow/Ungrouped/Talon[0]/.type": "Speed Controller",
+            "/LiveWindow/Ungrouped/Talon[0]/Value": 0,
+            "/LiveWindow/Ungrouped/Talon[1]/.actuator": true,
+            "/LiveWindow/Ungrouped/Talon[1]/.name": "Talon[1]",
+            "/LiveWindow/Ungrouped/Talon[1]/.type": "Speed Controller",
+            "/LiveWindow/Ungrouped/Talon[1]/Value": 0
+        },
+        "values": {
+            "FMSInfo": {
+                ".type/": "FMSInfo",
+                "EventName/": "sim-event",
+                "FMSControlData/": 0,
+                "GameSpecificMessage/": "",
+                "IsRedAlliance/": true,
+                "MatchNumber/": 0,
+                "MatchType/": 0,
+                "ReplayNumber/": 0,
+                "StationNumber/": 1
+            },
+            "LiveWindow": {
+                ".status": {
+                    "LW Enabled/": false
+                },
+                "Ungrouped": {
+                    ".type/": "LW Subsystem",
+                    "Talon[0]": {
+                        ".actuator/": true,
+                        ".name/": "Talon[0]",
+                        ".type/": "Speed Controller",
+                        "Value/": 0
+                    },
+                    "Talon[1]": {
+                        ".actuator/": true,
+                        ".name/": "Talon[1]",
+                        ".type/": "Speed Controller",
+                        "Value/": 0
+                    }
+                }
+            }
+        }
+    },
+    "start": 1550171204611,
+    "updates": []
+}
