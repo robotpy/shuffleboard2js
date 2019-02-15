@@ -1,7 +1,7 @@
-import './gyro.tag';
-import image from './gyro.png';
+import './camera.tag';
+import image from './camera.png';
 
-dashboard.registerWidget('gyro', {
+dashboard.registerWidget('camera', {
   label: 'Camera',
   category: 'Sensors',
   acceptedTypes: ['Camera'],

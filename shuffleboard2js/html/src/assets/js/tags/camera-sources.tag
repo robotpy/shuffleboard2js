@@ -72,6 +72,7 @@ import fileImage from 'open-iconic/png/file-8x.png';
             cameras[key] = {
               ntKey: `/CameraPublisher/${key}/`
             };
+            this.update();
           }
         });
 

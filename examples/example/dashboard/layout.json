@@ -1,7 +1,7 @@
 {
     "tabs": [
         {
-            "header": "lkklklklklkioojjjkkllkklkllklk",
+            "header": "oiiijiooijoijoi",
             "widgets": [
                 {
                     "col": 9,
@@ -15,7 +15,7 @@
                 {
                     "col": 2,
                     "ntRoot": null,
-                    "row": 4,
+                    "row": 10,
                     "sizeX": 6,
                     "sizeY": 6,
                     "widgetTitle": "",
@@ -24,11 +24,20 @@
                 {
                     "col": 10,
                     "ntRoot": null,
-                    "row": 8,
+                    "row": 11,
                     "sizeX": 5,
                     "sizeY": 5,
                     "widgetTitle": "rfdfdv",
                     "widgetType": "widget-a"
+                },
+                {
+                    "col": 3,
+                    "ntRoot": "/CameraPublisher/USB Camera 0/",
+                    "row": 2,
+                    "sizeX": 8,
+                    "sizeY": 7,
+                    "widgetTitle": null,
+                    "widgetType": "camera"
                 }
             ]
         }
