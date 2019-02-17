@@ -18,8 +18,29 @@ export default class NetworkTablesWrapper {
     
     // sets a function that will be called when any NetworkTables key/value changes
     NetworkTables.addGlobalListener((key, value, isNew) => {
-      this.store.dispatch(actions.ntValueChanged(key, value));
+
+      // Don't dispatch networktables values if currently replaying
+      if (!this.isReplaying && !this.isReplayingPaused) {
+        this.store.dispatch(actions.ntValueChanged(key, value));
+      }
     }, true);
+  }
+
+  get replayState() {
+    const state = this.store.getState();
+    return state.replay.state;
+  }
+
+  get isReplaying() {
+    return this.replayState === 'REPLAYING';
+  }
+
+  get isReplayingPaused() {
+    return this.replayState === 'REPLAYING_PAUSED';
+  }
+
+  get isRecording() {
+    return this.replayState === 'RECORDING';
   }
 } 
 

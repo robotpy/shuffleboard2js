@@ -128,6 +128,17 @@ const rootReducer = (state = initialState, action) => {
         }
       };
 
+    case ActionTypes.INIT_NETWORKTABLES:
+
+      return {
+        ...state,
+        networktables: {
+          ...state.networktables,
+          values: {},
+          rawValues: {}
+        }
+      };
+
     case ActionTypes.STOP_RECORDING:
       
       return {
@@ -196,10 +207,10 @@ const rootReducer = (state = initialState, action) => {
       const recording = action.payload.recording;
       
       if (recording.updates.length > 0) {
-        var recordingLength = Math.max(recording.updates[recording.updates.length - 1].time, .01);
+        var recordingLength = Math.max(recording.updates[recording.updates.length - 1].time, 1);
       }
       else {
-        var recordingLength = .01;
+        var recordingLength = 1;
       }
       
       return {

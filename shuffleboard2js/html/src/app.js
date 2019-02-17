@@ -10,6 +10,7 @@ import 'assets/scss/app.scss';
 window.dashboard = {
   store,
   actions,
+  events: riot.observable(),
   registerWidget: function(tagName, config) {
     store.dispatch(actions.registerWidget(tagName, config));
   }

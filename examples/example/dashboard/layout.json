@@ -1,7 +1,7 @@
 {
     "tabs": [
         {
-            "header": "oiiijiooijoijoi",
+            "header": "oiiijiooij",
             "widgets": [
                 {
                     "col": 9,
@@ -29,15 +29,56 @@
                     "sizeY": 5,
                     "widgetTitle": "rfdfdv",
                     "widgetType": "widget-a"
+                }
+            ]
+        },
+        {
+            "header": "Tab 2",
+            "widgets": [
+                {
+                    "col": 6,
+                    "ntRoot": null,
+                    "row": 3,
+                    "sizeX": 5,
+                    "sizeY": 5,
+                    "widgetTitle": "",
+                    "widgetType": "camera"
                 },
                 {
-                    "col": 3,
-                    "ntRoot": "/CameraPublisher/USB Camera 0/",
+                    "col": 5,
+                    "ntRoot": null,
+                    "row": 8,
+                    "sizeX": 3,
+                    "sizeY": 3,
+                    "widgetTitle": "",
+                    "widgetType": "gyro"
+                },
+                {
+                    "col": 11,
+                    "ntRoot": null,
+                    "row": 3,
+                    "sizeX": 3,
+                    "sizeY": 3,
+                    "widgetTitle": "",
+                    "widgetType": "gyro"
+                },
+                {
+                    "col": 15,
+                    "ntRoot": null,
                     "row": 2,
-                    "sizeX": 8,
-                    "sizeY": 7,
+                    "sizeX": 5,
+                    "sizeY": 5,
                     "widgetTitle": null,
-                    "widgetType": "camera"
+                    "widgetType": "widget-a"
+                },
+                {
+                    "col": 1,
+                    "ntRoot": null,
+                    "row": 6,
+                    "sizeX": 1,
+                    "sizeY": 1,
+                    "widgetTitle": null,
+                    "widgetType": "widget-b"
                 }
             ]
         }

@@ -83,6 +83,12 @@ export function ntValueChanged(key, value) {
   };
 }
 
+export function initNetworktTables() {
+  return {
+    type: ActionTypes.INIT_NETWORKTABLES
+  };
+};
+
 
 /**
  * Replay Actions

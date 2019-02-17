@@ -1,4 +1,6 @@
 import axios from 'axios';
+import Player from './player';
+import * as actions from './actions';
 
 export default class Recorder {
 
@@ -6,8 +8,25 @@ export default class Recorder {
     this.store = store;
     this.prevReplayState = this.replayState;
     this.recording = this.createNewRecording();
+    this.player = null;
+
+    dashboard.events.on('loadReplay', () => {
+      let state = this.store.getState();
+      this.player = new Player(this.store, state.replay.recording);
+    });
+
+    setInterval(() => {
+      let state = this.store.getState();
+
+      if (this.player) {
+        this.player.goToTime(state.replay.recordingTime);
+      }
+    }, 100);
 
     this.store.subscribe(() => {
+
+      let state = this.store.getState();
+
       if (this.replayState !== this.prevReplayState) {
         
         // If we just started recording create a new recording
@@ -16,12 +35,21 @@ export default class Recorder {
         }
 
         // If we just stopped recording save the replay
-        if (this.replayState === 'RECORDING_STOPPED') {
+        if (this.wasRecording) {
           this.saveRecording();
         }
 
-        this.prevReplayState = this.replayState;
+        // If we just stopped replaying reinit networktables
+        if ((this.wasReplaying || this.wasReplayingPaused) && this.isRecording) {
+          this.prevReplayState = this.replayState;
+          NetworkTables.getKeys().forEach(ntKey => {
+            let ntValue = NetworkTables.getValue(ntKey);
+            this.store.dispatch(actions.ntValueChanged(ntKey, ntValue));
+          });
+        }
       }
+
+      this.prevReplayState = this.replayState;
     });
   }
 
@@ -30,10 +58,7 @@ export default class Recorder {
 
     return {
       start: Date.now(),
-      networktablesStart: {
-        values: state.networktables.values,
-        rawValues: state.networktables.rawValues,
-      },
+      networktablesInit: state.networktables.rawValues,
       updates: []
     }
   }
@@ -113,7 +138,35 @@ export default class Recorder {
     return state.replay.state;
   }
 
+  get wasRecording() {
+    return this.prevReplayState === 'RECORDING';
+  }
+
+  get wasRecordingStopped() {
+    return this.prevReplayState === 'RECORDING_STOPPED';
+  }
+
+  get wasReplaying() {
+    return this.prevReplayState === 'REPLAYING';
+  }
+
+  get wasReplayingPaused() {
+    return this.prevReplayState === 'REPLAYING_PAUSED';
+  }
+
   get isRecording() {
     return this.replayState === 'RECORDING';
+  }
+
+  get isRecordingStopped() {
+    return this.replayState === 'RECORDING_STOPPED';
+  }
+
+  get isReplaying() {
+    return this.replayState === 'REPLAYING';
+  }
+
+  get isReplayingPaused() {
+    return this.replayState === 'REPLAYING_PAUSED';
   }
 }

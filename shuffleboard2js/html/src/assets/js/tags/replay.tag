@@ -93,6 +93,10 @@
 
     this.isPlaying = false;
 
+    dashboard.events.on('loadReplay', () => {
+      $(this.refs.videoTime).val(0);
+    });
+
 
     setInterval(() => {
       const state = dashboard.store.getState();
@@ -108,9 +112,8 @@
         recordingTime = 0;
       }
 
-      $(this.refs.videoTime).val(recordingTime / recordingLength);
-      
-      this.goToTime(recordingTime);
+      $(this.refs.videoTime).val(recordingTime / recordingLength);      
+      this.goToTime(recordingTime / recordingLength);
 
     }, 100);
 
