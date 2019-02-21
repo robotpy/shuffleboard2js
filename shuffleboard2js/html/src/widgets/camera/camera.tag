@@ -23,8 +23,15 @@
                 // get first element from streams
                 let stream = streams[0];
 
+                let img = new Image();
+
                 // remove mjpg:
-                this.url = stream.replace('mjpg:', '');    
+                img.src = stream.replace('mjpg:', ''); 
+                img.onload = () => {
+                    this.url = img.src;
+                    img.onload = () => {}
+                }
+ 
             }
             else {
                 this.url = '';
