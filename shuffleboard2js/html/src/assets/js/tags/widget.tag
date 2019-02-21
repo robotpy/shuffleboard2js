@@ -9,8 +9,13 @@ import ObservableSlim from 'observable-slim';
   </div>
   <div class="widget-type" ref="widgetType" tables="{opts.ntValue}"></div>
   
-  <modal ref="propertiesModal">
-    <div class="widget-properties"></div>
+  <modal ref="propertiesModal" title="Properties">
+    <div class="modal-body">
+      <div class="widget-properties"></div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
   </modal>
 
   <style>
