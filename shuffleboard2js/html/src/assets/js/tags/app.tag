@@ -1,7 +1,7 @@
 
 
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
-import './user-modules.tag';
+import './user-widgets.tag';
 import './side-panel.tag';
 import './replay.tag';
 import axios from 'axios';
@@ -32,6 +32,7 @@ import './load-recording-modal.tag';
     </div>
   </div>
 
+  <user-widgets />
 
   <style>
 

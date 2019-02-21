@@ -87,6 +87,7 @@ class ApiHandler(tornado.web.RequestHandler):
     def initialize(self, dashboard_path):
 
         self.dashboard_path = dashboard_path
+        self.user_widgets_path = join(self.dashboard_path, 'widgets')
         
 
     def set_default_headers(self):
@@ -137,6 +138,15 @@ class ApiHandler(tornado.web.RequestHandler):
                     recordings[basename(root)] = files
 
             self.write(recordings)
+
+        elif param == 'widgets':
+            widgets = []
+            for root, dirs, files in os.walk(self.user_widgets_path):
+                widgets.extend(dirs)
+
+            self.write({
+                'widgets': widgets
+            })
 
         else:
             raise tornado.web.HTTPError(404)
@@ -240,12 +250,15 @@ def main():
     # Path where user files are served from
     robot_file = abspath(os.getcwd())
     dashboard_path = join(robot_file, 'dashboard')
+    widget_path = join(dashboard_path, 'widgets')
+
     if not exists(dashboard_path):
         os.mkdir(dashboard_path)
 
     app = tornado.web.Application(
         get_handlers()
         + [
+            (r'/widgets/(.*)', NonCachingStaticFileHandler, {'path': widget_path }),
             (r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
             (r'/api/(.*)', ApiHandler, {'dashboard_path': dashboard_path}),
             (r"/()", NonCachingStaticFileHandler, {"path": index_html}),

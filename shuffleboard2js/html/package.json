@@ -64,6 +64,7 @@
     "lodash": "^4.17.11",
     "observable-slim": "^0.1.4",
     "open-iconic": "^1.1.1",
+    "path-webpack": "0.0.3",
     "popper.js": "^1.14.4",
     "riot-redux-connect": "^1.1.8"
   }
