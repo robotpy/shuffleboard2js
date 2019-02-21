@@ -68,8 +68,9 @@ setup(
     include_package_data=True,
     package_data={},
     zip_safe=False,
-    scripts=['shuffleboard2js/shuffleboard2js'],
-    #entry_points={'robotpy': [ 'webdashboard = webdashboard.server:Main' ]},
+    entry_points={
+        "console_scripts": ["shuffleboard2js = shuffleboard2js.__main__:main"]
+    },
     install_requires=install_requires,
     license="BSD License",
     classifiers=[
