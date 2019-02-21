@@ -11,6 +11,9 @@ import inspect
 import os
 from os.path import abspath, dirname, exists, join, basename
 from optparse import OptionParser
+import webbrowser
+import threading
+import time
 
 import tornado.web
 from tornado.web import StaticFileHandler
@@ -193,6 +196,7 @@ class ApiHandler(tornado.web.RequestHandler):
         else:
             raise tornado.web.HTTPError(404)
 
+
 def main():
     '''Entrypoint called from wpilib.run'''
 
@@ -271,6 +275,37 @@ def main():
     logger.info("Listening on http://localhost:%s/", options.port)
 
     app.listen(options.port)
+
+
+    def launch_browser():
+		
+        try:
+            time.sleep(1.0)
+            w = None
+            
+            # Prefer chrome if available
+            for b in ['chrome', 'google-chrome', 'chromium', 'chromium-browser', 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s']:
+                if w is not None:
+                    break
+                try:
+                    w = webbrowser.get(using=b)
+                    
+                except:
+                    pass
+            
+            if w is None:
+                w = webbrowser.get()
+            
+            w.open('http://localhost:%s/' % options.port)
+        except:
+            logger.exception("Unexpected error trying to open browser automatically")
+        
+        return False
+
+
+    launch_thread = threading.Thread(target=launch_browser, daemon=True)
+    launch_thread.start()
+
     IOLoop.current().start()
 
 
