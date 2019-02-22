@@ -1,5 +1,5 @@
 {
-  "name": "robotpy-websim",
+  "name": "shuffleboard2js",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/robotpy/robotpy-websim.git"
+    "url": "git+https://github.com/robotpy/shuffleboard2js.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/robotpy/robotpy-websim/issues"
+    "url": "https://github.com/robotpy/shuffleboard2js/issues"
   },
-  "homepage": "https://github.com/robotpy/robotpy-websim#readme",
+  "homepage": "https://github.com/robotpy/shuffleboard2js#readme",
   "devDependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",

@@ -42,7 +42,7 @@ if exists(version_file):
 else:
     __version__ = "master"
 
-with open(join(setup_dir, 'README.md'), 'r') as readme_file:
+with open(join(setup_dir, 'README.rst'), 'r') as readme_file:
     long_description = readme_file.read()
 
 with open(join(setup_dir, "requirements.txt")) as fp:
