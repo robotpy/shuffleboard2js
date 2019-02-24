@@ -253,11 +253,14 @@ def main():
 
     # Path where user files are served from
     robot_file = abspath(os.getcwd())
-    dashboard_path = join(robot_file, 'dashboard')
+    dashboard_path = join(robot_file, 'shuffleboard2js')
     widget_path = join(dashboard_path, 'widgets')
 
     if not exists(dashboard_path):
         os.mkdir(dashboard_path)
+
+    if not exists(widget_path):
+        os.mkdir(widget_path)
 
     app = tornado.web.Application(
         get_handlers()
