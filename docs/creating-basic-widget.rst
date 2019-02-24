@@ -63,8 +63,8 @@ Your widget doesn't show up automatically in the *shuffleboard2js* interface. To
       image: 'widget.png',        // This is the image the widget will show in the widget menu
       category: 'Basic',          // This is the category the widget will placed under in the widget menu 
       acceptedTypes: ['string'],  // These are the types of NetworkTables values you can drag onto the widget
-      minX: 2,                    // This is the minimum number of x grid spaces the widget can take up in the interface
-      minY: 2                     // This is the minimum number of y grid spaces the widget can take up in the interface
+      minX: 3,                    // This is the minimum number of x grid spaces the widget can take up in the interface
+      minY: 3                     // This is the minimum number of y grid spaces the widget can take up in the interface
     });
   </script>
 
@@ -73,3 +73,15 @@ You can optionally put an image in your widget's folder named after whatever you
 Your folder structure should now look like this:
 
 .. image:: images/folder-structure4.png
+
+Refresh the interface and your widget should be there:
+
+.. image:: images/basic-widget-preview.png
+
+Dragging a widget onto the interface should look like this:
+
+.. image:: images/basic-widget-dragged.png
+
+Drag a NetworkTables source onto the widget of type *string*. The widget should take on the NetworkTable value:
+
+.. image:: images/basic-widget-source.png
