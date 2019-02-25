@@ -203,6 +203,10 @@ import axios from 'axios';
         this.widgetTabs = tabs;
         this.update();
         this.updateTabInputWidths();
+        
+        if (this.widgetTabs.length === 0) {
+          this.addTab();
+        }
       });
     });
 
