@@ -41,6 +41,11 @@ import './camera-sources.tag';
   
 
   <style>
+
+    #accordion {
+      max-height: 100%;
+    }
+
     .card-header {
       padding: 3px 5px;
     }
