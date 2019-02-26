@@ -48,9 +48,9 @@ import axios from 'axios';
       height: 100%;
     }
 
-    .card-body {
+    > .card > .card-body {
       padding: 10px;
-      overflow: auto;
+      overflow: hidden;
       background: #EFEFEF;
     }
 

@@ -284,6 +284,9 @@ import { getType } from 'assets/js/networktables';
         collision: {
             wait_for_mouseup: true
         },
+        extra_cols: 0,
+        // Make sure width of gridster isn't larger than the screen
+        max_cols: parseInt(window.outerWidth / 55),
         resize: {
           enabled: true,
           start: function (event, uiWidget, $widget) {
