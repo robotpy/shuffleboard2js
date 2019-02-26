@@ -41,7 +41,6 @@ import './widget-menu.tag';
     }
 
     > .card > .card-header {
-      overflow: hidden;
       border-bottom: none;
       padding: 0 1.25rem .75rem;
     }
