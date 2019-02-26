@@ -1,0 +1,22 @@
+{
+    "tabs": [
+        {
+            "header": "asdsadsasa",
+            "widgets": [
+                {
+                    "col": 4,
+                    "ntRoot": null,
+                    "row": 3,
+                    "sizeX": 3,
+                    "sizeY": 4,
+                    "widgetTitle": null,
+                    "widgetType": "basic-widget"
+                }
+            ]
+        },
+        {
+            "header": "Tab 2",
+            "widgets": []
+        }
+    ]
+}

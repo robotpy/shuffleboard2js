@@ -323,7 +323,23 @@ import { getType } from 'assets/js/networktables';
 
       $(() => {
         this.opts.savedWidgets.forEach(widgetConfig => {
-          this.addSavedWidget(widgetConfig);
+
+          // Wait until widget is registered before adding it
+          const promise = new Promise(function(resolve, reject) {
+            if (widgetConfig.widgetType in dashboard.store.getState().widgets.registered) {
+              resolve();
+            }
+
+            dashboard.events.on('registerWidget', () => {
+              if (widgetConfig.widgetType in dashboard.store.getState().widgets.registered) {
+                resolve();
+              }
+            });
+          });
+
+          promise.then(() => {
+            this.addSavedWidget(widgetConfig);
+          });
         });
       });
     });

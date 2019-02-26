@@ -19,6 +19,9 @@ const fireEventsMiddleware = store => next => action => {
   if (action.type === ActionTypes.LOAD_REPLAY) {
     dashboard.events.trigger('loadReplay');
   }
+  else if (action.type === ActionTypes.REGISTER_WIDGET) {
+    dashboard.events.trigger('registerWidget');
+  }
 };
 
 
