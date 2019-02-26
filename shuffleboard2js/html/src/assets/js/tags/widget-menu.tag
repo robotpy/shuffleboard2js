@@ -131,12 +131,11 @@ import * as _ from 'lodash';
       let unaddedTypes = this.getUnaddedTypes(Object.keys(state.widgets.registered));
       widgetTypes = widgetTypes.concat(unaddedTypes);
 
-      unaddedTypes.forEach(unaddedType => {
+      unaddedTypes.forEach((unaddedType) => {
         let type = state.widgets.registered[unaddedType];
-        this.addType({
-          ...type,
+        this.addType(Object.assign({}, type, {
           widgetType: unaddedType
-        });
+        }));
         this.update();
       });
 

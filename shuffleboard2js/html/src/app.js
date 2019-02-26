@@ -7,6 +7,7 @@ import "assets/js/tags/app.tag";
 import * as actions from  'assets/js/actions';
 import 'assets/scss/app.scss';
 
+
 window.dashboard = {
   store,
   actions,

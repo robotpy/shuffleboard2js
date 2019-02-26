@@ -135,11 +135,7 @@ import ObservableSlim from 'observable-slim';
     };
 
     this.manuallyUpdate = () => {
-      this.opts = {
-        ...this.opts,
-        ...this.mapStateToOpts(dashboard.store.getState())
-      };
-
+      this.opts = Object.assign({}, this.opts, this.mapStateToOpts(dashboard.store.getState()));
       this.update();
       this.refs.widgetType._tag.update();
     }

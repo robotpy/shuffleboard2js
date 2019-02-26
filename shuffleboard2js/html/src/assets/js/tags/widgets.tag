@@ -208,10 +208,9 @@ import { getType } from 'assets/js/networktables';
 
         if (x > left && x < (left + width) && y > top && y < (top + height)) {
           let widget = $(this).find('widget')[0]._tag;
-          widgets.push({
-            ...widget,
+          widgets.push(Object.assign({}, widget, {
             $widget: $(this)
-          });
+          }));
         }
       });
 
