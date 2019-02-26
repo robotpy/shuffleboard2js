@@ -38,7 +38,7 @@ networktables .row-item.type, .row-item.value {
 
 networktables .row-item {
   white-space: nowrap;
-  overflow-x: scroll;
+  overflow-x: auto;
   padding: 3px 0;
   display: inline-block;
 }
