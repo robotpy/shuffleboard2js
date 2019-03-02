@@ -6,6 +6,6 @@ dashboard.registerWidget('gyro', {
   category: 'Sensors',
   acceptedTypes: ['Gyro'],
   image,
-  minX: 3,
-  minY: 3
+  minX: 6,
+  minY: 6
 });

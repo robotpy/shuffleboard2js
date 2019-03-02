@@ -16,13 +16,8 @@ module.exports = (env = {}) => {
     context: path.resolve(__dirname, "src"),
     entry: {
       app: ['babel-polyfill', './app.js'],
-      'widget-a': ['./widgets/a/index.js'],
-      'widget-b': ['./widgets/b/index.js'],
-      'widget-c': ['./widgets/c/index.js'],
-      'widget-d': ['./widgets/d/index.js'],
       'gyro': ['./widgets/gyro/index.js'],
-      'pid-tuner': ['./widgets/pid-tuner/index.js'],
-      'camera': ['./widgets/camera/index.js'],
+      'camera': ['./widgets/camera/index.js']
     },
     output: {
       filename: "[name].bundle.js",
