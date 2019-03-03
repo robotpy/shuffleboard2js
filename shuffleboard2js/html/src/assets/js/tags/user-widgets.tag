@@ -36,11 +36,11 @@ import pathModule from 'path';
           url = "http://" + pathModule.join(l.hostname + ":" + port, 'widgets', widget, url);
         }
         
-        riot.compile(url ? url : tag);
-  
-      });
+        riot.compile(url ? url : tag, () => {
+          $(html).appendTo('body');
+        });
 
-      $(html).appendTo('body');
+      });
     }
 
 
