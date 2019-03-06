@@ -8,6 +8,16 @@
 Contents
 ========
 
+.. _introduction:
+
+.. toctree::
+  :maxdepth: 3
+  :caption: Introduction
+
+  tour-of-shuffleboard2js
+  working-with-widgets
+  
+
 .. _widgets:
 
 .. toctree::
