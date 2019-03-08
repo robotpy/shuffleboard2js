@@ -16,6 +16,7 @@ Contents
 
   tour-of-shuffleboard2js
   working-with-widgets
+  creating-and-manipulating-tabs
   
 
 .. _widgets:
