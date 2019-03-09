@@ -94,27 +94,33 @@ const rootReducer = (state = initialState, action) => {
     case ActionTypes.NT_VALUE_CHANGED:
 
       let values = { ...state.networktables.values };
-      
-      let segments = action.payload.key.split('/')
-        .filter(segment => {
-          return segment !== '';
-        });
+      let valueChanges = action.payload.valueChanges;
 
-      if (segments.length > 0 && !action.payload.key.endsWith('/')) {
-        segments[segments.length - 1] += '/';
+      for (let key in valueChanges) {
+
+        let value = valueChanges[key];
+
+        let segments = key.split('/')
+          .filter(segment => {
+            return segment !== '';
+          });
+
+        if (segments.length > 0 && !key.endsWith('/')) {
+          segments[segments.length - 1] += '/';
+        }
+
+        let path = segments
+          .map(segment => {
+            return `['${segment}']`;
+          })
+          .join('');
+
+        if (key.endsWith('/')) {
+          path += "['/']";
+        }
+
+        set(values, path, value);
       }
-
-      let path = segments
-        .map(segment => {
-          return `['${segment}']`;
-        })
-        .join('');
-
-      if (action.payload.key.endsWith('/')) {
-        path += "['/']";
-      }
-
-      set(values, path, action.payload.value);
 
       return {
         ...state,
@@ -123,7 +129,7 @@ const rootReducer = (state = initialState, action) => {
           values,
           rawValues: {
             ...state.networktables.rawValues,
-            [action.payload.key]: action.payload.value
+            ...valueChanges
           }
         }
       };

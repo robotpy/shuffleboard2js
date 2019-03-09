@@ -5,6 +5,7 @@ export default class NetworkTablesWrapper {
 
   constructor(store) {
     this.store = store;
+    this.ntUpdates = {};
 
     // sets a function that will be called when the websocket connects/disconnects
     NetworkTables.addWsConnectionListener((connected) => {
@@ -15,15 +16,22 @@ export default class NetworkTablesWrapper {
     NetworkTables.addRobotConnectionListener((connected) => {
       this.store.dispatch(actions.ntWsConnectionChanged(connected));
     }, true);
-    
+
     // sets a function that will be called when any NetworkTables key/value changes
     NetworkTables.addGlobalListener((key, value, isNew) => {
+      this.ntUpdates[key] = value;
+    }, true);
+
+    // Sending NetworkTable updates too quickly causes the dashboard to freeze.
+    // Send them in batches every 100ms
+    setTimeout(() => {
 
       // Don't dispatch networktables values if currently replaying
       if (!this.isReplaying && !this.isReplayingPaused) {
-        this.store.dispatch(actions.ntValueChanged(key, value));
+        this.store.dispatch(actions.ntValueChanged(this.ntUpdates));
+        this.ntUpdates = {};
       }
-    }, true);
+    }, 100);
   }
 
   get replayState() {

@@ -81,12 +81,24 @@ export function ntWsConnectionChanged(connected) {
   };
 }
 
-export function ntValueChanged(key, value) {
+export function ntValueChanged() {
+
+  let valueChanges = {};
+
+  if (arguments.length === 1) {
+    valueChanges = arguments[0];
+  } 
+  else {
+    const key = arguments[0];
+    const value = arguments[1];
+    valueChanges[key] = value;
+  }
+
+
   return {
     type: ActionTypes.NT_VALUE_CHANGED,
     payload: {
-      key,
-      value
+      valueChanges
     },
     meta: {
       record: true

@@ -38,7 +38,7 @@ export default class Player {
         }
         else {
           this.lastUpdateIndex = i;
-          this.update(update.key, update.value);
+          this.update(update.valueChanges);
         }
       }
     }
@@ -57,7 +57,7 @@ export default class Player {
         }
         else {
           this.lastUpdateIndex = i;
-          this.update(update.key, update.value);
+          this.update(update.valueChanges);
         }
       }
     }
@@ -73,8 +73,8 @@ export default class Player {
     });
   } 
 
-  update(ntKey, ntValue) {
-    this.store.dispatch(actions.ntValueChanged(ntKey, ntValue));
+  update(valueChanges) {
+    this.store.dispatch(actions.ntValueChanged(valueChanges));
   }
 
 

@@ -72,8 +72,7 @@ export default class Recorder {
     const time = (Date.now() - this.recording.start) / 1000;
     this.recording.updates.push({
       time,
-      key: action.payload.key,
-      value: action.payload.value
+      valueChanges: action.payload.valueChanges
     });
   }
 
