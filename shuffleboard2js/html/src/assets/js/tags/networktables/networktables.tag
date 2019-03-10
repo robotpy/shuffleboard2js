@@ -53,7 +53,7 @@ import { getType } from 'assets/js/networktables';
 
         // Send notification if setting widget failed
         if (widgets.length === 0) {
-          dashboard.toastr.error(`Failed to add source '${ntKey}'`);
+          dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget found.`);
         }
 ;
       });
