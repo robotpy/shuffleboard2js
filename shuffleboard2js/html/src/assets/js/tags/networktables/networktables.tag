@@ -1,6 +1,7 @@
 import './subtable.tag';
 import './networktables.scss';
 import fileImage from 'open-iconic/png/file-8x.png';
+import { getType } from 'assets/js/networktables';
 
 <networktables>  
   <div class="table">
@@ -38,8 +39,23 @@ import fileImage from 'open-iconic/png/file-8x.png';
 
         let widgets = this.getWidgets(ev.clientX, ev.clientY);
         widgets.forEach(widget => {
-          widget.setNtRoot(ntKey);
+          
+          if (widget.setNtRoot(ntKey)) {
+            dashboard.toastr.success(`Successfully added source '${ntKey}'`);
+          }
+          else {
+            const widgetConfig = widget.getConfig();
+            const ntType = getType(ntKey);
+            dashboard.toastr.error(`Widget of type '${widgetConfig.label}' doesn't accept type 
+                                    '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
+          }
         });
+
+        // Send notification if setting widget failed
+        if (widgets.length === 0) {
+          dashboard.toastr.error(`Failed to add source '${ntKey}'`);
+        }
+;
       });
     });
 

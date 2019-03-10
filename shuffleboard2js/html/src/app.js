@@ -6,15 +6,16 @@ import Recorder from './assets/js/recorder';
 import "assets/js/tags/app.tag";
 import * as actions from  'assets/js/actions';
 import 'assets/scss/app.scss';
-
+import toastr from 'toastr';
 
 window.dashboard = {
   store,
   actions,
   events: riot.observable(),
+  toastr,
   registerWidget: function(tagName, config) {
     store.dispatch(actions.registerWidget(tagName, config));
-  }
+  },
 };
 
 riotReduxConnect(riot, store);

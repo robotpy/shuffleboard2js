@@ -68,6 +68,10 @@ import ObservableSlim from 'observable-slim';
       }
     };
 
+    this.getConfig = () => {
+      return dashboard.store.getState().widgets.registered[this.widgetType];
+    };
+
     this.getPropertiesTag = (widgetType) => {
       let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
       return widgetConfig.properties.tag;
@@ -114,7 +118,10 @@ import ObservableSlim from 'observable-slim';
       if (this.isAcceptedType(ntType)) {
         this.ntRoot = root;
         this.manuallyUpdate();
+        return true;
       }
+
+      return false;
     };
 
     this.setWidgetType = (type) => {
