@@ -282,7 +282,7 @@ import { getType } from 'assets/js/networktables';
         shift_larger_widgets_down: false,
         collision: {
             wait_for_mouseup: true
-        }
+        },
         resize: {
           enabled: true,
           start: function (event, uiWidget, $widget) {
