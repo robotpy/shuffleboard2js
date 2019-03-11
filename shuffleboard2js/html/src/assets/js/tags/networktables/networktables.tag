@@ -36,8 +36,9 @@ import { getType } from 'assets/js/networktables';
         const isSubtable = $ntKey[0].tagName === 'SUBTABLE';
         const ntKey = $ntKey.attr('data-nt-key') || $ntKey.attr('nt-key');
 
+        let dragEndPosition = this.getDragEndPosition(ev);
 
-        let widgets = this.getWidgets(ev.clientX, ev.clientY);
+        let widgets = this.getWidgets(dragEndPosition.x, dragEndPosition.y);
         widgets.forEach(widget => {
           
           if (widget.setNtRoot(ntKey)) {
@@ -55,9 +56,31 @@ import { getType } from 'assets/js/networktables';
         if (widgets.length === 0) {
           dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget found.`);
         }
-;
+
+        
       });
     });
+
+
+    this.getDragEndPosition = (ev) => {
+
+      if (navigator.userAgent.indexOf("Firefox") != -1) {
+        const scrollLeft = $(window).scrollLeft();
+        const scrollTop = $(window).scrollTop();
+
+        return {
+          x: ev.originalEvent.screenX - scrollLeft - window.screenX,
+          y: ev.originalEvent.screenY - scrollTop - window.screenY
+        }
+      }
+      else {
+        return {
+          x: ev.originalEvent.clientX,
+          y: ev.originalEvent.clientY
+        }
+      }
+
+    };
 
 
 

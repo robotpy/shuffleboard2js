@@ -2,6 +2,7 @@
 import { getSubtable } from 'assets/js/networktables';
 import _ from 'lodash';
 import fileImage from 'open-iconic/png/file-8x.png';
+import { getType } from 'assets/js/networktables';
 
 <camera-sources>
 
@@ -50,10 +51,45 @@ import fileImage from 'open-iconic/png/file-8x.png';
     this.onDragEnd = (ev) => {
       const ntKey = $(ev.target).attr('data-nt-key');
 
-      let widgets = this.getWidgets(ev.clientX, ev.clientY);
+      let dragEndPosition = this.getDragEndPosition(ev);
+
+      let widgets = this.getWidgets(dragEndPosition.x, dragEndPosition.y);
       widgets.forEach(widget => {
-        widget.setNtRoot(ntKey);
+        
+        if (widget.setNtRoot(ntKey)) {
+          dashboard.toastr.success(`Successfully added source '${ntKey}'`);
+        }
+        else {
+          const widgetConfig = widget.getConfig();
+          const ntType = getType(ntKey);
+          dashboard.toastr.error(`Widget of type '${widgetConfig.label}' doesn't accept type 
+                                  '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
+        }
       });
+
+      // Send notification if setting widget failed
+      if (widgets.length === 0) {
+        dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget found.`);
+      }
+    };
+
+    this.getDragEndPosition = (ev) => {
+
+      if (navigator.userAgent.indexOf("Firefox") != -1) {
+        const scrollLeft = $(window).scrollLeft();
+        const scrollTop = $(window).scrollTop();
+
+        return {
+          x: ev.originalEvent.screenX - scrollLeft - window.screenX,
+          y: ev.originalEvent.screenY - scrollTop - window.screenY
+        }
+      }
+      else {
+        return {
+          x: ev.originalEvent.clientX,
+          y: ev.originalEvent.clientY
+        }
+      }
     };
 
     const mapStateToOpts = (state) => {
