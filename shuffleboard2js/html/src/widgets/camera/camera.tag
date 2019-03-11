@@ -18,7 +18,7 @@
             
             let streams = this.opts.table.streams;
 
-            if (streams.length > 0) {
+            if (streams && streams.length > 0) {
 
                 // get first element from streams
                 let stream = streams[0];

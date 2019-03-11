@@ -80,14 +80,14 @@ import { getType } from 'assets/js/networktables';
         const scrollTop = $(window).scrollTop();
 
         return {
-          x: ev.originalEvent.screenX - scrollLeft - window.screenX,
-          y: ev.originalEvent.screenY - scrollTop - window.screenY
+          x: ev.screenX - scrollLeft - window.screenX,
+          y: ev.screenY - scrollTop - window.screenY
         }
       }
       else {
         return {
-          x: ev.originalEvent.clientX,
-          y: ev.originalEvent.clientY
+          x: ev.clientX,
+          y: ev.clientY
         }
       }
     };
