@@ -24,8 +24,7 @@ export default class NetworkTablesWrapper {
 
     // Sending NetworkTable updates too quickly causes the dashboard to freeze.
     // Send them in batches every 100ms
-    setTimeout(() => {
-
+    setInterval(() => {
       // Don't dispatch networktables values if currently replaying
       if (!this.isReplaying && !this.isReplayingPaused) {
         this.store.dispatch(actions.ntValueChanged(this.ntUpdates));
