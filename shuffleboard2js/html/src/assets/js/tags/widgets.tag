@@ -246,7 +246,7 @@ import { getType } from 'assets/js/networktables';
       widget.setTitle(config.widgetTitle);
 
       if (config.ntRoot) {
-        widget.setNtRoot(config.ntRoot);
+        widget.setNtRoot(config.ntRoot, true);
       }
     };
 

@@ -112,10 +112,12 @@ import ObservableSlim from 'observable-slim';
       return widgetConfig.acceptedTypes.indexOf(ntType) > -1;
     }
 
-    this.setNtRoot = (root) => {
+    // If ignoreType is true, set even if the type is not one of the accepted types.
+    // This is useful for saved widgets that have ntRoots that haven't been set yet.
+    this.setNtRoot = (root, ignoreType) => {
       let ntType = getType(root);
       
-      if (this.isAcceptedType(ntType)) {
+      if (ignoreType || this.isAcceptedType(ntType)) {
         this.ntRoot = root;
         this.manuallyUpdate();
         return true;
@@ -153,7 +155,11 @@ import ObservableSlim from 'observable-slim';
         return {};
       }
 
-      let ntValue = getSubtable(this.ntRoot);
+      const ntType = getType(this.ntRoot);
+      const isAcceptedType = this.isAcceptedType(ntType);
+
+      let ntValue = isAcceptedType ? getSubtable(this.ntRoot) : {};
+      
       
       if (this.refs.widgetType) {
         this.refs.widgetType._tag.opts.table = ntValue;
