@@ -17,27 +17,25 @@
         this.on('update', () => {
             
             let streams = this.opts.table.streams;
+            let loaded = false;
 
             if (streams && streams.length > 0) {
-
-                // get first element from streams
-                let stream = streams[0];
-
-                let img = new Image();
-
-                // remove mjpg:
-                img.src = stream.replace('mjpg:', ''); 
-                img.onload = () => {
-                    this.url = img.src;
-                    img.onload = () => {}
-                }
- 
+                streams.forEach((stream) => {
+                    let img = new Image();
+                    // remove mjpg:
+                    img.src = stream.replace('mjpg:', ''); 
+                    img.onload = () => {
+                        img.onload = () => {}
+                        if (!loaded) {
+                            this.url = img.src;
+                        }
+                        loaded = true;
+                    }
+                });
             }
             else {
                 this.url = '';
             }      
-        });
-        
-        
+        });        
     </script>
 </camera>
