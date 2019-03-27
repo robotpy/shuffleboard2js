@@ -296,6 +296,12 @@ import { getType } from 'assets/js/networktables';
           resize: function(e, ui, $widget) {
             let widget = $widget.find('widget')[0]._tag;
             widget.onResize();
+
+            // Widget resizes again to fit grid after a short animation, so wait before
+            // calling again.
+            setTimeout(() => {
+              widget.onResize();
+            }, 1000);
           },
           stop: function(e, ui, $widget) {
             let sizeX = parseInt($widget.attr('data-sizex'));
