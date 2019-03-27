@@ -77,6 +77,10 @@ import { getType } from 'assets/js/networktables';
       padding-top: 0;
     }
 
+    .task-card-list > li.focus {
+      z-index: 100;
+    }
+
     context-menu .dropdown-menu .dropdown-item {
       padding: .25rem 15px;
     }
@@ -269,8 +273,14 @@ import { getType } from 'assets/js/networktables';
 
     }
 
-
     this.on('mount', () => {
+
+
+      $(this.root).on('click, focus, contextmenu', '.task-card-list > li', (ev) => {
+        $(this.root).find('.task-card-list > li').removeClass('focus');
+        $(ev.currentTarget).addClass('focus');
+      });
+
       $(this.root).width(screen.width - 20);
 
       var gridster;
