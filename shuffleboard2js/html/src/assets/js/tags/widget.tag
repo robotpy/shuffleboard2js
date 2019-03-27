@@ -50,7 +50,7 @@ import ObservableSlim from 'observable-slim';
 
     this.getPropertiesDefaults = (widgetType) => {
       let widgetConfig = dashboard.store.getState().widgets.registered[widgetType]
-      return ObservableSlim.create(widgetConfig.properties.defaults, false, (changes) => {
+      return ObservableSlim.create({...widgetConfig.properties.defaults}, false, (changes) => {
         this.refs.widgetType._tag.trigger('propertiesUpdate');
         this.refs.widgetType._tag.update();
       });
