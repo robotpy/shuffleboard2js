@@ -3,7 +3,7 @@ import image from './basic-fms-info.png';
 
 dashboard.registerWidget('basic-fms-info', {
   label: 'Basic FMS Info',
-  category: 'Sensors',
+  category: 'Basic',
   acceptedTypes: ['FMSInfo'],
   image,
   minX: 7,
