@@ -19,7 +19,8 @@ module.exports = (env = {}) => {
       'gyro': ['./widgets/gyro/index.js'],
       'camera': ['./widgets/camera/index.js'],
       'accelerometer': ['./widgets/accelerometer/index.js'],
-      '3-axis-accelerometer': ['./widgets/3-axis-accelerometer/index.js']
+      '3-axis-accelerometer': ['./widgets/3-axis-accelerometer/index.js'],
+      'basic-fms-info': ['./widgets/basic-fms-info/index.js']
     },
     output: {
       filename: "[name].bundle.js",
