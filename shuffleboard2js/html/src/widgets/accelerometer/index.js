@@ -8,7 +8,7 @@ dashboard.registerWidget('accelerometer', {
   acceptedTypes: ['Accelerometer'],
   image,
   minX: 3,
-  minY: 3,
+  minY: 2,
   properties: {
     tag: 'accelerometer-props',
     defaults: {

@@ -92,21 +92,10 @@
       }
     };
 
-    this.setAxis = () => {
-    };
-
     this.on('update', () => {
       if ('Value' in this.opts.table) {
         this.value = this.opts.table.Value;
       }
-    });
-
-    this.on('mount', () => {
-      this.setAxis();
-    });
-
-    this.on('resize', () => {
-      this.setAxis();
     });
   </script>
 
