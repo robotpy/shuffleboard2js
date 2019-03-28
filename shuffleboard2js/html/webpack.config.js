@@ -17,7 +17,8 @@ module.exports = (env = {}) => {
     entry: {
       app: ['babel-polyfill', './app.js'],
       'gyro': ['./widgets/gyro/index.js'],
-      'camera': ['./widgets/camera/index.js']
+      'camera': ['./widgets/camera/index.js'],
+      'accelerometer': ['./widgets/accelerometer/index.js']
     },
     output: {
       filename: "[name].bundle.js",
