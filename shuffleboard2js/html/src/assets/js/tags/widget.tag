@@ -97,6 +97,12 @@ import ObservableSlim from 'observable-slim';
       this.update();
     }
 
+    this.setProperties = (properties) => {
+      _.forEach(properties, (value, key) => {
+        this.properties[key] = value;
+      });
+    };
+
     this.onResize = () => {
       this.refs.widgetType._tag.trigger('resize');
       this.refs.widgetType._tag.update();

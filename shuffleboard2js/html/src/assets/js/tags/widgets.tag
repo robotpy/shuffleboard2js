@@ -180,7 +180,7 @@ import { getType } from 'assets/js/networktables';
     this.getWidgetJson = () => {
       let widgets = [];
 
-      $(this.refs.grid).find('li').each(function() {
+      $(this.refs.grid).find('> li').each(function() {
 
         let $widget = $(this).find('widget')[0];
         let widget = $widget._tag;
@@ -192,7 +192,8 @@ import { getType } from 'assets/js/networktables';
           sizeY: parseInt($(this).attr('data-sizey')),
           ntRoot: widget.ntRoot,
           widgetType: widget.widgetType,
-          widgetTitle: widget.widgetTitle
+          widgetTitle: widget.widgetTitle,
+          properties: widget.properties
         });
       });
 
@@ -248,6 +249,7 @@ import { getType } from 'assets/js/networktables';
       let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
       widget.setWidgetType(config.widgetType);
       widget.setTitle(config.widgetTitle);
+      widget.setProperties(config.properties);
 
       if (config.ntRoot) {
         widget.setNtRoot(config.ntRoot, true);
