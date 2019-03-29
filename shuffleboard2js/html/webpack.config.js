@@ -22,6 +22,7 @@ module.exports = (env = {}) => {
       '3-axis-accelerometer': ['./widgets/3-axis-accelerometer/index.js'],
       'basic-fms-info': ['./widgets/basic-fms-info/index.js'],
       'boolean-box': ['./widgets/boolean-box/index.js'],
+      'combobox-chooser': ['./widgets/combobox-chooser/index.js']
     },
     output: {
       filename: "[name].bundle.js",
