@@ -23,7 +23,8 @@ module.exports = (env = {}) => {
       'basic-fms-info': ['./widgets/basic-fms-info/index.js'],
       'boolean-box': ['./widgets/boolean-box/index.js'],
       'combobox-chooser': ['./widgets/combobox-chooser/index.js'],
-      'encoder': ['./widgets/encoder/index.js']
+      'encoder': ['./widgets/encoder/index.js'],
+      'number-bar': ['./widgets/number-bar/index.js']
     },
     output: {
       filename: "[name].bundle.js",
