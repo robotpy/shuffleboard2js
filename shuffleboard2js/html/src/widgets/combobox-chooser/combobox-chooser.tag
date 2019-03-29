@@ -49,7 +49,6 @@
         this.on('update', () => {
             this.options = this.opts.table.options || [];
             this.selected = this.opts.table.selected || '';
-            console.log('selected:', this.selected);
         });
 
         this.onChange = (ev) => {
