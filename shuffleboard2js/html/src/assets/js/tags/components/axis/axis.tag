@@ -29,6 +29,8 @@ import _ from 'lodash';
 
     this.prevSize = 0;
     this.prevTicks = 0;
+    this.prevMin = null;
+    this.prevMax = null;
 
     this.setAxis = () => {
       let size = $(this.root).width();
@@ -42,12 +44,14 @@ import _ from 'lodash';
       let textEnd = -Infinity;
 
       // Prevent update if nothing has changed
-      if (this.prevSize === size && this.prevTicks === this.opts.ticks) {
+      if (this.prevSize === size && this.prevTicks === this.opts.ticks && this.prevMin === min && this.prevMax === max) {
         return;
       }
       else {
         this.prevSize = size;
         this.prevTicks = this.opts.ticks;
+        this.prevMin = min;
+        this.prevMax = max;
       }
 
       $(this.refs.svg).html('');

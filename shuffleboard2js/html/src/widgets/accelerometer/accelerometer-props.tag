@@ -97,7 +97,7 @@
     };
 
     this.onMinChange = (ev) => {
-      const min = parseInt(ev.target.value);
+      const min = parseFloat(ev.target.value);
       this.opts.properties.min = min;
 
       if (min > this.opts.properties.max) {
@@ -106,7 +106,7 @@
     };
 
     this.onMaxChange = (ev) => {
-      const max = parseInt(ev.target.value);
+      const max = parseFloat(ev.target.value);
       this.opts.properties.max = max;
 
       if (max < this.opts.properties.min) {
