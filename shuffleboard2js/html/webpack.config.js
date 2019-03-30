@@ -25,7 +25,8 @@ module.exports = (env = {}) => {
       'combobox-chooser': ['./widgets/combobox-chooser/index.js'],
       'encoder': ['./widgets/encoder/index.js'],
       'number-bar': ['./widgets/number-bar/index.js'],
-      'number-slider': ['./widgets/number-slider/index.js']
+      'number-slider': ['./widgets/number-slider/index.js'],
+      'relay': ['./widgets/relay/index.js']
     },
     output: {
       filename: "[name].bundle.js",
