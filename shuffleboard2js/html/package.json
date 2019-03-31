@@ -67,6 +67,7 @@
     "path-webpack": "0.0.3",
     "popper.js": "^1.14.4",
     "riot-redux-connect": "^1.1.8",
+    "svg-gauge": "^1.0.5",
     "toastr": "^2.1.4"
   }
 }
