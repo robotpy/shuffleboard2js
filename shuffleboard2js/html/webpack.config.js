@@ -30,7 +30,8 @@ module.exports = (env = {}) => {
       'gauge': ['./widgets/gauge/index.js'],
       'text-view': ['./widgets/text-view/index.js'],
       'toggle-button': ['./widgets/toggle-button/index.js'],
-      'toggle-switch': ['./widgets/toggle-switch/index.js']
+      'toggle-switch': ['./widgets/toggle-switch/index.js'],
+      'voltage-view': ['./widgets/voltage-view/index.js']
     },
     output: {
       filename: "[name].bundle.js",
