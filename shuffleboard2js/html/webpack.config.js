@@ -29,7 +29,8 @@ module.exports = (env = {}) => {
       'relay': ['./widgets/relay/index.js'],
       'gauge': ['./widgets/gauge/index.js'],
       'text-view': ['./widgets/text-view/index.js'],
-      'toggle-button': ['./widgets/toggle-button/index.js']
+      'toggle-button': ['./widgets/toggle-button/index.js'],
+      'toggle-switch': ['./widgets/toggle-switch/index.js']
     },
     output: {
       filename: "[name].bundle.js",
