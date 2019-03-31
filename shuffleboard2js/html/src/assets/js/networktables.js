@@ -56,7 +56,15 @@ export function getSubtable(root) {
   let rawValues = dashboard.store.getState().networktables.rawValues;
 
   let ntKeys = Object.keys(rawValues).filter(key => {
-    return key.startsWith(root);
+    if (key === root) {
+      return true;
+    }
+    else if (root.endsWith('/')) {
+      return key.startsWith(root);
+    }
+    else {
+      return false;
+    }
   });
 
   if (ntKeys.length === 1) {
