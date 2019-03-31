@@ -11,7 +11,7 @@ import ObservableSlim from 'observable-slim';
   
   <modal ref="propertiesModal" title="Properties">
     <div class="modal-body">
-      <div class="widget-properties"></div>
+      <div ref="widgetProperties" class="widget-properties"></div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -83,6 +83,8 @@ import ObservableSlim from 'observable-slim';
 
     this.openPropertiesModal = () => {
       this.refs.propertiesModal.open();
+      let propsElement = $(this.root).find('.widget-properties')[0];
+      propsElement._tag.update();
     };
 
     this.onTitleChange = (ev) => {
