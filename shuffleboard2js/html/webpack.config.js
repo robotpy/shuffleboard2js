@@ -28,6 +28,7 @@ module.exports = (env = {}) => {
       'number-slider': ['./widgets/number-slider/index.js'],
       'relay': ['./widgets/relay/index.js'],
       'gauge': ['./widgets/gauge/index.js'],
+      'text-view': ['./widgets/text-view/index.js']
     },
     output: {
       filename: "[name].bundle.js",
