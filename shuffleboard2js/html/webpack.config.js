@@ -21,6 +21,7 @@ module.exports = (env = {}) => {
       'accelerometer': ['./widgets/accelerometer/index.js'],
       '3-axis-accelerometer': ['./widgets/3-axis-accelerometer/index.js'],
       'basic-fms-info': ['./widgets/basic-fms-info/index.js'],
+      'basic-subsystem': ['./widgets/basic-subsystem/index.js'],
       'boolean-box': ['./widgets/boolean-box/index.js'],
       'combobox-chooser': ['./widgets/combobox-chooser/index.js'],
       'encoder': ['./widgets/encoder/index.js'],
