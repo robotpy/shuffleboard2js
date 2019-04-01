@@ -83,7 +83,7 @@ import _ from 'lodash';
                 .attr('x', i * tickSpacing)
                 .attr('y', 25)
                 .attr('text-anchor', 'middle')
-                .text(value.toFixed(2));
+                .text(value.toFixed(2) + (this.opts.units ? ` ${this.opts.units}` : ''));
 
               textEnd = i * tickSpacing + textEl.node().getBBox().width / 2;
               lastTickWithText = i;
