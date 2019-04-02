@@ -32,7 +32,8 @@ module.exports = (env = {}) => {
       'text-view': ['./widgets/text-view/index.js'],
       'toggle-button': ['./widgets/toggle-button/index.js'],
       'toggle-switch': ['./widgets/toggle-switch/index.js'],
-      'voltage-view': ['./widgets/voltage-view/index.js']
+      'voltage-view': ['./widgets/voltage-view/index.js'],
+      'differential-drivebase': ['./widgets/differential-drivebase/index.js'],
     },
     output: {
       filename: "[name].bundle.js",

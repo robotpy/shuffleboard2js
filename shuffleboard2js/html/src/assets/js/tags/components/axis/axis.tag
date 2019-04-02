@@ -33,7 +33,7 @@ import _ from 'lodash';
     this.prevMax = null;
 
     this.setAxis = () => {
-      let size = $(this.root).width();
+      let size = this.opts.vertical ? $(this.root).height() : $(this.root).width();
       let tickSpacing = size / (this.opts.ticks - 1);
       const width = this.opts.range ? 30 : 10;
       const showNums = this.opts.range && this.opts.range.length === 2;
@@ -68,27 +68,6 @@ import _ from 'lodash';
             .attr('y1', 0)
             .attr('x2', i * tickSpacing)
             .attr('y2', 8);
-
-          if (showNums) {
-            
-            // check to see if text will fit
-            let spaceBetweenTicks = (i - lastTickWithText) * tickSpacing;
-            let pointWhereNewTextCanBegin = (lastTickWithText * tickSpacing) + spaceBetweenTicks * .4;
-            let textWillFit = textEnd < 0 || pointWhereNewTextCanBegin > textEnd;
-
-            if (textWillFit) {
-              const value = min + i * (max - min) / Math.max(this.opts.ticks - 1, 1);
-
-              let textEl = svg.append('text')
-                .attr('x', i * tickSpacing)
-                .attr('y', 25)
-                .attr('text-anchor', 'middle')
-                .text(value.toFixed(2) + (this.opts.units ? ` ${this.opts.units}` : ''));
-
-              textEnd = i * tickSpacing + textEl.node().getBBox().width / 2;
-              lastTickWithText = i;
-            }
-          }
         }
         else {
           svg.append('line')
@@ -97,6 +76,39 @@ import _ from 'lodash';
             .attr('x2', 8)
             .attr('y2', i * tickSpacing);
         }
+
+        if (showNums) {
+            
+            if (!this.opts.vertical) {
+              // check to see if text will fit
+              let spaceBetweenTicks = (i - lastTickWithText) * tickSpacing;
+              let pointWhereNewTextCanBegin = (lastTickWithText * tickSpacing) + spaceBetweenTicks * .4;
+              let textWillFit = textEnd < 0 || pointWhereNewTextCanBegin > textEnd;
+
+              if (textWillFit) {
+                const value = min + i * (max - min) / Math.max(this.opts.ticks - 1, 1);
+                
+                let textEl = svg.append('text')
+                  .attr('x', i * tickSpacing)
+                  .attr('y', 25)
+                  .attr('text-anchor', 'middle')
+                  .text(value.toFixed(2) + (this.opts.units ? ` ${this.opts.units}` : ''));
+
+                textEnd = i * tickSpacing + textEl.node().getBBox().width / 2;
+                lastTickWithText = i;
+              }
+            }
+            else {
+              const value = min + i * (max - min) / Math.max(this.opts.ticks - 1, 1);
+                
+              let textEl = svg.append('text')
+                .attr('x', -3)
+                .attr('y', i * tickSpacing + 4)
+                .attr('text-anchor', 'end')
+                .text(value.toFixed(2) + (this.opts.units ? ` ${this.opts.units}` : ''));
+            }
+          }
+
 
         // don't do this for last tick
         if (i < this.opts.ticks - 1) {
