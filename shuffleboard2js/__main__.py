@@ -8,6 +8,7 @@
 """
 
 import inspect
+import sys
 import os
 from os.path import abspath, dirname, exists, join, basename
 from optparse import OptionParser
@@ -24,6 +25,9 @@ from pynetworktables2js import get_handlers
 
 import shuffleboard2js
 
+from tkinter import filedialog
+import tkinter
+
 from datetime import date, datetime
 
 try:
@@ -37,6 +41,21 @@ logger = logging.getLogger("dashboard")
 
 log_datefmt = "%H:%M:%S"
 log_format = "%(asctime)s:%(msecs)03d %(levelname)-8s: %(name)-20s: %(message)s"
+
+
+def select_widget_folder_dialog():
+    root = tkinter.Tk()
+    root.overrideredirect(1)
+    root.directory = filedialog.askdirectory()
+    root.update()
+    return root.directory
+
+def open_layout_dialog():
+    root = tkinter.Tk()
+    root.overrideredirect(1)
+    root.filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+    root.update()
+    return root.filename
 
 def pretty_json(d):
     return json.dumps(d, sort_keys=True, indent=4, separators=(',', ': '))
@@ -151,6 +170,12 @@ class ApiHandler(tornado.web.RequestHandler):
                 'widgets': widgets
             })
 
+        elif param == 'open_layout':
+            open_layout_dialog()
+
+        elif param == 'select_widget_folder':
+            select_widget_folder_dialog()
+
         else:
             raise tornado.web.HTTPError(404)
 
@@ -246,10 +271,18 @@ def main():
     # Setup NetworkTables
     init_networktables(options)
 
+    if getattr(sys, 'frozen', False):
+        # If the application is run as a bundle, the pyInstaller bootloader
+        # extends the sys module by a flag frozen=True and sets the app 
+        # path into variable _MEIPASS'.
+        application_path = sys._MEIPASS
+    else:
+        application_path = os.path.dirname(os.path.abspath(__file__))
+
     # setup tornado application with static handler + networktables support
-    html_dir = abspath(join(dirname(shuffleboard2js.__file__), "html", "dist"))
+    html_dir = abspath(join(application_path, "html", "dist"))
     index_html = join(html_dir, "index.html")
-    vendor_dir = abspath(join(dirname(shuffleboard2js.__file__), "html", "vendor"))
+    vendor_dir = abspath(join(application_path, "html", "vendor"))
 
     # Path where user files are served from
     robot_file = abspath(os.getcwd())
