@@ -6,6 +6,6 @@ dashboard.registerWidget('differential-drivebase', {
   category: 'Basic',
   acceptedTypes: ['DifferentialDrive'],
   image,
-  minX: 5,
+  minX: 7,
   minY: 5
 });

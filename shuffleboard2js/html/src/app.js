@@ -7,12 +7,14 @@ import "assets/js/tags/app.tag";
 import * as actions from  'assets/js/actions';
 import 'assets/scss/app.scss';
 import toastr from 'toastr';
+import * as CurvedArrow from 'assets/js/curved-arrow';
 
 window.dashboard = {
   store,
   actions,
   events: riot.observable(),
   toastr,
+  CurvedArrow,
   registerWidget: function(tagName, config) {
     store.dispatch(actions.registerWidget(tagName, config));
   },

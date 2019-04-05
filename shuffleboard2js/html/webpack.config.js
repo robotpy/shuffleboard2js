@@ -34,6 +34,7 @@ module.exports = (env = {}) => {
       'toggle-switch': ['./widgets/toggle-switch/index.js'],
       'voltage-view': ['./widgets/voltage-view/index.js'],
       'differential-drivebase': ['./widgets/differential-drivebase/index.js'],
+      'mecanum-drivebase': ['./widgets/mecanum-drivebase/index.js'],
     },
     output: {
       filename: "[name].bundle.js",
