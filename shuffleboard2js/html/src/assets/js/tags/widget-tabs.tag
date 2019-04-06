@@ -198,8 +198,8 @@ import axios from 'axios';
         });
     };
 
-    this.on('mount', () => {
-      getSavedLayout().then((tabs) => {
+    this.loadLayout = () => {
+      return getSavedLayout().then((tabs) => {
         this.widgetTabs = tabs;
         this.update();
         this.updateTabInputWidths();
@@ -208,13 +208,17 @@ import axios from 'axios';
           this.addTab();
         }
       });
+    }
+
+    this.on('mount', () => {
+      this.addTab();
     });
 
     async function getSavedLayout() {
       try {
         let l = window.location;
         let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/layout";
+        let url = "http://" + l.hostname + ":" + port + "/api/open_layout";
         const response = await axios.get(url);
         return response.data.tabs || [];
       }

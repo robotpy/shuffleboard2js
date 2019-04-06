@@ -53,7 +53,7 @@ def select_widget_folder_dialog():
 def open_layout_dialog():
     root = tkinter.Tk()
     root.overrideredirect(1)
-    root.filename = filedialog.askopenfilename(initialdir = "/",title = "Select file",filetypes = (("jpeg files","*.jpg"),("all files","*.*")))
+    root.filename = filedialog.askopenfilename(title = "Select file", filetypes=[("JSON files", "*.json")])
     root.update()
     return root.filename
 
@@ -171,7 +171,18 @@ class ApiHandler(tornado.web.RequestHandler):
             })
 
         elif param == 'open_layout':
-            open_layout_dialog()
+            filename = open_layout_dialog()
+            layout = {}
+            try: 
+                with open(filename, 'r') as fp:
+                    try:
+                        layout = json.loads(fp.read())
+                    except:
+                        logger.error("Error reading layout")
+            except:
+                pass
+
+            self.write(layout)
 
         elif param == 'select_widget_folder':
             select_widget_folder_dialog()

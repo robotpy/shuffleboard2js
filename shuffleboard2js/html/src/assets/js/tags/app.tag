@@ -14,6 +14,9 @@ import './load-recording-modal.tag';
     <button type="button" class="btn btn-sm btn-secondary" aria-label="Save Layout" onclick={onSave}>
       Save
     </button>
+    <button ref="loadLayoutBtn" type="button" class="btn btn-sm btn-secondary" aria-label="Load Layout" onclick={onLoad}>
+      Load Layout
+    </button>
     <button type="button" class="btn btn-sm btn-secondary" aria-label="Load Recording" onclick={onLoadRecording}>
       Load Recording
     </button>
@@ -81,9 +84,20 @@ import './load-recording-modal.tag';
   <user-modules />
 
   <script>
+
+    this.onLoad = _.throttle((ev) => {
+      // Disable button so so we don't make another request if user click button while
+      // load dialog is up
+      $(this.refs.loadLayoutBtn).attr('disabled', true);
+      return this.refs.widgetTabs.loadLayout()
+        .then(() => {
+          // We've loaded, so enable button again
+          $(this.refs.loadLayoutBtn).attr('disabled', false);
+        });
+    }, 500);
+
     this.onSave = (ev) => {
       let widgetJson = this.refs.widgetTabs.getWidgetTabsJson();
-      console.log('widgetJson', widgetJson);
       saveLayout(widgetJson);
     };
 
