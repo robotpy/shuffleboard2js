@@ -211,8 +211,30 @@ import axios from 'axios';
     }
 
     this.on('mount', () => {
-      this.addTab();
+      return getDefaultLayout().then((tabs) => {
+        this.widgetTabs = tabs;
+        this.update();
+        this.updateTabInputWidths();
+        
+        if (this.widgetTabs.length === 0) {
+          this.addTab();
+        }
+      });
     });
+
+    async function getDefaultLayout() {
+      try {
+        let l = window.location;
+        let port = process.env.socket_port || l.port;
+        let url = "http://" + l.hostname + ":" + port + "/api/open_default_layout";
+        const response = await axios.get(url);
+        return response.data.tabs || [];
+      }
+      catch(e) {
+        console.error('error', e);
+        return [];
+      }
+    }
 
     async function getSavedLayout() {
       try {

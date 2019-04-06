@@ -15,6 +15,7 @@ from optparse import OptionParser
 import webbrowser
 import threading
 import time
+import configparser
 
 import tornado.web
 from tornado.web import StaticFileHandler
@@ -42,6 +43,29 @@ logger = logging.getLogger("dashboard")
 log_datefmt = "%H:%M:%S"
 log_format = "%(asctime)s:%(msecs)03d %(levelname)-8s: %(name)-20s: %(message)s"
 
+
+def get_application_path():
+    if getattr(sys, 'frozen', False):
+        # If the application is run as a bundle, the pyInstaller bootloader
+        # extends the sys module by a flag frozen=True and sets the app 
+        # path into variable _MEIPASS'.
+        return sys._MEIPASS
+    else:
+        return os.path.dirname(os.path.abspath(__file__))
+
+def get_config(key):
+    application_path = get_application_path()
+    config = configparser.SafeConfigParser()
+    config.read(join(application_path, 'properties.ini'))
+    return config.get('DEFAULT', key)
+
+def set_config(key, value):
+    application_path = get_application_path()
+    config = configparser.SafeConfigParser()
+    config.read(join(application_path, 'properties.ini'))
+    config.set('DEFAULT', key, value)
+    with open(join(application_path, "properties.ini"), "w+") as configfile:
+        config.write(configfile) 
 
 def select_widget_folder_dialog():
     root = tkinter.Tk()
@@ -172,6 +196,21 @@ class ApiHandler(tornado.web.RequestHandler):
 
         elif param == 'open_layout':
             filename = open_layout_dialog()
+            layout = {}
+            try: 
+                with open(filename, 'r') as fp:
+                    try:
+                        layout = json.loads(fp.read())
+                        set_config('default_layout_location', filename)
+                    except:
+                        logger.error("Error reading layout")
+            except:
+                pass
+
+            self.write(layout)
+
+        elif param == 'open_default_layout':
+            filename = get_config('default_layout_location')
             layout = {}
             try: 
                 with open(filename, 'r') as fp:
