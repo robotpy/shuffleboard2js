@@ -91,6 +91,15 @@ const rootReducer = (state = initialState, action) => {
           wsConnected: action.payload.connected
         }
       };
+    case ActionTypes.CLEAR_NETWORKTABLES:
+      return {
+        ...state,
+        networktables: {
+          ...state.networktables,
+          values: {},
+          rawValues: {}
+        }
+      }
     case ActionTypes.NT_VALUE_CHANGED:
 
       let values = { ...state.networktables.values };

@@ -8,20 +8,37 @@ import axios from 'axios';
 import * as _ from 'lodash';
 import './widget-tabs.tag';
 import './load-recording-modal.tag';
+import './networktables-settings-modal.tag';
 
 <app>
   <div class="menu">
-    <button type="button" class="btn btn-sm btn-secondary" aria-label="Save Layout" onclick={onSave}>
-      Save
-    </button>
-    <button ref="loadLayoutBtn" type="button" class="btn btn-sm btn-secondary" aria-label="Load Layout" onclick={onLoad}>
-      Load Layout
-    </button>
-    <button type="button" class="btn btn-sm btn-secondary" aria-label="Load Recording" onclick={onLoadRecording}>
-      Load Recording
-    </button>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        File
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" aria-label="New Layout" onclick={onNew}>
+          New
+        </a>
+        <a class="dropdown-item" aria-label="Save Layout" onclick={onSave}>
+          Save
+        </a>
+        <a ref="loadLayoutBtn" class="dropdown-item" aria-label="Load Layout" onclick={onLoad}>
+          Load Layout
+        </a>
+        <a class="dropdown-item" aria-label="Load Recording" onclick={onLoadRecording}>
+          Load Recording
+        </a>
+        <a class="dropdown-item" aria-label="NetworkTable Settings" onclick={onNetworkTableSettings}>
+          NetworkTables Settings
+        </a>
+      </div>
+    </div>
     <modal ref="loadRecordingModal" title="Load Recording">
       <load-recording-modal recordings={opts.recordings} modal={root._tag} />
+    </modal>
+    <modal ref="networkTablesModal" title="NetworkTables Settings">
+      <networktables-settings-modal robot-ip={opts.robotIp} modal={root._tag} />
     </modal>
     <replay />
   </div>
@@ -96,6 +113,10 @@ import './load-recording-modal.tag';
         });
     }, 500);
 
+    this.onNew = (ev) => {
+      this.refs.widgetTabs.newLayout();
+    };
+
     this.onSave = (ev) => {
       let widgetJson = this.refs.widgetTabs.getWidgetTabsJson();
       saveLayout(widgetJson);
@@ -108,6 +129,15 @@ import './load-recording-modal.tag';
           this.refs.loadRecordingModal.update();
           this.refs.loadRecordingModal.open();
         });
+    };
+
+    this.onNetworkTableSettings = (ev) => {
+      getRobotIp()
+        .then(robotIp => {
+          this.refs.networkTablesModal.opts.robotIp = robotIp;
+          this.refs.networkTablesModal.update();
+          this.refs.networkTablesModal.open();
+        }); 
     };
 
     async function saveLayout(widgetJson) {
@@ -123,6 +153,20 @@ import './load-recording-modal.tag';
       catch(e) {
         console.error('error', e);
         return [];
+      }
+    }
+
+    async function getRobotIp() {
+      try {
+        let l = window.location;
+        let port = process.env.socket_port || l.port;
+        let url = "http://" + l.hostname + ":" + port + "/api/get_robot_ip";
+        const response = await axios.get(url);
+        return response.data.robot_ip;
+      }
+      catch(e) {
+        console.error('error', e);
+        return 'localhost';
       }
     }
     

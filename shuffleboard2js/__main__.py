@@ -84,20 +84,15 @@ def open_layout_dialog():
 def pretty_json(d):
     return json.dumps(d, sort_keys=True, indent=4, separators=(',', ': '))
 
+def set_robot_ip(ip):
+    NetworkTables.shutdown()
+    NetworkTables.initialize(server=ip)
 
 def init_networktables(options):
     NetworkTables.setNetworkIdentity(options.identity)
 
-    if options.team:
-        logger.info("Connecting to NetworkTables for team %s", options.team)
-        NetworkTables.startClientTeam(options.team)
-    else:
-        logger.info("Connecting to networktables at %s", options.robot)
-        NetworkTables.initialize(server=options.robot)
-
-    if options.dashboard:
-        logger.info("Enabling driver station override mode")
-        NetworkTables.startDSClient()
+    logger.info("Connecting to networktables at %s", options.robot)
+    NetworkTables.initialize(server=options.robot)
 
     logger.info("Networktables Initialized")
 
@@ -226,6 +221,16 @@ class ApiHandler(tornado.web.RequestHandler):
         elif param == 'select_widget_folder':
             select_widget_folder_dialog()
 
+        elif param == 'get_robot_ip':
+            self.write({
+                'robot_ip': get_config('robot_ip')
+            })
+
+        elif param == 'set_robot_ip':
+            robot_ip = self.get_argument("robot_ip", 'localhost')
+            set_robot_ip(robot_ip)
+            set_config('robot_ip', robot_ip)
+
         else:
             raise tornado.web.HTTPError(404)
 
@@ -291,16 +296,7 @@ def main():
         help="Enable verbose logging",
     )
 
-    parser.add_option("--robot", default="127.0.0.1", help="Robot's IP address")
-
-    parser.add_option("--team", type=int, help="Team number of robot to connect to")
-
-    parser.add_option(
-        "--dashboard",
-        default=False,
-        action="store_true",
-        help="Use this instead of --robot to receive the IP from the driver station. WARNING: It will not work if you are not on the same host as the DS!",
-    )
+    parser.add_option("--robot", default=get_config('robot_ip'), help="Robot's IP address")
 
     parser.add_option(
         "--identity", default="pynetworktables2js", help="Identity to send to NT server"
@@ -314,9 +310,6 @@ def main():
         format=log_format,
         level=logging.DEBUG if options.verbose else logging.INFO,
     )
-
-    if options.team and options.robot != "127.0.0.1":
-        raise Exception("--robot and --team are mutually exclusive")
 
     # Setup NetworkTables
     init_networktables(options)

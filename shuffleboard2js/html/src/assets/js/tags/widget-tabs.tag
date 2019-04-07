@@ -210,6 +210,13 @@ import axios from 'axios';
       });
     }
 
+    this.newLayout = () => {
+        this.widgetTabs = [];
+        this.update();
+        this.updateTabInputWidths();
+        this.addTab();
+    };
+
     this.on('mount', () => {
       return getDefaultLayout().then((tabs) => {
         this.widgetTabs = tabs;

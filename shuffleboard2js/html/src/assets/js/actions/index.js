@@ -112,6 +112,11 @@ export function initNetworktTables() {
   };
 };
 
+export function clearNetworkTables() {
+  return {
+    type: ActionTypes.CLEAR_NETWORKTABLES
+  };
+};
 
 /**
  * Replay Actions
