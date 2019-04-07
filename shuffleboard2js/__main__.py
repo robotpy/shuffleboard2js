@@ -122,13 +122,22 @@ class NonCachingStaticFileHandler(StaticFileHandler):
             "Content-Type, Depth, User-Agent, X-File-Size, X-Requested-With, X-Requested-By, If-Modified-Since, X-File-Name, Cache-Control")
         self.set_header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
 
-
+class WidgetFileHandler(NonCachingStaticFileHandler):
+    """
+        This static file handler disables caching, to allow for easy
+        development of your Dashboard
+    """
+    
+    @classmethod
+    def get_absolute_path(cls, root, path):
+        return StaticFileHandler.get_absolute_path(get_config('default_widget_folder'), path)
+    
+    
 class ApiHandler(tornado.web.RequestHandler):
 
     def initialize(self, dashboard_path):
 
         self.dashboard_path = dashboard_path
-        self.user_widgets_path = join(self.dashboard_path, 'widgets')
         
 
     def set_default_headers(self):
@@ -182,7 +191,7 @@ class ApiHandler(tornado.web.RequestHandler):
 
         elif param == 'widgets':
             widgets = []
-            for root, dirs, files in os.walk(self.user_widgets_path):
+            for root, dirs, files in os.walk(get_config('default_widget_folder')):
                 widgets.extend(dirs)
 
             self.write({
@@ -219,11 +228,25 @@ class ApiHandler(tornado.web.RequestHandler):
             self.write(layout)
 
         elif param == 'select_widget_folder':
-            select_widget_folder_dialog()
+            widget_folder = select_widget_folder_dialog()
+            widgets = []
+            for root, dirs, files in os.walk(widget_folder):
+                widgets.extend(dirs)
+
+            set_config('default_widget_folder', widget_folder)
+
+            self.write({
+                'widgets': widgets
+            })
 
         elif param == 'get_robot_ip':
             self.write({
                 'robot_ip': get_config('robot_ip')
+            })
+
+        elif param == 'get_widget_folder':
+            self.write({
+                'widget_folder': get_config('default_widget_folder')
             })
 
         elif param == 'set_robot_ip':
@@ -330,18 +353,14 @@ def main():
     # Path where user files are served from
     robot_file = abspath(os.getcwd())
     dashboard_path = join(robot_file, 'shuffleboard2js')
-    widget_path = join(dashboard_path, 'widgets')
 
     if not exists(dashboard_path):
         os.mkdir(dashboard_path)
 
-    if not exists(widget_path):
-        os.mkdir(widget_path)
-
     app = tornado.web.Application(
         get_handlers()
         + [
-            (r'/widgets/(.*)', NonCachingStaticFileHandler, {'path': widget_path }),
+            (r'/widgets/(.*)', WidgetFileHandler, {'path': '/'}),
             (r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
             (r'/api/(.*)', ApiHandler, {'dashboard_path': dashboard_path}),
             (r"/()", NonCachingStaticFileHandler, {"path": index_html}),

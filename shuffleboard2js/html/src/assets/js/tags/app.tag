@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import './widget-tabs.tag';
 import './load-recording-modal.tag';
 import './networktables-settings-modal.tag';
+import './custom-widget-settings-modal.tag';
 
 <app>
   <div class="menu">
@@ -32,6 +33,9 @@ import './networktables-settings-modal.tag';
         <a class="dropdown-item" aria-label="NetworkTable Settings" onclick={onNetworkTableSettings}>
           NetworkTables Settings
         </a>
+        <a class="dropdown-item" aria-label="Custom Widget Settings" onclick={onCustomWidgetSettings}>
+          Custom Widget Settings
+        </a>
       </div>
     </div>
     <modal ref="loadRecordingModal" title="Load Recording">
@@ -39,6 +43,9 @@ import './networktables-settings-modal.tag';
     </modal>
     <modal ref="networkTablesModal" title="NetworkTables Settings">
       <networktables-settings-modal robot-ip={opts.robotIp} modal={root._tag} />
+    </modal>
+    <modal ref="customWidgetModal" title="Custom Widget Settings">
+      <custom-widget-settings-modal widget-folder={opts.widgetFolder} modal={root._tag} />
     </modal>
     <replay />
   </div>
@@ -140,6 +147,15 @@ import './networktables-settings-modal.tag';
         }); 
     };
 
+    this.onCustomWidgetSettings = (ev) => {
+      getWidgetFolder()
+        .then(widgetFolder => {
+          this.refs.customWidgetModal.opts.widgetFolder = widgetFolder;
+          this.refs.customWidgetModal.update();
+          this.refs.customWidgetModal.open();
+        });
+    };
+
     async function saveLayout(widgetJson) {
       try {
         let l = window.location;
@@ -163,6 +179,20 @@ import './networktables-settings-modal.tag';
         let url = "http://" + l.hostname + ":" + port + "/api/get_robot_ip";
         const response = await axios.get(url);
         return response.data.robot_ip;
+      }
+      catch(e) {
+        console.error('error', e);
+        return 'localhost';
+      }
+    }
+
+    async function getWidgetFolder() {
+      try {
+        let l = window.location;
+        let port = process.env.socket_port || l.port;
+        let url = "http://" + l.hostname + ":" + port + "/api/get_widget_folder";
+        const response = await axios.get(url);
+        return response.data.widget_folder;
       }
       catch(e) {
         console.error('error', e);
