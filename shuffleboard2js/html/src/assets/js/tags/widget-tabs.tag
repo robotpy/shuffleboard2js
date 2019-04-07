@@ -200,6 +200,11 @@ import axios from 'axios';
 
     this.loadLayout = () => {
       return getSavedLayout().then((tabs) => {
+
+        if (!tabs) {
+          return;
+        }
+
         this.widgetTabs = tabs;
         this.update();
         this.updateTabInputWidths();
@@ -249,11 +254,11 @@ import axios from 'axios';
         let port = process.env.socket_port || l.port;
         let url = "http://" + l.hostname + ":" + port + "/api/open_layout";
         const response = await axios.get(url);
-        return response.data.tabs || [];
+        return response.data.tabs;
       }
       catch(e) {
         console.error('error', e);
-        return [];
+        return null;
       }
     }
 

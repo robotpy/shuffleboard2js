@@ -52,7 +52,7 @@ import axios from 'axios';
         let port = process.env.socket_port || l.port;
         let url = "http://" + l.hostname + ":" + port + "/api/select_widget_folder";
         const response = await axios.get(url);
-        return response;
+        return response.data.widget_folder;
       }
       catch(e) {
         console.error('error', e);

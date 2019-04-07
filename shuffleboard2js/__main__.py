@@ -200,6 +200,7 @@ class ApiHandler(tornado.web.RequestHandler):
 
         elif param == 'open_layout':
             filename = open_layout_dialog()
+            
             layout = {}
             try: 
                 with open(filename, 'r') as fp:
@@ -236,7 +237,7 @@ class ApiHandler(tornado.web.RequestHandler):
             set_config('default_widget_folder', widget_folder)
 
             self.write({
-                'widgets': widgets
+                'widget_folder': widget_folder
             })
 
         elif param == 'get_robot_ip':
