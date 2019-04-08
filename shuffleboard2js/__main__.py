@@ -296,6 +296,7 @@ class ApiHandler(tornado.web.RequestHandler):
             filename = save_layout_dialog()
 
             if filename:         
+                set_config('default_layout_location', filename)
                 with open(filename, 'w') as fp:
                     fp.write(pretty_json(data))
 
