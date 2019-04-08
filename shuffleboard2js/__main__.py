@@ -77,7 +77,27 @@ def select_widget_folder_dialog():
 def open_layout_dialog():
     root = tkinter.Tk()
     root.overrideredirect(1)
-    root.filename = filedialog.askopenfilename(title = "Select file", filetypes=[("JSON files", "*.json")])
+    layout_location = os.path.dirname(get_config('default_layout_location'))
+
+    if layout_location:
+        root.filename = filedialog.askopenfilename(initialdir=layout_location, title = "Open layout", filetypes=[("JSON files", "*.json")])
+    else:
+        root.filename = filedialog.askopenfilename(title = "Open layout", filetypes=[("JSON files", "*.json")])
+    
+    root.update()
+    return root.filename
+
+def save_layout_dialog():
+    root = tkinter.Tk()
+    root.overrideredirect(1)
+    layout_location = os.path.dirname(get_config('default_layout_location'))
+    layout_filename = os.path.basename(get_config('default_layout_location'))
+
+    if layout_location:
+        root.filename = filedialog.asksaveasfilename(initialdir=layout_location, initialfile=layout_filename, title = "Save layout", filetypes=[("JSON files", "*.json")])
+    else:
+        root.filename = filedialog.asksaveasfilename(title = "Save layout", filetypes=[("JSON files", "*.json")])
+    
     root.update()
     return root.filename
 
@@ -272,9 +292,12 @@ class ApiHandler(tornado.web.RequestHandler):
         if param == 'layout/save':
             
             data = json.loads(self.request.body.decode('utf-8'))
-            
-            with open(join(self.dashboard_path, 'layout.json'), 'w') as fp:
-                fp.write(pretty_json(data))
+
+            filename = save_layout_dialog()
+
+            if filename:         
+                with open(filename, 'w') as fp:
+                    fp.write(pretty_json(data))
 
         elif param == 'recording/save':
 
