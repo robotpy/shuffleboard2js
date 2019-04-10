@@ -53,18 +53,47 @@ def get_application_path():
     else:
         return os.path.dirname(os.path.abspath(__file__))
 
-def get_config(key):
-    application_path = get_application_path()
+def get_config_parser():
+
     config = configparser.SafeConfigParser()
-    config.read(join(application_path, 'properties.ini'))
+
+    config.read_dict({
+        'DEFAULT': {
+            'default_layout_location': '',
+            'default_widget_folder': '',
+            'robot_ip': 'localhost'
+        }
+    })
+
+    dashboard_path = os.path.expanduser('~/shuffleboard2js')
+    properties_path = join(dashboard_path, 'properties.ini')
+
+    if not exists(dashboard_path):
+        os.mkdir(dashboard_path)
+
+    if not exists(properties_path):
+        f = open(properties_path, 'a+')
+        f.close()
+
+    config.read(properties_path)
+
+    return config
+
+
+def get_config(key):
+    config = get_config_parser()
     return config.get('DEFAULT', key)
 
 def set_config(key, value):
-    application_path = get_application_path()
-    config = configparser.SafeConfigParser()
-    config.read(join(application_path, 'properties.ini'))
+    dashboard_path = os.path.expanduser('~/shuffleboard2js')
+    properties_path = join(dashboard_path, 'properties.ini')
+
+    if not exists(dashboard_path):
+        os.mkdir(dashboard_path)
+
+    config = get_config_parser()
     config.set('DEFAULT', key, value)
-    with open(join(application_path, "properties.ini"), "w+") as configfile:
+    with open(properties_path, "w+") as configfile:
         config.write(configfile) 
 
 def select_widget_folder_dialog():
@@ -184,22 +213,16 @@ class ApiHandler(tornado.web.RequestHandler):
             :param param: The matching parameter for /api/(.*)
         '''
         
-        if param == 'layout':
-            layout = {}
-            try: 
-                with open(join(self.dashboard_path, 'layout.json'), 'r') as fp:
-                    try:
-                        layout = json.loads(fp.read())
-                    except:
-                        logger.error("Error reading config.json")
-            except:
-                pass
+        if param == 'recordings':
 
-            self.write(layout)
+            dashboard_path = os.path.expanduser('~/shuffleboard2js')
+            recordings_path = join(dashboard_path, 'recordings')
 
-        elif param == 'recordings':
+            if not exists(dashboard_path):
+                os.mkdir(dashboard_path)
 
-            recordings_path = join(self.dashboard_path, 'recordings')
+            if not exists(recordings_path):
+                os.mkdir(recordings_path)
 
             recordings = {}
 
@@ -302,7 +325,11 @@ class ApiHandler(tornado.web.RequestHandler):
 
         elif param == 'recording/save':
 
-            recordings_path = join(self.dashboard_path, 'recordings')
+            dashboard_path = os.path.expanduser('~/shuffleboard2js')
+            recordings_path = join(dashboard_path, 'recordings')
+
+            if not exists(dashboard_path):
+                os.mkdir(dashboard_path)
 
             if not exists(recordings_path):
                 os.mkdir(recordings_path)
@@ -362,13 +389,7 @@ def main():
     # Setup NetworkTables
     init_networktables(options)
 
-    if getattr(sys, 'frozen', False):
-        # If the application is run as a bundle, the pyInstaller bootloader
-        # extends the sys module by a flag frozen=True and sets the app 
-        # path into variable _MEIPASS'.
-        application_path = sys._MEIPASS
-    else:
-        application_path = os.path.dirname(os.path.abspath(__file__))
+    application_path = get_application_path()
 
     # setup tornado application with static handler + networktables support
     html_dir = abspath(join(application_path, "html", "dist"))
@@ -376,8 +397,7 @@ def main():
     vendor_dir = abspath(join(application_path, "html", "vendor"))
 
     # Path where user files are served from
-    robot_file = abspath(os.getcwd())
-    dashboard_path = join(robot_file, 'shuffleboard2js')
+    dashboard_path = os.path.expanduser('~/shuffleboard2js')
 
     if not exists(dashboard_path):
         os.mkdir(dashboard_path)
