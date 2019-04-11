@@ -3,6 +3,8 @@ dist: xenial
 language: python
 python:
 - "3.7"
+services:
+- docker
 
 matrix:
   fast_finish: true
@@ -13,10 +15,13 @@ install:
 - "npm install -g webpack-cli"
 - "npm install -g webpack"
 - "npm install --prefix ./shuffleboard2js/html/ --no-save"
+- "pip install pyinstaller"
 
 # command to create build 
 script:
 - "npm run --prefix ./shuffleboard2js/html/ build:prod"
+- ./build_exe.sh
+- "mv ./dist ./dist-windows"
 
 deploy:
 - provider: pypi
@@ -24,6 +29,14 @@ deploy:
   user: $PYPI_USERNAME
   password: $PYPI_PASSWORD
   distributions: sdist bdist_wheel
+  on:
+    tags: true
+
+- provider: releases
+  api_key: $GITHUB_OAUTH_TOKEN
+  file_glob: true
+  file: dist-windows/shuffleboard2js*.zip
+  skip_cleanup: true
   on:
     tags: true
 
