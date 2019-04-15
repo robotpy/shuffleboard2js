@@ -1,7 +1,8 @@
 import './subtable.tag';
 import './networktables.scss';
+import _ from 'lodash';
 import fileImage from 'open-iconic/png/file-8x.png';
-import { getType } from 'assets/js/networktables';
+import { getTypes } from 'assets/js/networktables';
 
 <networktables>  
   <div class="table">
@@ -39,6 +40,7 @@ import { getType } from 'assets/js/networktables';
         let dragEndPosition = this.getDragEndPosition(ev);
 
         let widgets = this.getWidgets(dragEndPosition.x, dragEndPosition.y);
+
         widgets.forEach(widget => {
           
           if (widget.setNtRoot(ntKey)) {
@@ -46,7 +48,8 @@ import { getType } from 'assets/js/networktables';
           }
           else {
             const widgetConfig = widget.getConfig();
-            const ntType = getType(ntKey);
+            const ntTypes = getTypes(ntKey);
+            const ntType = _.first(ntTypes);
             dashboard.toastr.error(`Widget of type '${widgetConfig.label}' doesn't accept type 
                                     '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
           }

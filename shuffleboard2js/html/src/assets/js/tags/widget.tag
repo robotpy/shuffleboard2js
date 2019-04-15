@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { getSubtable, getType } from 'assets/js/networktables';
+import { getSubtable, getTypes } from 'assets/js/networktables';
 import ObservableSlim from 'observable-slim';
 
 
@@ -110,22 +110,28 @@ import ObservableSlim from 'observable-slim';
       this.refs.widgetType._tag.update();
     }
 
-    this.isAcceptedType = (ntType, widgetType = this.widgetType) => {
+    this.isAcceptedType = (ntTypes, widgetType = this.widgetType) => {
       let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
 
       if (!widgetConfig) {
         return false;
       }
 
-      return widgetConfig.acceptedTypes.indexOf(ntType) > -1;
+      for (let i = 0; i < ntTypes.length; i++) {
+        if (widgetConfig.acceptedTypes.indexOf(ntTypes[i]) > -1) {
+          return true;
+        }
+      }
+
+      return false;
     }
 
     // If ignoreType is true, set even if the type is not one of the accepted types.
     // This is useful for saved widgets that have ntRoots that haven't been set yet.
     this.setNtRoot = (root, ignoreType) => {
-      let ntType = getType(root);
+      let ntTypes = getTypes(root);
       
-      if (ignoreType || this.isAcceptedType(ntType)) {
+      if (ignoreType || this.isAcceptedType(ntTypes)) {
         this.ntRoot = root;
         this.manuallyUpdate();
         return true;
@@ -136,9 +142,9 @@ import ObservableSlim from 'observable-slim';
 
     this.setWidgetType = (type) => {
 
-      let ntType = getType(this.ntRoot);
+      let ntTypes = getTypes(this.ntRoot);
 
-      if (!ntType || this.isAcceptedType(ntType, type)) {
+      if (ntTypes.length === 0 || this.isAcceptedType(ntTypes, type)) {
         this.widgetType = type;
         this.properties = this.getPropertiesDefaults(type);
         riot.mount(this.refs.widgetType, type, {
@@ -163,8 +169,8 @@ import ObservableSlim from 'observable-slim';
         return {};
       }
 
-      const ntType = getType(this.ntRoot);
-      const isAcceptedType = this.isAcceptedType(ntType);
+      const ntTypes = getTypes(this.ntRoot);
+      const isAcceptedType = this.isAcceptedType(ntTypes);
 
       let ntValue = isAcceptedType ? getSubtable(this.ntRoot) : {};
       

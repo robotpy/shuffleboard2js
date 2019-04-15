@@ -78,25 +78,25 @@ export function getSubtable(root) {
   }
 }
 
-export function getType(key) {
+export function getTypes(key) {
 
   if (!key) {
-    return null;
+    return [];
   }
 
   // Check if this is a camera source
   if (isCameraSource(key)) {
-    return 'Camera';
+    return ['Camera', 'Subtable'];
   }
 
   // Check if value has a primitive or array type
   let value = NetworkTables.getValue(key, null);
 
   if (_.isArray(value)) {
-    return 'array';
+    return ['array'];
   }
   else if (!_.isNull(value)) {
-    return typeof value;
+    return [typeof value];
   }
 
   // If it doesn't end with a / then it's not a subtable and it doesn't have a .type
@@ -108,7 +108,7 @@ export function getType(key) {
   let type = NetworkTables.getValue(key + '.type');
 
   if (type) {
-    return type;
+    return [type, 'Subtable'];
   }
 
   // If there are any keys that start with the passed in key then it's a subtable
@@ -116,12 +116,12 @@ export function getType(key) {
 
   for (let i = 0; i < allKeys.length; i++) {
     if (allKeys[i].startsWith(key)) {
-      return 'Subtable';
+      return ['Subtable'];
     }
   }
 
-  // Nothing in subtable, so return null
-  return null;
+  // Nothing in subtable, so return empty array of types
+  return [];
 }
 
 function isCameraSource(key) {

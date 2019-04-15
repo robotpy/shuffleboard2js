@@ -6,7 +6,7 @@ import uuidv1 from "uuid";
 import './widget.tag';
 import './components';
 import _ from 'lodash';
-import { getType } from 'assets/js/networktables';
+import { getTypes } from 'assets/js/networktables';
 
 <widgets>
 
@@ -113,7 +113,7 @@ import { getType } from 'assets/js/networktables';
     };
     this.contextMenuWidgetHasProperties = false;
 
-    this.getShowAsOptions = (ntType) => {
+    this.getShowAsOptions = (ntTypes) => {
       let currentType = this.contextMenuWidget.widgetType;
       let registeredWidgets = dashboard.store.getState().widgets.registered;
       let allOptions = _.map(registeredWidgets, (widget, type) => {
@@ -126,7 +126,12 @@ import { getType } from 'assets/js/networktables';
       });
 
       return allOptions.filter(option => {
-        return option.acceptedTypes.indexOf(ntType) > -1;
+        for (let i = 0; i < ntTypes.length; i++) {
+          if (option.acceptedTypes.indexOf(ntTypes[i]) > -1) {
+            return true;
+          }
+        }
+        return false;
       });
     };
 
@@ -139,8 +144,8 @@ import { getType } from 'assets/js/networktables';
       else {
         this.menu = 'widget';
         this.contextMenuWidget = widgets[0];
-        let ntType = getType(this.contextMenuWidget.ntRoot);
-        this.contextMenuShowAs.options = this.getShowAsOptions(ntType);
+        let ntTypes = getTypes(this.contextMenuWidget.ntRoot);
+        this.contextMenuShowAs.options = this.getShowAsOptions(ntTypes);
         this.contextMenuWidgetHasProperties = this.contextMenuWidget.hasProperties();
       }
     };

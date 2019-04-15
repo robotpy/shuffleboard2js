@@ -2,7 +2,7 @@
 import { getSubtable } from 'assets/js/networktables';
 import _ from 'lodash';
 import fileImage from 'open-iconic/png/file-8x.png';
-import { getType } from 'assets/js/networktables';
+import { getTypes } from 'assets/js/networktables';
 
 <camera-sources>
 
@@ -61,7 +61,8 @@ import { getType } from 'assets/js/networktables';
         }
         else {
           const widgetConfig = widget.getConfig();
-          const ntType = getType(ntKey);
+          const ntTypes = getTypes(ntKey);
+          const ntType = _.first(ntTypes);
           dashboard.toastr.error(`Widget of type '${widgetConfig.label}' doesn't accept type 
                                   '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
         }

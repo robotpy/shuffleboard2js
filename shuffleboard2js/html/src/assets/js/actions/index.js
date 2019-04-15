@@ -23,7 +23,6 @@ export function registerWidget(widgetType, config = {}) {
     let l = window.location;
     let port = process.env.socket_port || l.port;
     config.image = "http://" + pathModule.join(l.hostname + ":" + port, 'widgets', widgetType, config.image);
-    console.log('config image:', config.image);
   }
 
   return {
