@@ -124,6 +124,33 @@ export function getTypes(key) {
   return [];
 }
 
+export function getDefaultWidgetConfig(ntType) {
+  let widgetConfigs = dashboard.store.getState().widgets.registered;
+
+  for (let type in widgetConfigs) {
+    const config = widgetConfigs[type];
+    if (config.defaultsFor.indexOf(ntType) > -1) {
+      return {
+        type,
+        ...config
+      };
+    }
+  }
+
+  // Otherwise look for any widget that does ntType as an accepted type
+  for (let type in widgetConfigs) {
+    const config = widgetConfigs[type];
+    if (config.acceptedTypes.indexOf(ntType) > -1) {
+      return {
+        type,
+        ...config
+      };
+    }
+  }
+
+  return null;
+}
+
 function isCameraSource(key) {
 
   if (!key.startsWith('/CameraPublisher')) {

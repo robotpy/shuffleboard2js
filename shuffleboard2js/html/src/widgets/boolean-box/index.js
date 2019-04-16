@@ -6,6 +6,7 @@ dashboard.registerWidget('boolean-box', {
   label: 'Boolean Box',
   category: 'Basic',
   acceptedTypes: ['boolean'],
+  defaultsFor: ['boolean'],
   image,
   minX: 2,
   minY: 2,

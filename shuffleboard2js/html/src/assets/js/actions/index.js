@@ -8,6 +8,7 @@ export function registerWidget(widgetType, config = {}) {
     label: widgetType,
     category: 'Unknown',
     acceptedTypes: [],
+    defaultsFor: [],
     image: '',
     minX: 1,
     minY: 1,

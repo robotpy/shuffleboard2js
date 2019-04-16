@@ -239,6 +239,7 @@ import { getTypes } from 'assets/js/networktables';
 
       let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
       widget.setWidgetType(config.type);
+      return widget;
     };
 
     this.addSavedWidget = (config) => {

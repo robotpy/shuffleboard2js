@@ -2,7 +2,7 @@ import './subtable.tag';
 import './networktables.scss';
 import _ from 'lodash';
 import fileImage from 'open-iconic/png/file-8x.png';
-import { getTypes } from 'assets/js/networktables';
+import { getTypes, getDefaultWidgetConfig } from 'assets/js/networktables';
 
 <networktables>  
   <div class="table">
@@ -26,6 +26,13 @@ import { getTypes } from 'assets/js/networktables';
       return widgets.getWidgets(x, y);
     };
 
+    this.addWidget = (x, y, config) => {
+      let widgetTabsElement = document.getElementsByTagName('widget-tabs')[0]; 
+      let widgetTabs = widgetTabsElement._tag;
+      let widgets = widgetTabs.getActiveWidgetTab();
+      return widgets.addWidget(x, y, config);
+    }
+
     this.on('mount', () => {
       $(this.root).on('dragstart', '.table-row:not(.header)', (ev) => {
         ev.originalEvent.dataTransfer.setData("text/plain", ev.target.id);
@@ -36,6 +43,8 @@ import { getTypes } from 'assets/js/networktables';
         const $ntKey = $(ev.target).closest('[data-nt-key], [nt-key]');
         const isSubtable = $ntKey[0].tagName === 'SUBTABLE';
         const ntKey = $ntKey.attr('data-nt-key') || $ntKey.attr('nt-key');
+        const ntTypes = getTypes(ntKey);
+        const ntType = _.first(ntTypes);
 
         let dragEndPosition = this.getDragEndPosition(ev);
 
@@ -48,8 +57,6 @@ import { getTypes } from 'assets/js/networktables';
           }
           else {
             const widgetConfig = widget.getConfig();
-            const ntTypes = getTypes(ntKey);
-            const ntType = _.first(ntTypes);
             dashboard.toastr.error(`Widget of type '${widgetConfig.label}' doesn't accept type 
                                     '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
           }
@@ -57,7 +64,22 @@ import { getTypes } from 'assets/js/networktables';
 
         // Send notification if setting widget failed
         if (widgets.length === 0) {
-          dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget found.`);
+
+          const widgetConfig = getDefaultWidgetConfig(ntType);
+
+          if (widgetConfig) {
+            const widget = this.addWidget(dragEndPosition.x, dragEndPosition.y, {
+              type: widgetConfig.type,
+              minX: widgetConfig.minX,
+              minY: widgetConfig.minY
+            });
+
+            widget.setNtRoot(ntKey);
+            dashboard.toastr.success(`Successfully added source '${ntKey}' to widget of type '${widgetConfig.label}'.`);
+          }
+          else {
+            dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget that accepts type '${ntType}' could be found.`);
+          }
         }
 
         
