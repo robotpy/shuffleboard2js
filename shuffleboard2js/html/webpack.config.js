@@ -3,7 +3,17 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
+const createElectronReloadWebpackPlugin = require('electron-reload-webpack-plugin');
 require("babel-polyfill");
+
+// Create one plugin for both renderer and main process
+const ElectronReloadWebpackPlugin = createElectronReloadWebpackPlugin({
+  // Path to `package.json` file with main field set to main process file path, or just main process file path
+  path: path.join(__dirname, './'),
+  // or just `path: './'`,
+  // Other 'electron-connect' options
+  logLevel: 0
+});
 
 module.exports = (env = {}) => {
 
@@ -14,6 +24,7 @@ module.exports = (env = {}) => {
 
   return {
     context: path.resolve(__dirname, "src"),
+    target: 'electron-renderer',
     entry: {
       app: ['babel-polyfill', './app.js'],
       'gyro': ['./widgets/gyro/index.js'],
@@ -130,7 +141,8 @@ module.exports = (env = {}) => {
       new CopyWebpackPlugin([
         { context: 'assets/media/', from: '**', to: 'assets/media/' }
       ]),
-      new webpack.DefinePlugin(envKeys)
+      new webpack.DefinePlugin(envKeys),
+      ElectronReloadWebpackPlugin()
     ],
     devServer: {
       contentBase: path.resolve(__dirname, "dist/assets/media"),
