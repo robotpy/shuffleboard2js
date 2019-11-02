@@ -1,4 +1,5 @@
 import axios from 'axios';
+const dialog = require('electron').remote.dialog;
 
 <custom-widget-settings-modal>
   <div class="modal-body">
@@ -34,31 +35,26 @@ import axios from 'axios';
 
   <script>
     
-    this.onChangeWidgetFolder = (ev) => {
+    this.onChangeWidgetFolder = async (ev) => {
 
-      changeWidgetFolder()
-        .then(response => {
-          if (!response) {
-            return;
-          }
+      const options = {
+        title: 'Select Widget Folder',
+        defaultPath: dashboard.storage.getDefaultWidgetFolder(),
+        properties: ['openDirectory']
+      };
 
-          window.location.reload();
-        }); 
-    };
-
-    async function changeWidgetFolder() {
       try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/select_widget_folder";
-        const response = await axios.get(url);
-        return response.data.widget_folder;
+        const { canceled, filePaths } = await dialog.showOpenDialog(options);
+        if (!canceled) {
+          dashboard.storage.setDefaultWidgetFolder(filePaths[0]);
+          dashboard.toastr.success(`Widget folder changed to ${filePaths[0]}`); 
+          window.location.reload();
+        }
       }
       catch(e) {
-        console.error('error', e);
-        return null;
+        dashboard.toastr.error(`Failed to change widget folder: ${e.message}`);
       }
-    }
+    };
 
     this.mapDispatchToMethods = {
       clearNetworkTables: dashboard.actions.clearNetworkTables,

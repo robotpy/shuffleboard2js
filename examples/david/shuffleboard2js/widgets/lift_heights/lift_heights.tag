@@ -1,8 +1,9 @@
+const cargoImage = require('./cargo_ship_transparent.png');
 
 <lift_heights>
     <div id="svg-container" style="width:100%;height:100%;">
     <svg width='100%' height='100%' viewBox="0 0 100 100">
-        <image xlink:href="/widgets/lift_heights/rocket_ship_transparent.png" x="52%" y="0" height="100%" width="50%"/>
+        <image xlink:href="{cargoImage}" x="52%" y="0" height="100%" width="50%"/>
 
         <!-- Rocket ball button SVG elements -->
         <ellipse onclick={topLeft} cx = '67.3%' cy = '38%' rx = '4%' ry = '5%' style="fill:lime;fill-opacity:0;stroke:black;stroke-width:.8"/>
@@ -14,7 +15,7 @@
         <ellipse cx = '78%' cy = '60.5%' rx = '4.15%' ry = '5%' style="fill:lime;fill-opacity:0;stroke:black;stroke-width:.8"/>
         <ellipse cx = '78%' cy = '77.5%' rx = '4.15%' ry = '5%' style="fill:lime;fill-opacity:0;stroke:black;stroke-width:.8"/>
         
-        <image xlink:href="/widgets/lift_heights/cargo_ship_transparent.png" x="1" y="20%" height="100%" width="50%"/>
+        <image xlink:href="{cargoImage}" x="1" y="20%" height="100%" width="50%"/>
 
         <!-- Cargo ship ball SVG elements-->
         <polygon points="1.5,63.7 8.3,52.8 22.5,60.5 15.5,72" style="fill:lime;fill-opacity:0;stroke:black;stroke-width:.8" />

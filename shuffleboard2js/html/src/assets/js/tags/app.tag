@@ -141,21 +141,17 @@ import { writeFileSync } from 'fs';
     };
 
     this.onNetworkTableSettings = (ev) => {
-      getRobotIp()
-        .then(robotIp => {
-          this.refs.networkTablesModal.opts.robotIp = robotIp;
-          this.refs.networkTablesModal.update();
-          this.refs.networkTablesModal.open();
-        }); 
+      const robotIp = dashboard.storage.getRobotIp();
+      this.refs.networkTablesModal.opts.robotIp = robotIp;
+      this.refs.networkTablesModal.update();
+      this.refs.networkTablesModal.open();
     };
 
     this.onCustomWidgetSettings = (ev) => {
-      getWidgetFolder()
-        .then(widgetFolder => {
-          this.refs.customWidgetModal.opts.widgetFolder = widgetFolder;
-          this.refs.customWidgetModal.update();
-          this.refs.customWidgetModal.open();
-        });
+      const widgetFolder = dashboard.storage.getDefaultWidgetFolder();
+      this.refs.customWidgetModal.opts.widgetFolder = widgetFolder;
+      this.refs.customWidgetModal.update();
+      this.refs.customWidgetModal.open();
     };
 
     async function saveLayout(widgetJson) {
@@ -165,7 +161,6 @@ import { writeFileSync } from 'fs';
         filters: [
           { name: 'JSON files', extensions: ['json'] }
         ]
-
       };
 
       try {
@@ -179,52 +174,7 @@ import { writeFileSync } from 'fs';
       catch(e) {
         dashboard.toastr.error(`Failed to save layout: ${e.message}`);
       }
-      
-      /*
-      try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/layout/save";
-        const response = await axios.post(url, {
-          tabs: widgetJson
-        });
-        return response;
-      }
-      catch(e) {
-        console.error('error', e);
-        return [];
-      }
-      */
     }
-
-    async function getRobotIp() {
-      try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/get_robot_ip";
-        const response = await axios.get(url);
-        return response.data.robot_ip;
-      }
-      catch(e) {
-        console.error('error', e);
-        return 'localhost';
-      }
-    }
-
-    async function getWidgetFolder() {
-      try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/get_widget_folder";
-        const response = await axios.get(url);
-        return response.data.widget_folder;
-      }
-      catch(e) {
-        console.error('error', e);
-        return 'localhost';
-      }
-    }
-    
 
     this.on('mount', () => {
 

@@ -19,13 +19,6 @@ export function registerWidget(widgetType, config = {}) {
     ...config
   };
 
-  // If image is not from assets from folder then its a custom widget. Fix path if it's relative
-  if (!config.image.startsWith('assets/') && !config.image.startsWith('http')) {
-    let l = window.location;
-    let port = process.env.socket_port || l.port;
-    config.image = "http://" + pathModule.join(l.hostname + ":" + port, 'widgets', widgetType, config.image);
-  }
-
   return {
     type: ActionTypes.REGISTER_WIDGET,
     payload: {

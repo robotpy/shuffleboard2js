@@ -12,7 +12,6 @@ const initialState = {
   networktables: {
     values: {},
     rawValues: {},
-    wsConnected: false,
     robotConnected: false
   },
   widgets: {
@@ -81,14 +80,6 @@ const rootReducer = (state = initialState, action) => {
         networktables: {
           ...state.networktables,
           robotConnected: action.payload.connected
-        }
-      };
-    case ActionTypes.NT_WEBSOCKET_CONNECTION_CHANGED:
-      return {
-        ...state,
-        networktables: {
-          ...state.networktables,
-          wsConnected: action.payload.connected
         }
       };
     case ActionTypes.CLEAR_NETWORKTABLES:

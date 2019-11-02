@@ -9,8 +9,7 @@ import 'assets/scss/app.scss';
 import toastr from 'toastr';
 import * as CurvedArrow from 'assets/js/curved-arrow';
 import * as storage from 'assets/js/storage';
-
-alert('.!sdSSSssss!!');
+require('assets/js/require-extensions');
 
 window.dashboard = {
   store,

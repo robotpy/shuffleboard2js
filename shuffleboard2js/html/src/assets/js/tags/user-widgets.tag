@@ -1,59 +1,54 @@
 import axios from 'axios';
 import pathModule from 'path';
+import { readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
+
 
 <user-widgets>
 
   <script>
-    async function getWidgets() {
+    function getWidgets() {
       try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/widgets";
-        const response = await axios.get(url);
-        return response.data.widgets;
+        const widgetFolder = dashboard.storage.getDefaultWidgetFolder();
+        const widgets = readdirSync(widgetFolder, { withFileTypes: true })
+          .filter(dirent => dirent.isDirectory())
+          .map(dirent => dirent.name);
+
+        return widgets;
       }
       catch(e) {
-        console.log('error', e);
+        dashboard.toastr.error(`Failed to load widgets in folder: ${e.message}`);
         return [];
       }
     }
 
-    async function includeHtml(path, widget) {
+    async function includeHtml(path) {
 
-      let result = await axios.get(path);
-      let html = result.data;
-      let $html = $(`
+      const widget = window.require(path);
+
+/*
+      const html = readFileSync(path, 'utf8');
+      const $html = $(`
         <div>${html}</div>
       `);
       
       $html.find('[type="riot/tag"]').each(function() {
-        let tag = $(this).html();
-        let url = $(this).attr('src');
-        
-        if (!url.startsWith('http')) {
-          let l = window.location;
-          let port = process.env.socket_port || l.port;
-          url = "http://" + pathModule.join(l.hostname + ":" + port, 'widgets', widget, url);
-        }
-        
-        riot.compile(url ? url : tag, () => {
+        const tag = $(this).html();
+        riot.compile(tag, () => {
           $(html).appendTo('body');
         });
 
       });
+      */
     }
 
-
-    getWidgets()
-      .then(function(widgets) {
-        widgets.forEach(function(widget) {
-          let l = window.location;
-          let port = process.env.socket_port || l.port;
-          let path = `/widgets/${widget}/index.html`;
-          let url = "http://" + l.hostname + ":" + port + path;
-          includeHtml(url, widget);
-        });
-      });
+    const widgets = getWidgets();
+    const widgetFolder = dashboard.storage.getDefaultWidgetFolder();
+    widgets.forEach(function(widget) {
+      let widgetPath = join(widgetFolder, widget, 'index.js');
+    
+      includeHtml(widgetPath);
+    });
 
   </script>
 

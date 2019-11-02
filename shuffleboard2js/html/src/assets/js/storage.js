@@ -14,3 +14,11 @@ export const getDefaultLayoutPath = () => {
 export const setDefaultLayoutPath = (path) => {
   localStorage.defaultLayoutPath = path;
 };
+
+export const getDefaultWidgetFolder = () => {
+  return localStorage.defaultWidgetFolder;
+};
+
+export const setDefaultWidgetFolder = (path) => {
+  localStorage.defaultWidgetFolder = path;
+};
