@@ -1,0 +1,24 @@
+{
+    "tabs": [
+        {
+            "header": "Tab 1",
+            "widgets": [
+                {
+                    "col": 2,
+                    "ntRoot": null,
+                    "properties": {
+                        "numDecimals": 2,
+                        "range": 2,
+                        "showText": true,
+                        "showTickMarks": true
+                    },
+                    "row": 2,
+                    "sizeX": 4,
+                    "sizeY": 4,
+                    "widgetTitle": null,
+                    "widgetType": "three-axis-accelerometer"
+                }
+            ]
+        }
+    ]
+}

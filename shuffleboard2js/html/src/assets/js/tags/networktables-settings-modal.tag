@@ -29,33 +29,15 @@ import axios from 'axios';
   </style>
 
   <script>
+
+    NetworkTables.connect(dashboard.storage.getRobotIp());
     
     this.onRobotIpChange = (ev) => {
       const robotIp = ev.target.value;
-      setRobotIp(robotIp)
-        .then(response => {
-          if (!response) {
-            return;
-          }
-
-          this.clearNetworkTables();
-          NetworkTables.closeSocket();
-        }); 
+      this.clearNetworkTables();
+      NetworkTables.connect(robotIp);
+      dashboard.storage.setRobotIp(robotIp);
     };
-
-    async function setRobotIp(robotIp) {
-      try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/set_robot_ip?robot_ip=" + robotIp;
-        const response = await axios.get(url);
-        return response;
-      }
-      catch(e) {
-        console.error('error', e);
-        return null;
-      }
-    }
 
     this.mapDispatchToMethods = {
       clearNetworkTables: dashboard.actions.clearNetworkTables,

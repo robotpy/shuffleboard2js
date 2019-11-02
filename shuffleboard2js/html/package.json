@@ -72,6 +72,7 @@
     "popper.js": "^1.14.4",
     "riot-redux-connect": "^1.1.8",
     "svg-gauge": "^1.0.5",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "wpilib-nt-client": "^1.7.1"
   }
 }

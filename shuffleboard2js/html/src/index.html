@@ -21,7 +21,9 @@
       <!-- select2 -->
       <script src="http://localhost:8888/vendor/select2.min.js"></script>
 
-      <script data-nt-host="localhost:8888" src="http://localhost:8888/networktables/networktables.js"></script>
+      <script>
+        window.NetworkTables = require(`${__dirname}/../networktables/networktables.js`);
+      </script>
   
       <!-- d3 -->
       <script src="http://localhost:8888/vendor/d3.v4.min.js"></script>

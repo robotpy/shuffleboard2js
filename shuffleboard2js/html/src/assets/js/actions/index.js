@@ -72,15 +72,6 @@ export function ntRobotConnectionChanged(connected) {
   };
 }
 
-export function ntWsConnectionChanged(connected) {
-  return {
-    type: ActionTypes.NT_WEBSOCKET_CONNECTION_CHANGED,
-    payload: {
-      connected
-    }
-  };
-}
-
 export function ntValueChanged() {
 
   let valueChanges = {};

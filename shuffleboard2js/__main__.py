@@ -21,9 +21,6 @@ import tornado.web
 from tornado.web import StaticFileHandler
 from tornado.ioloop import IOLoop
 
-from networktables import NetworkTables
-from pynetworktables2js import get_handlers
-
 import shuffleboard2js
 
 from tkinter import filedialog
@@ -61,7 +58,6 @@ def get_config_parser():
         'DEFAULT': {
             'default_layout_location': '',
             'default_widget_folder': '',
-            'robot_ip': 'localhost'
         }
     })
 
@@ -132,18 +128,6 @@ def save_layout_dialog():
 
 def pretty_json(d):
     return json.dumps(d, sort_keys=True, indent=4, separators=(',', ': '))
-
-def set_robot_ip(ip):
-    NetworkTables.shutdown()
-    NetworkTables.initialize(server=ip)
-
-def init_networktables(options):
-    NetworkTables.setNetworkIdentity(options.identity)
-
-    logger.info("Connecting to networktables at %s", options.robot)
-    NetworkTables.initialize(server=options.robot)
-
-    logger.info("Networktables Initialized")
 
 
 class NonCachingStaticFileHandler(StaticFileHandler):
@@ -283,20 +267,10 @@ class ApiHandler(tornado.web.RequestHandler):
                 'widget_folder': widget_folder
             })
 
-        elif param == 'get_robot_ip':
-            self.write({
-                'robot_ip': get_config('robot_ip')
-            })
-
         elif param == 'get_widget_folder':
             self.write({
                 'widget_folder': get_config('default_widget_folder')
             })
-
-        elif param == 'set_robot_ip':
-            robot_ip = self.get_argument("robot_ip", 'localhost')
-            set_robot_ip(robot_ip)
-            set_config('robot_ip', robot_ip)
 
         else:
             raise tornado.web.HTTPError(404)
@@ -359,35 +333,14 @@ def main():
     # Setup options here
     parser = OptionParser()
 
-    parser.add_option(
-        "-p", "--port", type=int, default=8888, help="Port to run web server on"
-    )
-
-    parser.add_option(
-        "-v",
-        "--verbose",
-        default=False,
-        action="store_true",
-        help="Enable verbose logging",
-    )
-
-    parser.add_option("--robot", default=get_config('robot_ip'), help="Robot's IP address")
-
-    parser.add_option(
-        "--identity", default="pynetworktables2js", help="Identity to send to NT server"
-    )
-
     options, args = parser.parse_args()
 
     # Setup logging
     logging.basicConfig(
         datefmt=log_datefmt,
         format=log_format,
-        level=logging.DEBUG if options.verbose else logging.INFO,
+        level=logging.INFO,
     )
-
-    # Setup NetworkTables
-    init_networktables(options)
 
     application_path = get_application_path()
 
@@ -403,8 +356,7 @@ def main():
         os.mkdir(dashboard_path)
 
     app = tornado.web.Application(
-        get_handlers()
-        + [
+        [
             (r'/widgets/(.*)', WidgetFileHandler, {'path': '/'}),
             (r'/user/(.*)', NonCachingStaticFileHandler, {'path': dashboard_path }),
             (r'/api/(.*)', ApiHandler, {'dashboard_path': dashboard_path}),
@@ -415,39 +367,9 @@ def main():
     )
 
     # Start the app
-    logger.info("Listening on http://localhost:%s/", options.port)
+    logger.info("Listening on http://localhost:%s/", '8888')
 
-    app.listen(options.port)
-
-
-    def launch_browser():
-		
-        try:
-            time.sleep(1.0)
-            w = None
-            
-            # Prefer chrome if available
-            for b in ['chrome', 'google-chrome', 'chromium', 'chromium-browser', 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s']:
-                if w is not None:
-                    break
-                try:
-                    w = webbrowser.get(using=b)
-                    
-                except:
-                    pass
-            
-            if w is None:
-                w = webbrowser.get()
-            
-            w.open('http://localhost:%s/' % options.port)
-        except:
-            logger.exception("Unexpected error trying to open browser automatically")
-        
-        return False
-
-
-    launch_thread = threading.Thread(target=launch_browser, daemon=True)
-    launch_thread.start()
+    app.listen('8888')
 
     IOLoop.current().start()
 

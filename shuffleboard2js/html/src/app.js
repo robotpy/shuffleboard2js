@@ -8,6 +8,7 @@ import * as actions from  'assets/js/actions';
 import 'assets/scss/app.scss';
 import toastr from 'toastr';
 import * as CurvedArrow from 'assets/js/curved-arrow';
+import * as storage from 'assets/js/storage';
 
 alert('.!sdSSSssss!!');
 
@@ -20,6 +21,7 @@ window.dashboard = {
   registerWidget: function(tagName, config) {
     store.dispatch(actions.registerWidget(tagName, config));
   },
+  storage
 };
 
 riotReduxConnect(riot, store);
