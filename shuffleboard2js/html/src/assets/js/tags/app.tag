@@ -10,6 +10,8 @@ import './widget-tabs.tag';
 import './load-recording-modal.tag';
 import './networktables-settings-modal.tag';
 import './custom-widget-settings-modal.tag';
+const dialog = require('electron').remote.dialog;
+import { writeFileSync } from 'fs';
 
 <app>
   <div class="menu">
@@ -157,6 +159,28 @@ import './custom-widget-settings-modal.tag';
     };
 
     async function saveLayout(widgetJson) {
+      const options = {
+        title: 'Save Layout',
+        defaultPath: dashboard.storage.getDefaultLayoutPath(),
+        filters: [
+          { name: 'JSON files', extensions: ['json'] }
+        ]
+
+      };
+
+      try {
+        const { canceled, filePath } = await dialog.showSaveDialog(options);
+        if (!canceled) {
+          writeFileSync(filePath, JSON.stringify(widgetJson), 'utf-8');
+          dashboard.storage.setDefaultLayoutPath(filePath);
+          dashboard.toastr.success(`Layout saved to ${filePath}`); 
+        }
+      }
+      catch(e) {
+        dashboard.toastr.error(`Failed to save layout: ${e.message}`);
+      }
+      
+      /*
       try {
         let l = window.location;
         let port = process.env.socket_port || l.port;
@@ -170,6 +194,7 @@ import './custom-widget-settings-modal.tag';
         console.error('error', e);
         return [];
       }
+      */
     }
 
     async function getRobotIp() {

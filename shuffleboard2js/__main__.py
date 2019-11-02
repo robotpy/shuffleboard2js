@@ -112,20 +112,6 @@ def open_layout_dialog():
     root.update()
     return root.filename
 
-def save_layout_dialog():
-    root = tkinter.Tk()
-    root.overrideredirect(1)
-    layout_location = os.path.dirname(get_config('default_layout_location'))
-    layout_filename = os.path.basename(get_config('default_layout_location'))
-
-    if layout_location:
-        root.filename = filedialog.asksaveasfilename(initialdir=layout_location, initialfile=layout_filename, title = "Save layout", filetypes=[("JSON files", "*.json")])
-    else:
-        root.filename = filedialog.asksaveasfilename(title = "Save layout", filetypes=[("JSON files", "*.json")])
-    
-    root.update()
-    return root.filename
-
 def pretty_json(d):
     return json.dumps(d, sort_keys=True, indent=4, separators=(',', ': '))
 
@@ -285,19 +271,8 @@ class ApiHandler(tornado.web.RequestHandler):
             
             :param param: The matching parameter for /api/(.*)
         '''
-        
-        if param == 'layout/save':
-            
-            data = json.loads(self.request.body.decode('utf-8'))
 
-            filename = save_layout_dialog()
-
-            if filename:         
-                set_config('default_layout_location', filename)
-                with open(filename, 'w') as fp:
-                    fp.write(pretty_json(data))
-
-        elif param == 'recording/save':
+        if param == 'recording/save':
 
             dashboard_path = os.path.expanduser('~/shuffleboard2js')
             recordings_path = join(dashboard_path, 'recordings')
