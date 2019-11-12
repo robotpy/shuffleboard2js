@@ -23,23 +23,7 @@ import { join } from 'path';
     }
 
     async function includeHtml(path) {
-
       const widget = window.require(path);
-
-/*
-      const html = readFileSync(path, 'utf8');
-      const $html = $(`
-        <div>${html}</div>
-      `);
-      
-      $html.find('[type="riot/tag"]').each(function() {
-        const tag = $(this).html();
-        riot.compile(tag, () => {
-          $(html).appendTo('body');
-        });
-
-      });
-      */
     }
 
     const widgets = getWidgets();

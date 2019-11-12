@@ -10,6 +10,7 @@ import toastr from 'toastr';
 import * as CurvedArrow from 'assets/js/curved-arrow';
 import * as storage from 'assets/js/storage';
 require('assets/js/require-extensions');
+require('assets/js/menu');
 
 window.dashboard = {
   store,

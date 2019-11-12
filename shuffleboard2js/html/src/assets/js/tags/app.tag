@@ -15,31 +15,6 @@ import { writeFileSync } from 'fs';
 
 <app>
   <div class="menu">
-    <div class="dropdown">
-      <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        File
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" aria-label="New Layout" onclick={onNew}>
-          New
-        </a>
-        <a class="dropdown-item" aria-label="Save Layout" onclick={onSave}>
-          Save
-        </a>
-        <a ref="loadLayoutBtn" class="dropdown-item" aria-label="Load Layout" onclick={onLoad}>
-          Load Layout
-        </a>
-        <a class="dropdown-item" aria-label="Load Recording" onclick={onLoadRecording}>
-          Load Recording
-        </a>
-        <a class="dropdown-item" aria-label="NetworkTable Settings" onclick={onNetworkTableSettings}>
-          NetworkTables Settings
-        </a>
-        <a class="dropdown-item" aria-label="Custom Widget Settings" onclick={onCustomWidgetSettings}>
-          Custom Widget Settings
-        </a>
-      </div>
-    </div>
     <modal ref="loadRecordingModal" title="Load Recording">
       <load-recording-modal recordings={opts.recordings} modal={root._tag} />
     </modal>
@@ -111,7 +86,17 @@ import { writeFileSync } from 'fs';
 
   <script>
 
-    this.onLoad = _.throttle((ev) => {
+    dashboard.events.on('fileMenuNew', () => {
+      this.refs.widgetTabs.newLayout();
+    });
+
+
+    dashboard.events.on('fileMenuSave', () => {
+      let widgetJson = this.refs.widgetTabs.getWidgetTabsJson();
+      saveLayout(widgetJson);
+    });
+
+    dashboard.events.on('fileMenuLoadLayout', _.throttle((ev) => {
       // Disable button so so we don't make another request if user click button while
       // load dialog is up
       $(this.refs.loadLayoutBtn).attr('disabled', true);
@@ -120,39 +105,30 @@ import { writeFileSync } from 'fs';
           // We've loaded, so enable button again
           $(this.refs.loadLayoutBtn).attr('disabled', false);
         });
-    }, 500);
+    }, 500));
 
-    this.onNew = (ev) => {
-      this.refs.widgetTabs.newLayout();
-    };
-
-    this.onSave = (ev) => {
-      let widgetJson = this.refs.widgetTabs.getWidgetTabsJson();
-      saveLayout(widgetJson);
-    };
-
-    this.onLoadRecording = (ev) => {
+    dashboard.events.on('fileMenuLoadRecording', () => {
       dashboard.recorder.getRecordings()
         .then(recordings => {
           this.refs.loadRecordingModal.opts.recordings = recordings;
           this.refs.loadRecordingModal.update();
           this.refs.loadRecordingModal.open();
         });
-    };
+    });
 
-    this.onNetworkTableSettings = (ev) => {
+    dashboard.events.on('fileMenuNtSettings', () => {
       const robotIp = dashboard.storage.getRobotIp();
       this.refs.networkTablesModal.opts.robotIp = robotIp;
       this.refs.networkTablesModal.update();
       this.refs.networkTablesModal.open();
-    };
+    });
 
-    this.onCustomWidgetSettings = (ev) => {
+    dashboard.events.on('fileMenuWidgetSettings', () => {
       const widgetFolder = dashboard.storage.getDefaultWidgetFolder();
       this.refs.customWidgetModal.opts.widgetFolder = widgetFolder;
       this.refs.customWidgetModal.update();
       this.refs.customWidgetModal.open();
-    };
+    });
 
     async function saveLayout(widgetJson) {
       const options = {

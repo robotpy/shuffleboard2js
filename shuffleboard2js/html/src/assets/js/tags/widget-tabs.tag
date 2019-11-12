@@ -1,6 +1,8 @@
 import './widgets.tag';
 import _ from 'lodash';
 import axios from 'axios';
+import { readFileSync } from 'fs';
+const dialog = require('electron').remote.dialog;
 
 <widget-tabs>
 
@@ -223,42 +225,50 @@ import axios from 'axios';
     };
 
     this.on('mount', () => {
-      return getDefaultLayout().then((tabs) => {
-        this.widgetTabs = tabs;
-        this.update();
-        this.updateTabInputWidths();
-        
-        if (this.widgetTabs.length === 0) {
-          this.addTab();
-        }
-      });
+      this.widgetTabs = getDefaultLayout();
+      this.update();
+      this.updateTabInputWidths();
+      
+      if (this.widgetTabs.length === 0) {
+        this.addTab();
+      }
     });
 
-    async function getDefaultLayout() {
+    function getDefaultLayout() {
       try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/open_default_layout";
-        const response = await axios.get(url);
-        return response.data.tabs || [];
+        const filename = dashboard.storage.getDefaultLayoutPath();
+        const tabs = JSON.parse(readFileSync(filename, 'utf8'));
+        return tabs;
       }
       catch(e) {
-        console.error('error', e);
+        console.error('Error opening dashboard', e.message);
         return [];
       }
     }
 
     async function getSavedLayout() {
+
+      const options = {
+        title: 'Open Layout',
+        defaultPath: dashboard.storage.getDefaultLayoutPath(),
+        properties: ['openFile'],
+        filters: [
+          { name: 'JSON files', extensions: ['json'] }
+        ]
+      };
+
       try {
-        let l = window.location;
-        let port = process.env.socket_port || l.port;
-        let url = "http://" + l.hostname + ":" + port + "/api/open_layout";
-        const response = await axios.get(url);
-        return response.data.tabs;
+        const { canceled, filePaths } = await dialog.showOpenDialog(options);
+        if (!canceled) {
+          const tabs = JSON.parse(readFileSync(filePaths[0], 'utf8'));
+          dashboard.storage.setDefaultLayoutPath(filePaths[0]);
+          dashboard.toastr.success(`Layout opened`); 
+          return tabs;
+        }
       }
       catch(e) {
-        console.error('error', e);
-        return null;
+        dashboard.toastr.error(`Failed to open layout: ${e.message}`);
+        return [];
       }
     }
 
