@@ -15,16 +15,10 @@
           link.href = `${__dirname}/../vendor/${path}`;
           document.head.appendChild(link);
         }
-      </script>
 
-      <script>
         addVendorStyleSheet('bootstrap.min.css');
-      </script>
-
-      <!-- select2 -->
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-
-      <script>
+        addVendorStyleSheet('select2.min.css');
+        addVendorScript('riot.min.js');
         window.riot = require(`${__dirname}/../vendor/riot.min.js`);
         window.$ = window.jQuery = require(`${__dirname}/../vendor/jquery-3.3.1.min.js`);
         addVendorScript('popper.min.js');
@@ -42,13 +36,13 @@
     <script>
       // https://codepen.io/Momciloo/pen/bpyMbB
       $.fn.textWidth = function(text, font) {  
-          if (!$.fn.textWidth.fakeEl) {
-            $.fn.textWidth.fakeEl = $('<span class="fake-text-width">').hide().appendTo(document.body);
-          } 
-          var fakeElText = text || this.val() || this.text() || this.attr('placeholder');
-          $.fn.textWidth.fakeEl.text(fakeElText).css('font', font || this.css('font'));
-          
-          return $.fn.textWidth.fakeEl.width();
+        if (!$.fn.textWidth.fakeEl) {
+          $.fn.textWidth.fakeEl = $('<span class="fake-text-width">').hide().appendTo(document.body);
+        } 
+        var fakeElText = text || this.val() || this.text() || this.attr('placeholder');
+        $.fn.textWidth.fakeEl.text(fakeElText).css('font', font || this.css('font'));
+        
+        return $.fn.textWidth.fakeEl.width();
       };    
     </script>
 
