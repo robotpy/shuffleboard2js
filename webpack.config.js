@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const createElectronReloadWebpackPlugin = require('electron-reload-webpack-plugin');
@@ -64,22 +65,6 @@ module.exports = (env = {}) => {
           use: { loader: 'worker-loader' }
         },
         {
-          test: /\.js$/,
-          include: /src/,
-          exclude: /node_modules/,
-          use: {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-env"],
-              plugins: [
-                "@babel/plugin-proposal-object-rest-spread", 
-                "@babel/plugin-syntax-dynamic-import",
-                "@babel/plugin-transform-regenerator"
-              ]
-            }
-          }
-        },
-        {
           test: /\.tag$/,
           exclude: /node_modules/,
           use: [{
@@ -138,6 +123,9 @@ module.exports = (env = {}) => {
       new HtmlWebpackPlugin({
         template: 'index.html'
       }),
+      new ScriptExtHtmlWebpackPlugin({
+        defaultAttribute: 'defer'
+      }),
       new CopyWebpackPlugin([
         { context: 'assets/media/', from: '**', to: 'assets/media/' }
       ]),
@@ -158,7 +146,7 @@ module.exports = (env = {}) => {
     },
     externals: {
       riot: 'riot',
-      jquery: 'jQuery'
+      jquery: 'jQuery',
     },
     devtool: 'inline-source-map'
   };
