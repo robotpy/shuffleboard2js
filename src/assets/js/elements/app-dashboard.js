@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import './components/dashboard-modal';
 
 class AppDashboard extends LitElement {
 
@@ -73,7 +74,7 @@ class AppDashboard extends LitElement {
     dashboard.events.on('fileMenuNtSettings', () => {
       const robotIp = dashboard.storage.getRobotIp();
       const networkTablesModal = this.shadowRoot.getElementById('networkTablesModal');
-      networkTablesModal.opts.robotIp = robotIp;
+      //networkTablesModal.opts.robotIp = robotIp;
       networkTablesModal.open();
     });
 
@@ -128,16 +129,17 @@ class AppDashboard extends LitElement {
 
   render() {
     return html`
+      ${includeStyles()}
       <div class="menu">
-        <modal id="loadRecordingModal" title="Load Recording">
+        <dashboard-modal id="loadRecordingModal" title="Load Recording">
           <load-recording-modal recordings={opts.recordings} modal={root._tag} />
-        </modal>
-        <modal id="networkTablesModal" title="NetworkTables Settings">
+        </dashboard-modal>
+        <dashboard-modal id="networkTablesModal" title="NetworkTables Settings">
           <networktables-settings-modal robot-ip={opts.robotIp} modal={root._tag} />
-        </modal>
-        <modal id="customWidgetModal" title="Custom Widget Settings">
+        </dashboard-modal>
+        <dashboard-modal id="customWidgetModal" title="Custom Widget Settings">
           <custom-widget-settings-modal widget-folder={opts.widgetFolder} modal={root._tag} />
-        </modal>
+        </dashboard-modal>
         <replay />
       </div>
 

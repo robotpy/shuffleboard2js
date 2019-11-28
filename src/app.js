@@ -1,3 +1,13 @@
+import { html } from 'lit-element';
+
+window.includeStyles = () => {
+  return html`
+    <link type="text/css" rel="stylesheet" href="${getStylesheetPath('vendor/bootstrap.min.css')}">
+    <link type="text/css" rel="stylesheet" href="${getStylesheetPath('vendor/select2.min.css')}">
+    <link type="text/css" rel="stylesheet" href="${getStylesheetPath('vendor/select2-bootstrap4.min.css')}">
+  `;
+}
+
 import store from "assets/js/store/index";
 import riot from 'riot';
 import NetworkTablesWrapper from './assets/js/networktables';
@@ -23,7 +33,10 @@ window.dashboard = {
     store.dispatch(actions.registerWidget(tagName, config));
   },
   storage,
-  Lit
+  lit: {
+    ...Lit,
+    includeStyles: window.includeStyles
+  }
 };
 
 
