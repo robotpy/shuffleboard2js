@@ -11,6 +11,7 @@ class DashboardModal extends LitElement {
   constructor() {
     super();
     this.title = '';
+    this.$modal = null;
   }
 
   static get styles() {
@@ -22,51 +23,43 @@ class DashboardModal extends LitElement {
   }
 
   open() {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $modal.modal('show');
+    this.$modal.modal('show');
   }
 
   close() {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $modal.modal('hide');
+    this.$modal.modal('hide');
   }
 
   isOpen() {}
 
   onShow(callback) {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $modal.on('show.bs.modal', callback);
+    this.$modal.on('show.bs.modal', callback);
   }
 
   onShown(callback) {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $modal.on('shown.bs.modal', callback);
+    this.$modal.on('shown.bs.modal', callback);
   }
 
   onHide(callback) {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $modal.on('hide.bs.modal', callback);
+    this.$modal.on('hide.bs.modal', callback);
   }
 
   onHidden(callback) {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $modal.on('hidden.bs.modal', callback);
+    this.$modal.on('hidden.bs.modal', callback);
   }
 
   firstUpdated() {
-    const $modal = $(this.shadowRoot.getElementById('modal'));
-    $($modal).modal({
+    this.$modal = $(this.shadowRoot.getElementById('dashboard-modal'));
+    this.$modal.modal({
       keyboard: false,
       show: false,
-      backdrop: false
     });
   }
 
   render() {
     return html`
       ${includeStyles()}
-      <div id="modal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-backdrop show"></div>
+      <div id="dashboard-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
