@@ -54,6 +54,11 @@ class DashboardModal extends LitElement {
       keyboard: false,
       show: false,
     });
+
+
+    this.$modal.on('show.bs.modal', () => {
+      $(this).children().appendTo(this.shadowRoot.getElementById('slot'));
+    });
   }
 
   render() {
@@ -68,7 +73,7 @@ class DashboardModal extends LitElement {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <slot></slot>
+            <slot id="slot"></slot>
           </div>
         </div>
       </div>

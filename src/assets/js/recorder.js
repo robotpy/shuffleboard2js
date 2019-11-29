@@ -100,7 +100,7 @@ export default class Recorder {
     }
     catch(e) {
       console.error('error', e);
-      return [];
+      return {};
     }
   }
 

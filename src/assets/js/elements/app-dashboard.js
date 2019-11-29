@@ -1,7 +1,21 @@
 import { LitElement, html, css } from 'lit-element';
 import './components/dashboard-modal';
+import './load-recording-modal';
 
 class AppDashboard extends LitElement {
+
+  static get properties() { 
+    return {
+      recordings: { type: Object },
+      robotIp: { type: String }
+    }
+  }
+
+  constructor() {
+    super();
+    this.recordings = {};
+    this.robotIp = '';
+  }
 
   static get styles() {
     return css`
@@ -62,26 +76,21 @@ class AppDashboard extends LitElement {
       widgetTabs.loadLayout();
     });
 
-    dashboard.events.on('fileMenuLoadRecording', () => {
-      dashboard.recorder.getRecordings()
-        .then(recordings => {
-          const loadRecordingModal = this.shadowRoot.getElementById('loadRecordingModal');
-          loadRecordingModal.recordings = recordings;
-          loadRecordingModal.open();
-        });
+    dashboard.events.on('fileMenuLoadRecording', async () => {
+      const loadRecordingModal = this.shadowRoot.getElementById('loadRecordingModal');
+      this.recordings = dashboard.recorder.getRecordings();
+      loadRecordingModal.open();
     });
 
     dashboard.events.on('fileMenuNtSettings', () => {
-      const robotIp = dashboard.storage.getRobotIp();
       const networkTablesModal = this.shadowRoot.getElementById('networkTablesModal');
-      //networkTablesModal.opts.robotIp = robotIp;
+      this.robotIp = dashboard.storage.getRobotIp();
       networkTablesModal.open();
     });
 
     dashboard.events.on('fileMenuWidgetSettings', () => {
-      const widgetFolder = dashboard.storage.getDefaultWidgetFolder();
       const customWidgetModal = this.shadowRoot.getElementById('customWidgetModal');
-      customWidgetModal.widgetFolder = widgetFolder;
+      this.widgetFolder = dashboard.storage.getDefaultWidgetFolder();
       customWidgetModal.open();
     });
 
@@ -131,14 +140,17 @@ class AppDashboard extends LitElement {
     return html`
       ${includeStyles()}
       <div class="menu">
-        <dashboard-modal id="loadRecordingModal" title="Load Recording">
-          <load-recording-modal recordings={opts.recordings} modal={root._tag} />
+        <dashboard-modal id="loadRecordingModal" title="Load Recording" class="modal" tabindex="-1" role="dialog">
+          <load-recording-modal .recordings="${this.recordings}">
+          </load-recording-modal>
         </dashboard-modal>
         <dashboard-modal id="networkTablesModal" title="NetworkTables Settings">
-          <networktables-settings-modal robot-ip={opts.robotIp} modal={root._tag} />
+          <networktables-settings-modal .robotIp="${this.robotIp}">
+          </networktables-settings-modal>
         </dashboard-modal>
         <dashboard-modal id="customWidgetModal" title="Custom Widget Settings">
-          <custom-widget-settings-modal widget-folder={opts.widgetFolder} modal={root._tag} />
+          <custom-widget-settings-modal .widgetFolder="${this.widgetFolder}">
+          </custom-widget-settings-modal>
         </dashboard-modal>
         <replay />
       </div>
