@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 <networktables-settings-modal>
   <div class="modal-body">
     <form>

@@ -1,6 +1,4 @@
 import * as ActionTypes from "../constants/action-types";
-import pathModule from 'path';
-
 
 export function registerWidget(widgetType, config = {}) {
 

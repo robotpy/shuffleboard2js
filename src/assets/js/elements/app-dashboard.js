@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import './components/dashboard-modal';
 import './load-recording-modal';
+import './networktables-settings-modal';
 
 class AppDashboard extends LitElement {
 
@@ -140,7 +141,7 @@ class AppDashboard extends LitElement {
     return html`
       ${includeStyles()}
       <div class="menu">
-        <dashboard-modal id="loadRecordingModal" title="Load Recording" class="modal" tabindex="-1" role="dialog">
+        <dashboard-modal id="loadRecordingModal" title="Load Recording">
           <load-recording-modal .recordings="${this.recordings}">
           </load-recording-modal>
         </dashboard-modal>

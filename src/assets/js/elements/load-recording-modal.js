@@ -79,12 +79,12 @@ class LoadRecordingModal extends LitElement {
     this.modal.close();
   };
 
-  firstUpdated() {
-    this.modal = $(this).parents('dashboard-modal').get(0);
-  }
-
   close() {
     this.modal.close();
+  }
+
+  firstUpdated() {
+    this.modal = $(this).parents('dashboard-modal').get(0);
   }
 
   render() {
