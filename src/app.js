@@ -1,3 +1,4 @@
+import { includeStyles } from './assets/js/render-utils';
 import store from "assets/js/store/index";
 import riot from 'riot';
 import riotReduxConnect from 'riot-redux-connect';
@@ -9,6 +10,7 @@ import 'assets/scss/app.scss';
 import toastr from 'toastr';
 import * as CurvedArrow from 'assets/js/curved-arrow';
 import * as storage from 'assets/js/storage';
+import * as Lit from 'lit-element';
 require('assets/js/require-extensions');
 require('assets/js/menu');
 
@@ -21,7 +23,11 @@ window.dashboard = {
   registerWidget: function(tagName, config) {
     store.dispatch(actions.registerWidget(tagName, config));
   },
-  storage
+  storage,
+  lit: {
+    ...Lit,
+    includeStyles
+  }
 };
 
 riotReduxConnect(riot, store);
