@@ -2,13 +2,17 @@ import { LitElement, html, css } from 'lit-element';
 import './components/dashboard-modal';
 import './load-recording-modal';
 import './networktables-settings-modal';
+import './custom-widget-settings-modal';
+import './app-replay';
+import './side-panel';
 
 class AppDashboard extends LitElement {
 
   static get properties() { 
     return {
       recordings: { type: Object },
-      robotIp: { type: String }
+      robotIp: { type: String },
+      widgetFolder: { type: String }
     }
   }
 
@@ -41,6 +45,7 @@ class AppDashboard extends LitElement {
         width: 370px;
         display: block;
         overflow: auto;
+        height: 100%;
       }
 
       .layout-resizer {
@@ -92,6 +97,7 @@ class AppDashboard extends LitElement {
     dashboard.events.on('fileMenuWidgetSettings', () => {
       const customWidgetModal = this.shadowRoot.getElementById('customWidgetModal');
       this.widgetFolder = dashboard.storage.getDefaultWidgetFolder();
+      console.log('widgetFolder', this.widgetFolder);
       customWidgetModal.open();
     });
 
@@ -153,11 +159,11 @@ class AppDashboard extends LitElement {
           <custom-widget-settings-modal .widgetFolder="${this.widgetFolder}">
           </custom-widget-settings-modal>
         </dashboard-modal>
-        <replay />
+        <app-replay></app-replay>
       </div>
 
       <div class="main">
-        <side-panel id="sidePanel" />
+        <side-panel id="sidePanel"></side-panel>
         <div class="layout-resizer" ref="layoutResizer">
         </div>
         <div class="widget-container">
