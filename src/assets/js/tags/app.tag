@@ -7,23 +7,20 @@ import './replay.tag';
 import axios from 'axios';
 import * as _ from 'lodash';
 import './widget-tabs.tag';
-import './load-recording-modal.tag';
-import './networktables-settings-modal.tag';
-import './custom-widget-settings-modal.tag';
+import '../elements/custom-widget-settings-modal';
+import '../elements/load-recording-modal';
+import '../elements/networktables-settings-modal';
 const dialog = require('electron').remote.dialog;
 import { writeFileSync } from 'fs';
 
 <app>
   <div class="menu">
-    <modal ref="loadRecordingModal" title="Load Recording">
-      <load-recording-modal recordings={opts.recordings} modal={root._tag} />
-    </modal>
-    <modal ref="networkTablesModal" title="NetworkTables Settings">
-      <networktables-settings-modal robot-ip={opts.robotIp} modal={root._tag} />
-    </modal>
-    <modal ref="customWidgetModal" title="Custom Widget Settings">
-      <custom-widget-settings-modal widget-folder={opts.widgetFolder} modal={root._tag} />
-    </modal>
+    <load-recording-modal ref="loadRecordingModal">
+    </load-recording-modal>
+    <networktables-settings-modal ref="networkTablesModal">
+    </networktables-settings-modal>
+    <custom-widget-settings-modal ref="customWidgetModal"> 
+    </custom-widget-settings-modal>
     <replay />
   </div>
 
@@ -107,26 +104,22 @@ import { writeFileSync } from 'fs';
         });
     }, 500));
 
-    dashboard.events.on('fileMenuLoadRecording', () => {
-      dashboard.recorder.getRecordings()
-        .then(recordings => {
-          this.refs.loadRecordingModal.opts.recordings = recordings;
-          this.refs.loadRecordingModal.update();
-          this.refs.loadRecordingModal.open();
-        });
+    dashboard.events.on('fileMenuLoadRecording', async () => {
+      const recordings = await dashboard.recorder.getRecordings();
+      this.refs.loadRecordingModal.recordings = recordings;
+      this.refs.loadRecordingModal.open();
+
     });
 
     dashboard.events.on('fileMenuNtSettings', () => {
       const robotIp = dashboard.storage.getRobotIp();
-      this.refs.networkTablesModal.opts.robotIp = robotIp;
-      this.refs.networkTablesModal.update();
+      this.refs.networkTablesModal.robotIp = robotIp;
       this.refs.networkTablesModal.open();
     });
 
     dashboard.events.on('fileMenuWidgetSettings', () => {
       const widgetFolder = dashboard.storage.getDefaultWidgetFolder();
-      this.refs.customWidgetModal.opts.widgetFolder = widgetFolder;
-      this.refs.customWidgetModal.update();
+      this.refs.customWidgetModal.widgetFolder = widgetFolder;
       this.refs.customWidgetModal.open();
     });
 
