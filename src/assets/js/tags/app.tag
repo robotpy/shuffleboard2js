@@ -3,13 +3,13 @@
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-widgets.tag';
 import './side-panel.tag';
-import './replay.tag';
 import axios from 'axios';
 import * as _ from 'lodash';
 import './widget-tabs.tag';
 import '../elements/custom-widget-settings-modal';
 import '../elements/load-recording-modal';
 import '../elements/networktables-settings-modal';
+import '../elements/app-replay';
 const dialog = require('electron').remote.dialog;
 import { writeFileSync } from 'fs';
 
@@ -21,7 +21,7 @@ import { writeFileSync } from 'fs';
     </networktables-settings-modal>
     <custom-widget-settings-modal ref="customWidgetModal"> 
     </custom-widget-settings-modal>
-    <replay />
+    <app-replay></app-replay>
   </div>
 
   <div class="main">
@@ -37,8 +37,11 @@ import { writeFileSync } from 'fs';
 
   <style>
 
-    replay {
+    app-replay {
       flex: 1;
+      display: flex;
+      margin-right: 30px;
+      justify-content: flex-end;
     }
 
     .main {
