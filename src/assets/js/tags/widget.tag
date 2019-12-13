@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { getSubtable, getTypes } from 'assets/js/networktables';
 import ObservableSlim from 'observable-slim';
+import '../elements/components/dashboard-modal';
 
 
 <widget>
@@ -9,14 +10,14 @@ import ObservableSlim from 'observable-slim';
   </div>
   <div class="widget-type" ref="widgetType" tables="{opts.ntValue}"></div>
   
-  <modal ref="propertiesModal" title="Properties">
+  <dashboard-modal ref="propertiesModal" title="Propertiess">
     <div class="modal-body">
       <div ref="widgetProperties" class="widget-properties"></div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
     </div>
-  </modal>
+  </dashboard-modal>
 
   <style>
     .widget-type {
