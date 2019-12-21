@@ -20,29 +20,9 @@ export default class NetworkTablesWrapper {
     // Sending NetworkTable updates too quickly causes the dashboard to freeze.
     // Send them in batches every 100ms
     setInterval(() => {
-      // Don't dispatch networktables values if currently replaying
-      if (!this.isReplaying && !this.isReplayingPaused) {
-        this.store.dispatch(actions.ntValueChanged(this.ntUpdates));
-        this.ntUpdates = {};
-      }
+      this.store.dispatch(actions.ntValueChanged(this.ntUpdates));
+      this.ntUpdates = {};
     }, 100);
-  }
-
-  get replayState() {
-    const state = this.store.getState();
-    return state.replay.state;
-  }
-
-  get isReplaying() {
-    return this.replayState === 'REPLAYING';
-  }
-
-  get isReplayingPaused() {
-    return this.replayState === 'REPLAYING_PAUSED';
-  }
-
-  get isRecording() {
-    return this.replayState === 'RECORDING';
   }
 } 
 

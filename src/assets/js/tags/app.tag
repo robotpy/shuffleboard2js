@@ -1,5 +1,3 @@
-
-
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-widgets.tag';
 import './side-panel.tag';
