@@ -1,6 +1,5 @@
-import './sources.tag';
-//import './widget-menu.tag';
 import '../elements/widget-menu';
+import '../elements/networktables/networktables-sources';
 
 <side-panel>
   <div class="card ">
@@ -21,7 +20,7 @@ import '../elements/widget-menu';
     <div class="card-body">
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="sources" role="tabpanel" aria-labelledby="sources-tab">
-          <sources />
+          <networktables-sources></networktables-sources>
         </div>
         <div class="tab-pane fade" id="widgets" role="tabpanel" aria-labelledby="widgets-tab">
           <widget-menu></widget-menu>
