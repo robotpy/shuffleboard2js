@@ -1,5 +1,6 @@
 import './sources.tag';
-import './widget-menu.tag';
+//import './widget-menu.tag';
+import '../elements/widget-menu';
 
 <side-panel>
   <div class="card ">
@@ -23,7 +24,7 @@ import './widget-menu.tag';
           <sources />
         </div>
         <div class="tab-pane fade" id="widgets" role="tabpanel" aria-labelledby="widgets-tab">
-          <widget-menu />
+          <widget-menu></widget-menu>
         </div>
       </div>
     </div>

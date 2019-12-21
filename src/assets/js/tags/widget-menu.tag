@@ -1,4 +1,4 @@
-import './widget-menu-item.tag';
+import '../elements/widget-menu-item';
 import * as _ from 'lodash';
 
 <widget-menu>
@@ -17,11 +17,19 @@ import * as _ from 'lodash';
       <div id="{_.kebabCase(category.label)}-body" class="collapse" aria-labelledby="{_.kebabCase(category.label)}-header" data-parent="#accordion">
         <div class="card-body">
           <virtual each={type in category.types}>
-            <widget-menu-item type={type.widgetType} label={type.label} image={type.image} minx={type.minX} miny={type.minY} />
+            <widget-menu-item 
+              type={type.widgetType} 
+              label={type.label} 
+              image={type.image} 
+              minx={type.minX} 
+              miny={type.minY} 
+            >
+            </widget-menu-item>
           </virtual>
         </div>
       </div>
     </div>  
+  </div>
 
   <style>
 
@@ -53,6 +61,15 @@ import * as _ from 'lodash';
 
     .btn-link:hover, .btn-link:focus {
       text-decoration: none;
+    }
+
+    widget-menu-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 10px 5px;
     }
 
   </style>
@@ -106,18 +123,6 @@ import * as _ from 'lodash';
       }
     };
 
-    this.onToggleOpen = (ev) => {
-      $(this.refs.dropdown).toggleClass('show');
-    };
-
-    this.on('mount', () => {
-      $(window).on('click', (ev) => {
-        if ($(ev.target).closest('module-menu').length === 0) {
-          $(this.refs.dropdown).removeClass('show');
-        }
-      });
-    });
-
     this.mapStateToOpts = (state) => {
 
       let unaddedCategories = this.getUnaddedCategories(state.widgets.categories);
@@ -138,6 +143,8 @@ import * as _ from 'lodash';
         }));
         this.update();
       });
+
+      console.log(categories, state.widgets.categories, state.widgets.registered);
 
       return {
         categories: categories

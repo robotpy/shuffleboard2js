@@ -1,4 +1,4 @@
-import './networktables/networktables.tag';
+import '../elements/networktables/networktables-sources';
 import './camera-sources.tag';
 
 <sources>
@@ -33,7 +33,7 @@ import './camera-sources.tag';
       </div>
       <div id="networkTablesBody" class="collapse" aria-labelledby="networkTablesHeader" data-parent="#accordion">
         <div class="card-body">
-          <networktables />
+          <networktables-sources></networktables-sources>
         </div>
       </div>
     </div>
