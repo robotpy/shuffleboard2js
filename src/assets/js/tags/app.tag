@@ -9,20 +9,16 @@ import './widget-tabs.tag';
 import '../elements/custom-widget-settings-modal';
 import '../elements/load-recording-modal';
 import '../elements/networktables-settings-modal';
-import '../elements/app-replay';
 const dialog = require('electron').remote.dialog;
 import { writeFileSync } from 'fs';
 
 <app>
-  <div class="menu">
-    <load-recording-modal ref="loadRecordingModal">
-    </load-recording-modal>
-    <networktables-settings-modal ref="networkTablesModal">
-    </networktables-settings-modal>
-    <custom-widget-settings-modal ref="customWidgetModal"> 
-    </custom-widget-settings-modal>
-    <app-replay></app-replay>
-  </div>
+  <load-recording-modal ref="loadRecordingModal">
+  </load-recording-modal>
+  <networktables-settings-modal ref="networkTablesModal">
+  </networktables-settings-modal>
+  <custom-widget-settings-modal ref="customWidgetModal"> 
+  </custom-widget-settings-modal>
 
   <div class="main">
     <side-panel ref="sidePanel" />
