@@ -1,6 +1,6 @@
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-widgets.tag';
-import './side-panel.tag';
+import '../elements/side-panel';
 import axios from 'axios';
 import * as _ from 'lodash';
 import './widget-tabs.tag';
@@ -19,7 +19,7 @@ import { writeFileSync } from 'fs';
   </custom-widget-settings-modal>
 
   <div class="main">
-    <side-panel ref="sidePanel" />
+    <side-panel ref="sidePanel"></side-panel>
     <div class="layout-resizer" ref="layoutResizer">
     </div>
     <div class="widget-container">
@@ -55,6 +55,7 @@ import { writeFileSync } from 'fs';
       width: 370px;
       display: block;
       overflow: auto;
+      height: 100%;
     }
 
     .layout-resizer {
@@ -155,7 +156,7 @@ import { writeFileSync } from 'fs';
           return;
         }
 
-        $(this.refs.sidePanel.root).width(Math.clamp(ev.pageX, 10, window.innerWidth - 10));
+        $(this.refs.sidePanel).width(Math.clamp(ev.pageX, 10, window.innerWidth - 10));
       }, 50));
 
       $(window).on('mouseup', (ev) => { 
