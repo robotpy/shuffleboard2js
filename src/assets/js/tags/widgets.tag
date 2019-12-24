@@ -4,6 +4,7 @@ import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.css';
 import 'dsmorse-gridster/dist/jquery.dsmorse-gridster.min.js';
 import uuidv1 from "uuid";
 import './widget.tag';
+import '../elements/dashboard-widget';
 import './components';
 import _ from 'lodash';
 import { getTypes } from 'assets/js/networktables';
@@ -187,8 +188,7 @@ import { getTypes } from 'assets/js/networktables';
 
       $(this.refs.grid).find('> li').each(function() {
 
-        let $widget = $(this).find('widget')[0];
-        let widget = $widget._tag;
+        const widget = $(this).find('dashboard-widget')[0];
         
         widgets.push({
           col: parseInt($(this).attr('data-col')),
@@ -217,10 +217,9 @@ import { getTypes } from 'assets/js/networktables';
         let height = $(this).height();
 
         if (x > left && x < (left + width) && y > top && y < (top + height)) {
-          let widget = $(this).find('widget')[0]._tag;
-          widgets.push(Object.assign({}, widget, {
-            $widget: $(this)
-          }));
+          let widget = $(this).find('dashboard-widget')[0];
+          widget.$widget = $(this);
+          widgets.push(widget);
         }
       });
 
@@ -233,11 +232,11 @@ import { getTypes } from 'assets/js/networktables';
       let gridPos = this.cordsToGridPosition(x, y);
       let $widget = gridster.add_widget(`
         <li data-minx="${config.minX}" data-miny="${config.minY}">
-          <widget></widget>
+          <dashboard-widget></dashboard-widget>
         </li>
       `, config.minX, config.minY, gridPos.x, gridPos.y);
 
-      let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
+      let widget = $widget.find('dashboard-widget')[0];
       widget.setWidgetType(config.type);
       return widget;
     };
@@ -248,11 +247,11 @@ import { getTypes } from 'assets/js/networktables';
       let { minX, minY } = dashboard.store.getState().widgets.registered[config.widgetType];
       let $widget = gridster.add_widget(`
         <li data-minx="${minX}" data-miny="${minY}">
-          <widget></widget>
+          <dashboard-widget></dashboard-widget>
         </li>
       `, config.sizeX, config.sizeY, config.col, config.row);
 
-      let widget = riot.mount($widget.find('widget')[0], 'widget', {})[0];
+      let widget = $widget.find('dashboard-widget')[0];
       widget.setWidgetType(config.widgetType);
       widget.setTitle(config.widgetTitle);
       widget.setProperties(config.properties);
@@ -312,7 +311,7 @@ import { getTypes } from 'assets/js/networktables';
             $widget.css('min-height', minHeight);
           },
           resize: function(e, ui, $widget) {
-            let widget = $widget.find('widget')[0]._tag;
+            let widget = $widget.find('dashboard-widget')[0];
             widget.onResize();
 
             // Widget resizes again to fit grid after a short animation, so wait before

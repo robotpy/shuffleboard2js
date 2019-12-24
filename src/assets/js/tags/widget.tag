@@ -148,10 +148,21 @@ import '../elements/components/dashboard-modal';
       if (ntTypes.length === 0 || this.isAcceptedType(ntTypes, type)) {
         this.widgetType = type;
         this.properties = this.getPropertiesDefaults(type);
-        riot.mount(this.refs.widgetType, type, {
-          table: {},
-          properties: this.properties
-        });
+
+        if (customElements.get(type)) {
+          const widgetElement = document.createElement(type);
+          widgetElement.table = {};
+          widgetElement.properties = this.properties;
+          this.refs.widgetType.innerHTML = '';
+          this.refs.widgetType.appendChild(widgetElement);
+        } 
+        else {
+          riot.mount(this.refs.widgetType, type, {
+            table: {},
+            properties: this.properties
+          });
+        }
+        
         this.setupPropertiesModal(type);
 
         this.manuallyUpdate();

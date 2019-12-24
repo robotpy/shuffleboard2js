@@ -65,7 +65,7 @@ class DashboardModal extends LitElement {
   render() {
     return html`
       ${includeStyles()}
-      <div id="dashboard-modal" class="modal" tabindex="-1" role="dialog">
+      <div id="dashboard-modal" class="modal" tabindex="-1" role="dialog" style="display: none">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
