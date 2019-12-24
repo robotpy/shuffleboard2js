@@ -66,13 +66,6 @@ import { getTypes } from 'assets/js/networktables';
       background: #EFEFEF;
     }
 
-    .dragger {
-      width: 100%;
-      cursor: grab;
-      padding: 7px 10px;
-      background: cornflowerblue;
-    }
-
     .task-card {
       padding: 10px;
       padding-top: 0;

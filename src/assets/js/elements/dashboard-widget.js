@@ -29,12 +29,19 @@ class DashboardWidget extends connect(store)(LitElement) {
       .widget-title:focus {
         outline: none;
       }
+
+      .dragger {
+        width: 100%;
+        cursor: grab;
+        padding: 7px 10px;
+        background: cornflowerblue;
+      }
     `;
   }
 
   static get properties() { 
     return {
-      categories: { type: Object }      
+      //categories: { type: Object }      
     };
   }
 
@@ -96,7 +103,7 @@ class DashboardWidget extends connect(store)(LitElement) {
 
   setTitle(title) {
     this.widgetTitle = title || '';
-    this.title = this.widgetTitle || this.ntRoot;
+    this.title = this.widgetTitle || this.ntRoot || '';
     this.requestUpdate();
   }
 
