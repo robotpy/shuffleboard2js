@@ -16,26 +16,6 @@ class DashboardWidget extends connect(store)(LitElement) {
         width: 100%;
         height: calc(100% - 38px);
       }
-
-      .widget-title {
-        text-align: center;
-        width: 100%;
-        border: none;
-        text-overflow: ellipsis;
-        background: cornflowerblue;
-        font-weight: bold;
-      }
-
-      .widget-title:focus {
-        outline: none;
-      }
-
-      .dragger {
-        width: 100%;
-        cursor: grab;
-        padding: 7px 10px;
-        background: cornflowerblue;
-      }
     `;
   }
 
@@ -49,9 +29,9 @@ class DashboardWidget extends connect(store)(LitElement) {
     super();
     this.ntRoot = null;
     this.widgetType = null;
-    this.widgetTitle = null;
     this.properties = {};
     this.propertiesTag = null;
+    this.propertiesElement = null;
   }
 
   getPropertiesDefaults(widgetType) {
@@ -68,8 +48,7 @@ class DashboardWidget extends connect(store)(LitElement) {
     this.propertiesTag = this.getPropertiesTag(widgetType);
 
     if (this.propertiesTag) {
-      const widgetProperties = this.shadowRoot.getElementById('widgetProperties');
-      riot.mount(widgetProperties, this.propertiesTag, {
+      riot.mount(this.propertiesElement, this.propertiesTag, {
         properties: this.properties
       });
     }
@@ -91,20 +70,15 @@ class DashboardWidget extends connect(store)(LitElement) {
   openPropertiesModal() {
     const propertiesModal = this.shadowRoot.getElementById('propertiesModal');
     propertiesModal.open();
-    const propsElement = this.shadowRoot.getElementById('widgetProperties');
-    propsElement._tag.update();
+    this.propertiesElement._tag.update();
   }
 
-  onTitleChange(ev) {
-    this.widgetTitle = ev.target.value;
-    this.title = this.widgetTitle || this.ntRoot;
-    this.requestUpdate();
+  getTitle() {
+    return $(this).closest('li').find('.widget-title').val();
   }
 
   setTitle(title) {
-    this.widgetTitle = title || '';
-    this.title = this.widgetTitle || this.ntRoot || '';
-    this.requestUpdate();
+    $(this).closest('li').find('.widget-title').val(title || this.ntRoot || '');
   }
 
   setProperties(properties) {
@@ -180,9 +154,11 @@ class DashboardWidget extends connect(store)(LitElement) {
     }
   }
 
-  manuallyUpdate() {
+  async manuallyUpdate() {
     this.stateChanged(dashboard.store.getState());
+    this.setTitle(this.getTitle());
     this.requestUpdate();
+    await this.updateComplete;
     this.shadowRoot.getElementById('widgetType')._tag.update();
   }
  
@@ -205,24 +181,18 @@ class DashboardWidget extends connect(store)(LitElement) {
     }
 
     this.ntValue = ntValue;
-    this.title = this.widgetTitle || this.ntRoot;
+  }
+
+  firstUpdated() {
+    this.propertiesElement = this.shadowRoot.getElementById('widgetProperties');
   }
 
   render() {
     return html`
       ${includeStyles()}
-      <div class="dragger">
-        <input 
-          type="text" 
-          name="widget-title" 
-          class="widget-title" 
-          @change="${this.onTitleChange}" 
-          value="${this.title}" 
-        />
-      </div>
       <div class="widget-type" id="widgetType" .tables="${this.ntValue}"></div>
       
-      <dashboard-modal id="propertiesModal" title="Propertiess">
+      <dashboard-modal id="propertiesModal" title="Properties">
         <div class="modal-body">
           <div id="widgetProperties" class="widget-properties"></div>
         </div>

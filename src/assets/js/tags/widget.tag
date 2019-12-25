@@ -20,6 +20,7 @@ import '../elements/components/dashboard-modal';
   </dashboard-modal>
 
   <style>
+  
     .widget-type {
       overflow: auto;
       width: 100%;

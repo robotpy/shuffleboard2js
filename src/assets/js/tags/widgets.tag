@@ -12,22 +12,9 @@ import { getTypes } from 'assets/js/networktables';
 <widgets>
 
   <div class="gridster" ondragend={onDragEnd} oncontextmenu={onContextMenu}>
-    <ul class="task-card-list" ref="grid">
-        <virtual each={widget in widgets}>
-          <li data-row="{widget.row}" 
-              data-col="{widget.col}" 
-              data-minx="{widget.minX}" 
-              data-miny="{widget.minY}" 
-              data-sizex="{Math.max(widget.sizeX, widget.minX)}" 
-              data-sizey="{Math.max(widget.sizeY, widget.minY)}" 
-              class="task-card">
-            <div class="dragger"></div>
-          </li>
-        </virtual>
-		</ul>
+    <ul class="task-card-list" ref="grid"></ul>
 
-    <context-menu should-show={shouldShowContextMenu} 
-                  onclick={onContextMenuClick} 
+    <context-menu onclick={onContextMenuClick} 
                   onchange={onContextMenuChange} 
                   container={root} 
                   menu={menu} 
@@ -92,13 +79,30 @@ import { getTypes } from 'assets/js/networktables';
      color: gray;
     }
 
+    .widget-title {
+      text-align: center;
+      width: 100%;
+      border: none;
+      text-overflow: ellipsis;
+      background: cornflowerblue;
+      font-weight: bold;
+    }
 
+    .widget-title:focus {
+      outline: none;
+    }
+
+    .dragger {
+      width: 100%;
+      cursor: grab;
+      padding: 7px 10px;
+      background: cornflowerblue;
+    }
 
   </style>
 
   <script>
 
-    this.widgets = [];
     this.menu = 'allWidgets';
     this.contextMenuWidget = null;
     this.contextMenuShowAs = {
@@ -144,15 +148,6 @@ import { getTypes } from 'assets/js/networktables';
       }
     };
 
-    this.shouldShowContextMenu = (ev) => {
-
-      if (this.getWidgets(ev.clientX, ev.clientY).length === 0) {
-        return true;
-      }
-
-      return $(ev.target).hasClass('dragger') || $(ev.target).parents('.dragger').length > 0;
-    }
-
     this.onContextMenuClick = (ev) => {
       ev.preventDefault();
 
@@ -190,7 +185,7 @@ import { getTypes } from 'assets/js/networktables';
           sizeY: parseInt($(this).attr('data-sizey')),
           ntRoot: widget.ntRoot,
           widgetType: widget.widgetType,
-          widgetTitle: widget.widgetTitle,
+          widgetTitle: widget.getTitle(),
           properties: widget.properties
         });
       });
@@ -225,6 +220,14 @@ import { getTypes } from 'assets/js/networktables';
       let gridPos = this.cordsToGridPosition(x, y);
       let $widget = gridster.add_widget(`
         <li data-minx="${config.minX}" data-miny="${config.minY}">
+          <div class="dragger">
+            <input 
+              type="text" 
+              name="widget-title" 
+              class="widget-title" 
+              value="" 
+            />
+          </div>
           <dashboard-widget></dashboard-widget>
         </li>
       `, config.minX, config.minY, gridPos.x, gridPos.y);
@@ -240,13 +243,20 @@ import { getTypes } from 'assets/js/networktables';
       let { minX, minY } = dashboard.store.getState().widgets.registered[config.widgetType];
       let $widget = gridster.add_widget(`
         <li data-minx="${minX}" data-miny="${minY}">
+          <div class="dragger">
+            <input 
+              type="text" 
+              name="widget-title" 
+              class="widget-title" 
+              value="${config.widgetTitle || config.ntRoot || ''}" 
+            />
+          </div>
           <dashboard-widget></dashboard-widget>
         </li>
       `, config.sizeX, config.sizeY, config.col, config.row);
 
       let widget = $widget.find('dashboard-widget')[0];
       widget.setWidgetType(config.widgetType);
-      widget.setTitle(config.widgetTitle);
       widget.setProperties(config.properties);
 
       if (config.ntRoot) {
