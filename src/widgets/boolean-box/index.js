@@ -1,4 +1,4 @@
-import './boolean-box.tag';
+import './boolean-box';
 import './boolean-box-props.tag';
 import image from './boolean-box.png';
 

@@ -16,6 +16,12 @@ class DashboardWidget extends connect(store)(LitElement) {
         width: 100%;
         height: calc(100% - 38px);
       }
+
+      .widget-type:not([data-is]) > * {
+        overflow: auto;
+        width: 100%;
+        height: calc(100% - 38px);
+      }
     `;
   }
 
@@ -30,12 +36,23 @@ class DashboardWidget extends connect(store)(LitElement) {
     this.ntRoot = null;
     this.widgetType = null;
     this.properties = {};
+    this.prevProperties = {};
     this.propertiesTag = null;
     this.propertiesElement = null;
   }
 
   getPropertiesDefaults(widgetType) {
-    let widgetConfig = dashboard.store.getState().widgets.registered[widgetType]
+    let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+
+    if (widgetConfig.isCustomElement) {
+      return ObservableSlim.create({...widgetConfig.properties.defaults}, false, (changes) => {
+        const widgetType = this.shadowRoot.getElementById('widgetType');
+        const widget = $(widgetType).find(this.widgetType)[0];
+        widget.requestUpdate('widgetProps', this.prevProperties);
+        this.prevProperties = { ...this.properties };
+        
+      });
+    }
     return ObservableSlim.create({...widgetConfig.properties.defaults}, false, (changes) => {
       const widgetType = this.shadowRoot.getElementById('widgetType');
       widgetType._tag.trigger('propertiesUpdate');
@@ -88,9 +105,19 @@ class DashboardWidget extends connect(store)(LitElement) {
   }
 
   onResize() {
+    const { isCustomElement } = this.getConfig();
     const widgetType = this.shadowRoot.getElementById('widgetType');
-    widgetType._tag.trigger('resize');
-    widgetType._tag.update();
+    if (isCustomElement) {
+      const widget = $(widgetType).find(this.widgetType)[0];
+      if (widget) {
+        widget.resized();
+        widget.requestUpdate();
+      }
+    } 
+    else {
+      widgetType._tag.trigger('resize');
+      widgetType._tag.update();
+    }
   }
 
   isAcceptedType(ntTypes, widgetType = this.widgetType) {
@@ -131,11 +158,12 @@ class DashboardWidget extends connect(store)(LitElement) {
     if (ntTypes.length === 0 || this.isAcceptedType(ntTypes, type)) {
       this.widgetType = type;
       this.properties = this.getPropertiesDefaults(type);
+      this.prevProperties = { ...this.properties };
 
       if (customElements.get(type)) {
         const widgetElement = document.createElement(type);
         widgetElement.table = {};
-        widgetElement.properties = this.properties;
+        widgetElement.widgetProps = this.properties;
         const widgetType = this.shadowRoot.getElementById('widgetType');
         widgetType.innerHTML = '';
         widgetType.appendChild(widgetElement);
@@ -159,7 +187,17 @@ class DashboardWidget extends connect(store)(LitElement) {
     this.setTitle(this.getTitle());
     this.requestUpdate();
     await this.updateComplete;
-    this.shadowRoot.getElementById('widgetType')._tag.update();
+
+    const { isCustomElement } = this.getConfig();
+    const widgetType = this.shadowRoot.getElementById('widgetType');
+
+    if (isCustomElement) {
+      const widget = $(widgetType).find(this.widgetType)[0];
+      widget.requestUpdate();
+    }
+    else {
+      widgetType._tag.update();
+    }
   }
  
   stateChanged(state) {
@@ -172,9 +210,18 @@ class DashboardWidget extends connect(store)(LitElement) {
 
     let ntValue = isAcceptedType ? getSubtable(this.ntRoot) : {};
     
+    const { isCustomElement } = this.getConfig() || {};
     const widgetType = this.shadowRoot.getElementById('widgetType');
     
-    if (widgetType && '_tag' in widgetType) {
+
+    if (isCustomElement) {
+      const widget = $(widgetType).find(this.widgetType)[0];
+      if (widget) {
+        widget.table = ntValue;
+        widget.ntRoot = this.ntRoot;
+      }
+    }
+    else if (widgetType && '_tag' in widgetType) {
       widgetType._tag.opts.table = ntValue;
       widgetType._tag.opts.ntRoot = this.ntRoot;
       widgetType._tag.update();

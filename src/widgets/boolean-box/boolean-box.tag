@@ -4,13 +4,18 @@
 <boolean-box>
     <div ref="background" class="background"></div>
 
-    <style>
-        .background {
-            width: 100%;
-            height: 100%;
-        }
-    </style>
     <script>
+
+        this.on('mount', () => {
+            $(this.root).prepend(`
+                <style>
+                    .background {
+                        width: 100%;
+                        height: 100%;
+                    }
+                </style>
+            `)
+        });
 
         this.on('update', () => {
 

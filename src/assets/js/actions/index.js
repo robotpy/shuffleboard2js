@@ -4,6 +4,17 @@ import pathModule from 'path';
 
 export function registerWidget(widgetType, config = {}) {
 
+  const isCustomElement = !!customElements.get(widgetType);
+
+  if (isCustomElement) {
+    const widget = customElements.get(widgetType);
+    widget.properties = {
+      widgetSource: { type: Object },
+      widgetProps: { type: Object }
+    };
+    widget.prototype.resized = () => {};
+  }
+
   config = { 
     label: widgetType,
     category: 'Unknown',
@@ -16,6 +27,7 @@ export function registerWidget(widgetType, config = {}) {
       tag: null,
       defaults: {}
     },
+    isCustomElement,
     ...config
   };
 

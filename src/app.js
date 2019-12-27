@@ -4,7 +4,7 @@ import riot from 'riot';
 import riotReduxConnect from 'riot-redux-connect';
 import NetworkTablesWrapper from './assets/js/networktables';
 import "assets/js/tags/app.tag";
-import * as actions from  'assets/js/actions';
+import * as actions from  './assets/js/actions';
 import 'assets/scss/app.scss';
 import toastr from 'toastr';
 import * as CurvedArrow from 'assets/js/curved-arrow';
