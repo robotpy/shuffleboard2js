@@ -1,5 +1,6 @@
 import * as ActionTypes from "../constants/action-types";
 import pathModule from 'path';
+import { get } from 'lodash';
 
 
 export function registerWidget(widgetType, config = {}) {
@@ -9,11 +10,25 @@ export function registerWidget(widgetType, config = {}) {
   if (isCustomElement) {
     const widget = customElements.get(widgetType);
     widget.properties = {
-      widgetSource: { type: Object },
-      widgetProps: { type: Object }
+      table: { type: Object },
+      widgetProps: { type: Object },
+      ntRoot: { type: String }
     };
     widget.prototype.resized = () => {};
   }
+
+  const propertiesTag = get(config, 'properties.tag');
+  let isPropertiesTagCustomElement = false;
+  if (propertiesTag && customElements.get(propertiesTag)) {
+    isPropertiesTagCustomElement = true;
+  }
+
+  config.properties = {
+    isCustomElement: isPropertiesTagCustomElement,
+    tag: null,
+    defaults: {},
+    ...config.properties
+  };
 
   config = { 
     label: widgetType,
@@ -23,10 +38,6 @@ export function registerWidget(widgetType, config = {}) {
     image: '',
     minX: 1,
     minY: 1,
-    properties: {
-      tag: null,
-      defaults: {}
-    },
     isCustomElement,
     ...config
   };

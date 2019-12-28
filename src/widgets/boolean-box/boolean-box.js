@@ -11,7 +11,7 @@ class BooleanBox extends LitElement {
     `;
   }
 
-  updated(a) {
+  updated() {
     let background = 'black';
 
     if (this.table === true) {

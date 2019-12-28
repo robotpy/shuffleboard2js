@@ -1,5 +1,5 @@
 import './boolean-box';
-import './boolean-box-props.tag';
+import './boolean-box-props';
 import image from './boolean-box.png';
 
 dashboard.registerWidget('boolean-box', {

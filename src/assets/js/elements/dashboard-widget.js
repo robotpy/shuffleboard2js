@@ -65,9 +65,18 @@ class DashboardWidget extends connect(store)(LitElement) {
     this.propertiesTag = this.getPropertiesTag(widgetType);
 
     if (this.propertiesTag) {
-      riot.mount(this.propertiesElement, this.propertiesTag, {
-        properties: this.properties
-      });
+      const widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+      if (widgetConfig.properties.isCustomElement) {
+        const element = document.createElement(this.propertiesTag);
+        element.widgetProps = this.properties;
+        this.propertiesElement.innerHTML = '';
+        this.propertiesElement.appendChild(element);
+      }
+      else {
+        riot.mount(this.propertiesElement, this.propertiesTag, {
+          properties: this.properties
+        });
+      }
     }
   }
 
@@ -87,7 +96,15 @@ class DashboardWidget extends connect(store)(LitElement) {
   openPropertiesModal() {
     const propertiesModal = this.shadowRoot.getElementById('propertiesModal');
     propertiesModal.open();
-    this.propertiesElement._tag.update();
+
+    const widgetConfig = dashboard.store.getState().widgets.registered[this.widgetType];
+    if (widgetConfig.properties.isCustomElement) {
+      const propsElement = $(this.propertiesElement).find(widgetConfig.properties.tag)[0];
+      propsElement.requestUpdate();
+    }
+    else {
+      this.propertiesElement._tag.update();
+    }
   }
 
   getTitle() {
@@ -217,8 +234,12 @@ class DashboardWidget extends connect(store)(LitElement) {
     if (isCustomElement) {
       const widget = $(widgetType).find(this.widgetType)[0];
       if (widget) {
+        const prevTable = widget.table;
+        const prevNtRoot = this.ntRoot;
         widget.table = ntValue;
         widget.ntRoot = this.ntRoot;
+        widget.requestUpdate('table', prevTable);
+        widget.requestUpdate('ntRoot', prevNtRoot);
       }
     }
     else if (widgetType && '_tag' in widgetType) {
