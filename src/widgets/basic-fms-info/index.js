@@ -1,4 +1,4 @@
-import './basic-fms-info.tag';
+import './basic-fms-info';
 import image from './basic-fms-info.png';
 
 dashboard.registerWidget('basic-fms-info', {
