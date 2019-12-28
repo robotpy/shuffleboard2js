@@ -1,4 +1,4 @@
-import './combobox-chooser.tag';
+import './combobox-chooser';
 import image from './combobox-chooser.png';
 
 dashboard.registerWidget('combobox-chooser', {

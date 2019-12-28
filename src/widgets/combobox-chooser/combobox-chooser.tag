@@ -44,6 +44,30 @@
         this.on('mount', () => {
             this.options = this.opts.table.options || [];
             this.selected = this.opts.table.selected || '';
+
+            $(this.root).prepend(`
+            <style>
+
+        .chooser-container {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        form {
+            margin-bottom: 0;
+            max-width: 90%;
+            min-width: 100px;
+        }
+
+    </style>
+            `);
         });
 
         this.on('update', () => {
