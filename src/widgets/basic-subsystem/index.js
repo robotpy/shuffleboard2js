@@ -1,4 +1,4 @@
-import './basic-subsystem.tag';
+import './basic-subsystem';
 import image from './basic-subsystem.png';
 
 dashboard.registerWidget('basic-subsystem', {
