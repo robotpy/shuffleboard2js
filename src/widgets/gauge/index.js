@@ -1,8 +1,8 @@
-import './gauge.tag';
-import './gauge-props.tag';
+import './gauge-widget';
+import './gauge-widget-props';
 import image from './gauge.png';
 
-dashboard.registerWidget('gauge', {
+dashboard.registerWidget('gauge-widget', {
   label: 'Gauge',
   category: 'Basic',
   acceptedTypes: ['number'],
@@ -10,7 +10,7 @@ dashboard.registerWidget('gauge', {
   minX: 3,
   minY: 2,
   properties: {
-    tag: 'gauge-props',
+    tag: 'gauge-widget-props',
     defaults: {
       min: 0,
       max: 100
