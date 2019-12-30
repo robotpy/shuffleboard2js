@@ -1,5 +1,5 @@
-import './number-bar.tag';
-import './number-bar-props.tag';
+import './number-bar';
+import './number-bar-props';
 import image from './number-bar.png';
 
 dashboard.registerWidget('number-bar', {
