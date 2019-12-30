@@ -1,4 +1,4 @@
-import './differential-drivebase.tag';
+import './differential-drivebase';
 import image from './differential-drivebase.png';
 
 dashboard.registerWidget('differential-drivebase', {

@@ -14,7 +14,8 @@ export function registerWidget(widgetType, config = {}) {
       widgetProps: { type: Object },
       ntRoot: { type: String }
     };
-    widget.prototype.resized = () => {};
+    if (widget.prototype.resized === undefined)
+      widget.prototype.resized = () => {};
   }
 
   const propertiesTag = get(config, 'properties.tag');
