@@ -1,3 +1,5 @@
+import '../../assets/js/elements/components/table-axis';
+
 <script>
     /** 
     * Copyright (c) 2017-2018 FIRST
@@ -31,7 +33,7 @@
     <div class="diff-drive-container">
 
         <div class="speed">
-            <axis ticks="5" vertical={true} range={[-1, 1]} />
+            <table-axis ticks="5" vertical range="[-1, 1]"></table-axis>
             <div ref="bar" class="bar">
                 <div class="foreground" style={getLeftForegroundStyle()}></div>
             </div>
@@ -42,7 +44,7 @@
         </svg>
 
         <div class="speed">
-            <axis ticks="5" vertical={true} range={[-1, 1]} />
+            <table-axis ticks="5" vertical range="[-1, 1]"></table-axis>
             <div ref="bar" class="bar">
                 <div class="foreground" style={getRightForegroundStyle()}></div>
             </div>
@@ -288,6 +290,70 @@
             let drawing = this.drawMotionVector(0, 0);
             $(this.refs.drivetrain).html(this.drawDrivetrain(150, 200, 35));
             $(this.refs.forceVector).html(drawing);
+
+            $(this.root).prepend(`
+                <style>
+                    .diff-drive-container {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    svg .x {
+                        stroke: rgb(50,50,255);
+                        stroke-width: 2;
+                    }
+
+                    svg .arrow line, svg .arrow path {
+                        stroke: rgb(50,50,255);
+                        stroke-width: 2;
+                        fill: none;
+                        /*transform: rotate(-90deg);*/
+                    }
+
+                    svg .arrow polygon {
+                        stroke: rgb(50,50,255);
+                        fill: rgb(50,50,255);
+                    }
+
+                    svg .drivetrain {
+                        fill: none;
+                        stroke: black;
+                    }
+
+                    .bar {
+                        position: relative;
+                        height: calc(100% - 30px);
+                        width: 20px;
+                        border-radius: 3px;
+                        margin: 15px 0;
+                        background: #DDD;
+                    }
+
+                    .speed {
+                        display: flex;
+                        height: 100%;
+                        flex-direction: row;
+                        align-items: center;
+                        margin-left: 30px;
+                    }
+
+                    table-axis {
+                        width: 10px;
+                        height: calc(100% - 30px);
+                    }
+
+                    .foreground {
+                        position: absolute;
+                        top: 0;
+                        width: 20px;
+                        background: lightblue;
+                        border-radius: 3px;
+                    }
+                </style>
+            `)
         });
 
         this.on('update', () => {

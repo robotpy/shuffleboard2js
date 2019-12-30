@@ -133,7 +133,30 @@ import _ from 'lodash';
     };
 
     this.on('mount', () => {
-      this.setAxis();      
+      this.setAxis();    
+
+      $(this.root).prepend(`
+        <style>
+svg {
+      overflow: visible;
+    }
+
+    axis {
+      display: block;
+    }
+
+    line {
+      stroke: rgb(150, 150, 150);
+      stroke-width: 2;
+    }
+
+    text {
+      font-weight: normal;
+      font-size: 13px;
+    }
+
+        </style>
+      `);  
     });
 
     this.on('update', () => {
