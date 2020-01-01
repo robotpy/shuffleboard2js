@@ -3,6 +3,12 @@ import { includeStyles } from '../../assets/js/render-utils';
 
 class NumberSlider extends LitElement {
 
+  static get properties() {
+    return {
+      value: { type: Number }
+    };
+  }
+
   static get styles() {
     return css`
       .slider-container {
@@ -29,83 +35,47 @@ class NumberSlider extends LitElement {
   constructor() {
     super();
     this.value = 0;
-    this.lastTableValue = null;
-    this.differentValueCount = 0;
-
-    this.isDragging = false;
   }
 
 onChange(ev) {
-  this.value = parseFloat(ev.target.value);
+  const value = parseFloat(ev.target.value);
   if (this.ntRoot) {
-    this.lastTableValue = this.value;
-    NetworkTables.putValue(this.ntRoot, this.value);
+    NetworkTables.putValue(this.ntRoot, value);
   }
 }
 
-onDragStart(ev) {
-  this.isDragging = true;
+updated() {
+  const $slider = $(this.shadowRoot.getElementById('slider'));
+  this.value = this.table || this.value;
+  $slider.val(this.value);
 }
 
-onDragEnd(ev) {
-  this.isDragging = false;
+resized() {
+  $(this.shadowRoot).find('table-axis').each(function() {
+    this.requestUpdate();
+  });
 }
 
-  
+render() {
+  return html`
+    ${includeStyles()}
+    <div class="slider-container">
+      <input 
+        id="slider"
+        type="range" 
+        min="${this.widgetProps.min}"
+        max="${this.widgetProps.max}"
+        value="${this.value}"
+        step="${this.widgetProps.blockIncrement}"
+        @change="${this.onChange}"
+      />
 
-  updated() {
-    const $slider = $(this.shadowRoot.getElementById('slider'));
-    if (this.lastTableValue !== this.table) {
-      this.value = this.table || this.value;
-      $slider.val(this.value);
-    }
-    this.lastTableValue = this.table;
-
-    // If user is not interacting with the slider but the slider value is consistently
-    // different from the table value, change it
-    if (typeof this.table === 'number' && this.table !== $slider.val()) {
-      this.differentValueCount++;
-    }
-
-    if (this.isDragging) {
-      this.differentValueCount = 0;
-    }
-
-    if (this.differentValueCount > 20) {
-      this.value = this.table;
-      $slider.val(this.value);
-      this.differentValueCount = 0;
-    }
-  }
-
-  resized() {
-    $(this.shadowRoot).find('table-axis').each(function() {
-      this.requestUpdate();
-    });
-  }
-
-  render() {
-    return html`
-      ${includeStyles()}
-      <div class="slider-container">
-        <input 
-          id="slider"
-          type="range" 
-          min="${this.widgetProps.min}"
-          max="${this.widgetProps.max}"
-          value="${this.value}"
-          step="${this.widgetProps.blockIncrement}"
-          @change="${this.onChange}"
-          @mousedown="${this.onDragStart}"
-          @mouseup="${this.onDragEnd}"
-        />
-
-        <table-axis 
-          ticks="5" 
-          range="[${this.widgetProps.min}, ${this.widgetProps.max}]"
-        ></table-axis>
-    </div>
-    `;
+      <table-axis 
+        ticks="5" 
+        range="[${this.widgetProps.min}, ${this.widgetProps.max}]"
+      ></table-axis>
+  </div>
+  `;
   }
 }
 

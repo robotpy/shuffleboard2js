@@ -1,5 +1,5 @@
 import './number-slider';
-import './number-slider-props.tag';
+import './number-slider-props';
 import image from './number-slider.png';
 
 dashboard.registerWidget('number-slider', {
