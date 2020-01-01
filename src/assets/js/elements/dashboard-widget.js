@@ -218,6 +218,7 @@ class DashboardWidget extends connect(store)(LitElement) {
   }
  
   stateChanged(state) {
+
     if (!this.ntRoot) {
       return;
     }

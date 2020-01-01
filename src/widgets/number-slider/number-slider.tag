@@ -93,5 +93,34 @@
             this.isDragging = false;
         };
 
+        this.on('mount', () => {
+            $(this.root).prepend(`
+                <style>
+                    .slider-container {
+                        height: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    input {
+                        width: 85%;
+                        max-width: calc(100% - 60px);
+                    }
+
+                    axis {
+                        width: calc(85% - 14px);
+                        max-width: calc(100% - 74px);
+                    }
+
+                    axis {
+                        
+                    }
+
+                </style>
+            `);
+        });
+
     </script>
 </number-slider>

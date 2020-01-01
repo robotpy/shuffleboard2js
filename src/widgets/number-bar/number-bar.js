@@ -4,6 +4,12 @@ import { isNumber } from 'lodash';
 
 class NumberBar extends LitElement {
 
+  static get properties() {
+    return {
+      value: { type: Number }
+    };
+  }
+
   static get styles() {
     return css`
       .number-bar-container {

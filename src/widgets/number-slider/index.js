@@ -1,4 +1,4 @@
-import './number-slider.tag';
+import './number-slider';
 import './number-slider-props.tag';
 import image from './number-slider.png';
 

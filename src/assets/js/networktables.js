@@ -14,13 +14,34 @@ export default class NetworkTablesWrapper {
 
     // sets a function that will be called when any NetworkTables key/value changes
     NetworkTables.addGlobalListener((key, value, isNew) => {
-      this.ntUpdates[key] = value;
+      if (this.ntUpdates[key] === undefined) {
+        this.ntUpdates[key] = {
+          first: value
+        };
+      }
+      else {
+        this.ntUpdates[key].last = value;
+      }
     }, true);
 
     // Sending NetworkTable updates too quickly causes the dashboard to freeze.
     // Send them in batches every 100ms
     setInterval(() => {
-      this.store.dispatch(actions.ntValueChanged(this.ntUpdates));
+      if (Object.keys(this.ntUpdates).length === 0) {
+        return;
+      }
+      // send first updates then last
+      const firstUpdates = {};
+      const lastUpdates = {};
+      _.forEach(this.ntUpdates, (values, key) => {
+        firstUpdates[key] = values.first;
+        if ('last' in values)
+          lastUpdates[key] = values.last;
+      });
+      this.store.dispatch(actions.ntValueChanged(firstUpdates));
+      if (Object.keys(lastUpdates).length > 0)
+        this.store.dispatch(actions.ntValueChanged(lastUpdates));
+
       this.ntUpdates = {};
     }, 100);
   }

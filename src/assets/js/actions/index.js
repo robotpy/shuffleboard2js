@@ -9,11 +9,13 @@ export function registerWidget(widgetType, config = {}) {
 
   if (isCustomElement) {
     const widget = customElements.get(widgetType);
-    widget.properties = {
-      table: { type: Object },
-      widgetProps: { type: Object },
-      ntRoot: { type: String }
-    };
+    if (widget.properties === undefined)
+      widget.properties = {};
+    
+    widget.properties.table = { type: Object };
+    widget.properties.widgetProps = { type: Object }; 
+    widget.properties.ntRoot = { type: String };
+
     if (widget.prototype.resized === undefined)
       widget.prototype.resized = () => {};
   }
