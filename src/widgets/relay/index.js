@@ -1,7 +1,7 @@
-import './relay.tag';
+import './relay';
 import image from './relay.png';
 
-dashboard.registerWidget('relay', {
+dashboard.registerWidget('relay-widget', {
   label: 'Relay',
   category: 'Basic',
   acceptedTypes: ['Relay'],
