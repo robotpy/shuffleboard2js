@@ -1,6 +1,7 @@
 import 'open-iconic/font/css/open-iconic-bootstrap.css';
 import './user-widgets.tag';
 import '../elements/side-panel';
+import '../elements/text-editor';
 import axios from 'axios';
 import * as _ from 'lodash';
 import './widget-tabs.tag';
@@ -9,6 +10,7 @@ import '../elements/load-recording-modal';
 import '../elements/networktables-settings-modal';
 const dialog = require('electron').remote.dialog;
 import { writeFileSync } from 'fs';
+import '@vaadin/vaadin-split-layout';
 
 <app>
   <load-recording-modal ref="loadRecordingModal">
@@ -18,64 +20,51 @@ import { writeFileSync } from 'fs';
   <custom-widget-settings-modal ref="customWidgetModal"> 
   </custom-widget-settings-modal>
 
-  <div class="main">
-    <side-panel ref="sidePanel"></side-panel>
-    <div class="layout-resizer" ref="layoutResizer">
-    </div>
-    <div class="widget-container">
-      <widget-tabs ref="widgetTabs" />
-    </div>
-  </div>
+  <vaadin-split-layout orientation="vertical" class="editor-main-separator">
+    <vaadin-split-layout class="main">
+      <side-panel></side-panel>
+      <div class="widget-container">
+        <widget-tabs ref="widgetTabs" />
+      </div>
+    </vaadin-split-layout>
+    <text-editor></text-editor>
+  </vaadin-split-layout>
+
 
   <user-widgets />
 
   <style>
 
-    app-replay {
-      flex: 1;
-      display: flex;
-      margin-right: 30px;
-      justify-content: flex-end;
+    .editor-main-separator {
+      height: 100vh;
+      width: 100%;
     }
 
     .main {
-      display: flex;
-      height: 100%;
+      height: 75%;
+      width: 100%;
+    }
+
+    .text-editor {
+      height: 25%;
+      width: 100%;
     }
 
     .main .widget-container {
-      flex: 1;
+      width: 75%;
       background: #eee;
       overflow: auto;
       position: relative;
     }
 
     side-panel {
-      max-width: calc(100% - 10px);
-      width: 370px;
+      width: 25%;
       display: block;
       overflow: auto;
       height: 100%;
     }
 
-    .layout-resizer {
-      width: 5px;
-      background: #aaa;
-      cursor: ew-resize;
-    }
-
-    .menu {
-      display: flex;
-      padding: 10px 15px;
-    }
-
-    .menu > button {
-      margin-right: 5px;
-    }
-
   </style>
-
-  
 
   <user-modules />
 
@@ -142,28 +131,6 @@ import { writeFileSync } from 'fs';
         dashboard.toastr.error(`Failed to save layout: ${e.message}`);
       }
     }
-
-    this.on('mount', () => {
-
-      let dragging = false;
-
-      $(this.refs.layoutResizer).on('mousedown', (ev) => {
-        dragging = true;
-      });
-
-      $(window).on('mousemove', _.throttle((ev) => {
-        if (!dragging) {
-          return;
-        }
-
-        $(this.refs.sidePanel).width(Math.clamp(ev.pageX, 10, window.innerWidth - 10));
-      }, 50));
-
-      $(window).on('mouseup', (ev) => { 
-        dragging = false;
-      });
-
-    });
 
     this.mapDispatchToMethods = {
       loadReplay: dashboard.actions.loadReplay,

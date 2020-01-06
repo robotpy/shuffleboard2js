@@ -146,7 +146,7 @@ module.exports = (env = {}) => {
     },
     externals: {
       riot: 'riot',
-      jquery: 'jQuery',
+      jquery: 'jQuery'
     },
     devtool: 'inline-source-map'
   };

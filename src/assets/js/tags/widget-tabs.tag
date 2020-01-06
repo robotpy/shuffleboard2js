@@ -3,121 +3,25 @@ import _ from 'lodash';
 import axios from 'axios';
 import { readFileSync } from 'fs';
 const dialog = require('electron').remote.dialog;
+import '@vaadin/vaadin-tabs';
 
 <widget-tabs>
 
-  <div class="card">
-    <div class="card-header"> 
-      <ul class="nav nav-tabs card-header-tabs pull-right" id="widget-tabs" role="tablist">
-        <li class="nav-item tab" each={tab, index in widgetTabs}>
-          <a class="nav-link {index === 0 ? 'active' : ''}" 
-             id="{_.kebabCase(tab.header)}-tab" 
-             data-toggle="tab" 
-             href="#{_.kebabCase(tab.header)}" 
-             role="tab" aria-controls="{_.kebabCase(tab.header)}" 
-             aria-selected="{index === 0 ? 'true' : 'false'}">
+  <vaadin-tabs onselected-changed={onselected}>
+    <vaadin-tab each={tab in widgetTabs}>
+      {tab.header}
+    </vaadin-tab>
+  </vaadin-tabs>
 
-            <input data-tab-index={index} 
-                   type="text" class="tab-header-input" 
-                   onchange={onHeaderChange} 
-                   onfocusout={onHeaderChange} 
-                   oninput={onHeaderChange} 
-                   value={tab.header} />
-            <span class="oi oi-x" data-tab-index={index} onclick={removeTab}></span>
-          </a>
-        </li>
-        <li class="nav-item add-tab">
-          <span class="oi oi-plus" onclick={addTab}></span>
-        </li>
-      </ul>
-    </div>
-    <div class="card-body">
-      <div class="tab-content" id="widget-tab-content">
-        <virtual each={tab, index in widgetTabs}>
-          <div class="tab-pane fade {index === 0 ? 'active show' : ''}" 
-              id="{_.kebabCase(tab.header)}" role="tabpanel" 
-              aria-labelledby="{_.kebabCase(tab.header)}-tab">
-            <widgets saved-widgets={tab.widgets} />
-          </div>
-        </virtual>
-      </div>
-    </div>
+  <div class="tab-body">
+    <virtual if={index === selectedTab} each={tab, index in widgetTabs}>
+      <widgets saved-widgets={tab.widgets} />
+    </virtual>
   </div>
 
   <style>
-
-    side-panel {
-      height: 100%;
-    }
-
-    > .card > .card-body {
-      padding: 10px;
-      overflow: hidden;
-      background: #EFEFEF;
-    }
-
-    > .card > .card-header {
-      overflow: hidden;
-      border-bottom: none;
-      padding: 0 1.25rem .75rem;
-      background: white;
-    }
-
-    > .card {
-      border-bottom: none;
-      height: 100%;
-    }
-
-    .card {
-      border-radius: 0;
-      border-bottom: none;
-    }
-
-    .card:last-child {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.125);;
-    }
-    
-    > .card > .card-header .nav-item .nav-link {
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      border-top: 0;
-    }
-
-    > .card > .card-header .nav-item .nav-link.active {
-      background: #EFEFEF;
-    }
-
-    .nav-item.add-tab .oi {
-      margin-top: 15px;
-      margin-left: 10px;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    .nav-item.tab .nav-link {
-      display: flex;
-      align-items: center;
-    }
-
-    .nav-item.tab .nav-link .oi {
-      display: none;
-      margin-left: 10px;
-      font-size: 11px;
-      height: 12px;
-    }
-
-    .nav-item.tab .nav-link.active .oi {
-      display: inline-block;
-    }
-
-    .tab-header-input {
-      white-space: nowrap;
-      outline: none;
-      border: none;
-      background-color: rgba(0,0,0,0);
-      text-overflow: ellipsis;
-      max-width: 200px;
-      min-width: 30px;
+    vaadin-tabs {
+      margin-bottom: 5px;
     }
   </style>
 
@@ -125,9 +29,14 @@ const dialog = require('electron').remote.dialog;
   <script>
   
     this.widgetTabs = [];
+    this.selectedTab = 0;
+
+    this.onselected = (ev) => {
+      this.selectedTab = ev.detail.value;
+    }
 
     this.getActiveWidgetTab = () => {
-      let $activeWidget = $(this.root).find('.card-body .tab-pane.active widgets');
+      let $activeWidget = $(this.root).find('widgets');
 
       if ($activeWidget.length === 0) {
         return null;
@@ -135,6 +44,7 @@ const dialog = require('electron').remote.dialog;
 
       return $activeWidget[0]._tag;
     };
+
 
     this.getWidgetTabs = () => {
       let tabs = [];
@@ -166,7 +76,6 @@ const dialog = require('electron').remote.dialog;
       });
 
       this.update();
-      this.updateTabInputWidths();
     };
 
     this.removeTab = (ev) => {
@@ -191,26 +100,13 @@ const dialog = require('electron').remote.dialog;
       this.widgetTabs[index].header = header;
     };
 
-    this.updateTabInputWidths = () => {
-        $(this.root).find('.tab-header-input').each(function() {
-          var inputWidth = $(this).textWidth();
-          $(this).css({ 
-            width: inputWidth + 20
-          })
-        });
-    };
-
     this.loadLayout = () => {
       return getSavedLayout().then((tabs) => {
-
         if (!tabs) {
           return;
         }
-
         this.widgetTabs = tabs;
         this.update();
-        this.updateTabInputWidths();
-        
         if (this.widgetTabs.length === 0) {
           this.addTab();
         }
@@ -220,14 +116,12 @@ const dialog = require('electron').remote.dialog;
     this.newLayout = () => {
         this.widgetTabs = [];
         this.update();
-        this.updateTabInputWidths();
         this.addTab();
     };
 
     this.on('mount', () => {
       this.widgetTabs = getDefaultLayout();
       this.update();
-      this.updateTabInputWidths();
       
       if (this.widgetTabs.length === 0) {
         this.addTab();

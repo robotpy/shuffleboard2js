@@ -13,6 +13,7 @@ import * as Lit from 'lit-element';
 require('assets/js/require-extensions');
 require('assets/js/menu');
 
+
 window.dashboard = {
   store,
   actions,

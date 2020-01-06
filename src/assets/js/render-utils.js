@@ -6,5 +6,7 @@ export const includeStyles = () => {
     <link type="text/css" rel="stylesheet" href="${getStylesheetPath('vendor/select2.min.css')}">
     <link type="text/css" rel="stylesheet" href="${getStylesheetPath('vendor/select2-bootstrap4.min.css')}">
     <link type="text/css" rel="stylesheet" href="${getStylesheetPath('node_modules/open-iconic/font/css/open-iconic-bootstrap.css')}">
+    <link type="text/css" rel="stylesheet" href="${getStylesheetPath('node_modules/codemirror/lib/codemirror.css')}">
+    <!-- <link type="text/css" rel="stylesheet" href="${getStylesheetPath('node_modules/codemirror/theme/material.css')}"> -->
   `;
 };
