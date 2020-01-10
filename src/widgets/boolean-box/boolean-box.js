@@ -1,9 +1,15 @@
-import { LitElement, html, css } from 'lit-element';
+const { LitElement, html, css } = dashboard.lit;
 
-class BooleanBox extends LitElement {
+module.exports = class BooleanBox extends LitElement {
 
   static get styles() {
     return css`
+      :host { 
+        display: block; 
+        width: 100px;
+        height: 100px;
+      }
+
       .background {
         width: 100%;
         height: 100%;
@@ -30,5 +36,3 @@ class BooleanBox extends LitElement {
     `;
   }
 }
-
-customElements.define('boolean-box', BooleanBox);

@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../render-utils';
 import './widget-menu';
 import './networktables/networktables-sources';
 import '@vaadin/vaadin-tabs';
@@ -32,8 +31,6 @@ class SidePanel extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
-
       <vaadin-tabs @selected-changed="${this.onChange}">
         <vaadin-tab>Sources</vaadin-tab>
         <vaadin-tab>Widgets</vaadin-tab>

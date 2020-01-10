@@ -1,8 +1,9 @@
-import './boolean-box';
+import BooleanBox from './boolean-box';
 import './boolean-box-props';
 import image from './boolean-box.png';
 
 dashboard.registerWidget('boolean-box', {
+  class: BooleanBox,
   label: 'Boolean Box',
   category: 'Basic',
   acceptedTypes: ['boolean'],

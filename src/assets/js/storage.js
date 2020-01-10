@@ -1,3 +1,4 @@
+import { join, dirname } from 'path';
 
 export const getRobotIp = () => {
   return localStorage.robotIp || 'localhost';
@@ -7,12 +8,20 @@ export const setRobotIp = (robotIp) => {
   localStorage.robotIp = robotIp;
 };
 
-export const getDefaultLayoutPath = () => {
-  return localStorage.defaultLayoutPath;
+export const hasDashboardPath = () => {
+  return 'dashboardPath' in localStorage;
 };
 
-export const setDefaultLayoutPath = (path) => {
-  localStorage.defaultLayoutPath = path;
+export const getDashboardPath = () => {
+  return localStorage.dashboardPath;
+};
+
+export const setDashboardPath = (path) => {
+  localStorage.dashboardPath = path;
+};
+
+export const getDashboardConfigPath = () => {
+  return join(dirname(getDashboardPath()), 'dashboard-config.json');
 };
 
 export const getDefaultWidgetFolder = () => {

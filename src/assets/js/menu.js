@@ -9,27 +9,15 @@ let fileMenuItem = new MenuItem({
   label: 'File', 
   submenu: [
     { 
-      label: 'New', 
-      click() {
-        dashboard.events.trigger('fileMenuNew');
-      }
-    },
-    { 
       label: 'Save', 
       click() { 
         dashboard.events.trigger('fileMenuSave');
       } 
     },
     { 
-      label: 'Load Layout', 
+      label: 'Load', 
       click() { 
-        dashboard.events.trigger('fileMenuLoadLayout');
-      } 
-    },
-    { 
-      label: 'Load Recording', 
-      click() { 
-        dashboard.events.trigger('fileMenuLoadRecording');
+        dashboard.events.trigger('fileMenuLoad');
       } 
     },
     { 

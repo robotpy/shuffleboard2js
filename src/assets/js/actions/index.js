@@ -15,9 +15,6 @@ export function registerWidget(widgetType, config = {}) {
     widget.properties.table = { type: Object };
     widget.properties.widgetProps = { type: Object }; 
     widget.properties.ntRoot = { type: String };
-
-    if (widget.prototype.resized === undefined)
-      widget.prototype.resized = () => {};
   }
 
   const propertiesTag = get(config, 'properties.tag');
@@ -34,6 +31,7 @@ export function registerWidget(widgetType, config = {}) {
   };
 
   config = { 
+    class: null,
     label: widgetType,
     category: 'Unknown',
     acceptedTypes: [],
@@ -44,6 +42,14 @@ export function registerWidget(widgetType, config = {}) {
     isCustomElement,
     ...config
   };
+
+  // Make this happen after the action is dispatched
+  // TODO: Find a better way to do this. maybe thunks?
+  if (config.class) {
+    setTimeout(() => {
+      customElements.define(widgetType, config.class);
+    });
+  }
 
   return {
     type: ActionTypes.REGISTER_WIDGET,

@@ -19,7 +19,7 @@ class TextEditor extends LitElement {
 
   static get properties() {
     return {
-      
+      text: { type: String }
     };
   }
 
@@ -28,6 +28,12 @@ class TextEditor extends LitElement {
       #editor {
         width: 100%;
         height: 100%;
+      }
+
+      .CodeMirror {
+        height: 100%;
+        background: #eee;
+        padding-left: 10px;
       }
     `;
   }
@@ -39,12 +45,13 @@ class TextEditor extends LitElement {
 
   initEditor() {
     var cm = CodeMirror(this.shadowRoot.getElementById("editor"), {
-      value: "function myScript() {\n    return 100;\n}",
+      value: this.text || '',
       mode: "google-javascript",
       indentUnit: 2,
       tabSize: 2,
-      lineNumbers: true,
+      lineNumbers: false,
       autofocus: true,
+      readOnly: true,
       extraKeys: {
         Tab: (cm) => {
           if (cm.getMode().name === 'null') {
@@ -88,54 +95,13 @@ class TextEditor extends LitElement {
     }, 1);
   }
 
-  initEditorMenu() {
-    const menu = this.shadowRoot.querySelector('vaadin-menu-bar');
-    menu.items = [
-      {
-        component: makeIcon('lumo:menu'),
-        children: [
-          {text: 'Dashboard'},
-          {text: 'Reports'}
-        ]
-      },
-      {
-        component: makeIcon('lumo:user'),
-        children: [
-          {text: 'Edit Profile'},
-          {component: 'hr'},
-          {text: 'Privacy Settings'},
-          {text: 'Terms of Service'}
-        ]
-      },
-      {
-        component: makeIcon('lumo:bell'),
-        children: [
-          {text: 'Notifications'},
-          {text: 'Mark as read'}
-        ]
-      }
-    ];
-    function makeIcon(img, txt) {
-      const icon = window.document.createElement('iron-icon');
-      icon.icon = img;
-      icon.style.margin = '0 6px';
-      return icon;
-    }
-    menu.addEventListener('item-selected', function(e) {
-      document.querySelector('i').textContent = JSON.stringify(e.detail.value);
-    });
-  }
-
   firstUpdated() {
     this.initEditor();
-    this.initEditorMenu();
   }
-
 
   render() {
     return html`
       ${includeStyles()}
-      <vaadin-menu-bar theme="tertiary-inline"></vaadin-menu-bar>
       <div id="editor"></div>
     `;
   }

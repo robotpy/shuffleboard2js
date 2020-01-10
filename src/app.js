@@ -10,6 +10,7 @@ import toastr from 'toastr';
 import * as CurvedArrow from 'assets/js/curved-arrow';
 import * as storage from 'assets/js/storage';
 import * as Lit from 'lit-element';
+import ObservableSlim from 'observable-slim';
 require('assets/js/require-extensions');
 require('assets/js/menu');
 
@@ -26,6 +27,26 @@ window.dashboard = {
   storage,
   lit: {
     ...Lit,
+    LitElement: class ExtendedLitElement extends Lit.LitElement {
+
+      constructor() {
+        super();
+        this._oldWidgetProps = {};
+
+        const widgetConfig = dashboard.store.getState().widgets.registered[this.nodeName.toLowerCase()];
+
+        console.log('widgetConfig:', this.nodeName.toLowerCase(), this);
+        if (widgetConfig) {
+          this.table = {};
+          this.widgetProps = ObservableSlim.create({...widgetConfig.properties.defaults}, false, () => {
+            this.requestUpdate('widgetProps', this._oldWidgetProps);
+            this._oldWidgetProps = { ...this.widgetProps };
+          });
+        }
+      }
+
+      resized() {}
+    },
     includeStyles
   }
 };

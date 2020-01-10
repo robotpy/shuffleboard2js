@@ -14,6 +14,7 @@ class BooleanBoxProps extends LitElement {
   }
 
   render() {
+    console.log('PROPS:', this.widgetProps);
     return html`
       ${includeStyles()}
       <form>     

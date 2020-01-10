@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../render-utils';
+import '@vaadin/vaadin-dialog';
 
 class DashboardModal extends LitElement {
 
@@ -12,7 +12,10 @@ class DashboardModal extends LitElement {
   constructor() {
     super();
     this.title = '';
-    this.$modal = null;
+    this.modalNode = null;
+    this.slotNode = null;
+    this.onOpenCallbacks = [];
+    this.onCloseCallbacks = [];
   }
 
   static get styles() {
@@ -24,60 +27,59 @@ class DashboardModal extends LitElement {
   }
 
   open() {
-    this.$modal.modal('show');
+    this.modalNode.opened = true;
   }
 
   close() {
-    this.$modal.modal('hide');
+    this.modalNode.opened = false;
   }
 
-  isOpen() {}
+  isOpen() {
+    return this.modalNode.opened;
+  }
 
   onShow(callback) {
-    this.$modal.on('show.bs.modal', callback);
+    this.onOpenCallbacks.push(callback);
   }
 
   onShown(callback) {
-    this.$modal.on('shown.bs.modal', callback);
+    this.onOpenCallbacks.push(callback);
   }
 
   onHide(callback) {
-    this.$modal.on('hide.bs.modal', callback);
+    this.onCloseCallbacks.push(callback);
   }
 
   onHidden(callback) {
-    this.$modal.on('hidden.bs.modal', callback);
+    this.onCloseCallbacks.push(callback);
   }
 
   firstUpdated() {
-    this.$modal = $(this.shadowRoot.getElementById('dashboard-modal'));
-    this.$modal.modal({
-      keyboard: false,
-      show: false,
-    });
+    this.modalNode = this.shadowRoot.getElementById('dashboard-modal');
+    this.slotNode = this.shadowRoot.getElementById('slot');
 
+    this.modalNode.renderer = (root, dialog) => {
+      this.slotNode.assignedElements().forEach(element => {
+        root.appendChild(element);
+      });
+    };
+  }
 
-    this.$modal.on('show.bs.modal', () => {
-      $(this).children().appendTo(this.shadowRoot.getElementById('slot'));
-    });
+  openChanged(ev) {
+    const opened = ev.detail.value;
+    if (opened) {
+      this.onOpenCallbacks.forEach(callback => callback());
+    }
+    else {
+      this.onCloseCallbacks.forEach(callback => callback());
+    }
   }
 
   render() {
     return html`
-      ${includeStyles()}
-      <div id="dashboard-modal" class="modal" tabindex="-1" role="dialog" style="display: none">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title">${this.title}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <slot id="slot"></slot>
-          </div>
-        </div>
-      </div>
+      <vaadin-dialog id="dashboard-modal" @opened-changed="${this.openChanged}"> 
+        <slot id="slot"></slot>
+      </vaadin-dialog>
     `;
   }
 
