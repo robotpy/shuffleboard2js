@@ -1,5 +1,5 @@
 import BooleanBox from './boolean-box';
-import './boolean-box-props';
+import BooleanBoxProps from './boolean-box-props';
 import image from './boolean-box.png';
 
 dashboard.registerWidget('boolean-box', {
@@ -12,7 +12,7 @@ dashboard.registerWidget('boolean-box', {
   minX: 2,
   minY: 2,
   properties: {
-    tag: 'boolean-box-props',
+    class: BooleanBoxProps,
     defaults: {
       colorWhenTrue: '#00ff00',
       colorWhenFalse: '#ff0000'

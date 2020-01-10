@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
 import './components/dashboard-modal';
-const dialog = require('electron').remote.dialog;
 
 class WidgetPropsModal extends LitElement {
 
@@ -39,25 +38,9 @@ class WidgetPropsModal extends LitElement {
   render() {
     return html`
       <dashboard-modal id="properties-modal" title="Properties">
-        <style>
-          header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-          }
-
-          vaadin-button {
-            align-self: start;
-          }
-
-          footer {
-            display: flex;
-            justify-content: flex-end;
-          }
-        </style>
-        <header>
+        <header style="display: flex; justify-content: space-between; align-items: center;">
           <h4>Properties</h4>
-          <vaadin-button theme="icon large tertiary" aria-label="Close modal" @click="${this.close}">
+          <vaadin-button style="align-self: start;" theme="icon large tertiary" aria-label="Close modal" @click="${this.close}">
             <iron-icon icon="lumo:cross" slot="prefix"></iron-icon>
           </vaadin-button>  
         </header>
@@ -68,7 +51,7 @@ class WidgetPropsModal extends LitElement {
         </div>
 
         <hr/>
-        <footer>
+        <footer style="display: flex; justify-content: flex-end;">
           <vaadin-button aria-label="Close modal" @click="${this.close}">
             Close
           </vaadin-button>  

@@ -17,18 +17,16 @@ export function registerWidget(widgetType, config = {}) {
     widget.properties.ntRoot = { type: String };
   }
 
-  const propertiesTag = get(config, 'properties.tag');
-  let isPropertiesTagCustomElement = false;
-  if (propertiesTag && customElements.get(propertiesTag)) {
-    isPropertiesTagCustomElement = true;
-  }
 
   config.properties = {
-    isCustomElement: isPropertiesTagCustomElement,
-    tag: null,
+    class: null,
     defaults: {},
     ...config.properties
   };
+
+  if (config.properties.class) {
+    customElements.define(`${widgetType}-props`, config.properties.class);
+  }
 
   config = { 
     class: null,

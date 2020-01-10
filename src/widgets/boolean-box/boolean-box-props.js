@@ -1,7 +1,6 @@
-import { LitElement, html } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
+const { LitElement, html } = dashboard.lit;
 
-class BooleanBoxProps extends LitElement {
+module.exports = class BooleanBoxProps extends LitElement {
 
   onColorWhenTrueChange(ev) {
     const color = ev.target.value;
@@ -14,35 +13,29 @@ class BooleanBoxProps extends LitElement {
   }
 
   render() {
-    console.log('PROPS:', this.widgetProps);
     return html`
-      ${includeStyles()}
-      <form>     
-        <div class="form-group row">
-          <label for="colorWhenTrue" class="col-sm-4 col-form-label text-right">Color when true</label>
-          <div class="col-sm-8">
-            <input 
+      <vaadin-form-layout>
+        <vaadin-form-item>
+          <label slot="label" for="colorWhenTrue">Color when true</label>
+          <input 
               type="color" 
-              class="form-control" 
               id="colorWhenTrue" 
+              class="full-width"
               value="${this.widgetProps.colorWhenTrue}"
-              @change="${this.onColorWhenTrueChange}">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="colorWhenFalse" class="col-sm-4 col-form-label text-right">Color when false</label>
-          <div class="col-sm-8">
-            <input 
+              @change="${this.onColorWhenTrueChange}"
+          />
+        </vaadin-form-item>
+        <vaadin-form-item>
+        <label slot="label" for="colorWhenFalse">Color when false</label>
+          <input 
               type="color" 
-              class="form-control" 
               id="colorWhenFalse" 
+              class="full-width"
               value="${this.widgetProps.colorWhenFalse}"
-              @change="${this.onColorWhenFalseChange}">
-          </div>
-        </div>
-      </form>
+              @change="${this.onColorWhenFalseChange}"
+          />
+        </vaadin-form-item>
+      </vaadin-form-layout>
     `;
   }
 }
-
-customElements.define('boolean-box-props', BooleanBoxProps);

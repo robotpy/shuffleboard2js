@@ -286,7 +286,11 @@ class RobotDashboards extends connect(store)(LitElement) {
     event.clientX = ev.clientX;
     event.clientY = ev.clientY;
 
-    if (this.selectedWidget) {
+    const widgetType = this.getSelectedWidgetType();
+
+
+
+    if (this.selectedWidget && customElements.get(`${widgetType}-props`)) {
       const contextMenuNode = this.shadowRoot.getElementById('context-menu');
       contextMenuNode.dispatchEvent(event);
     }
@@ -308,8 +312,8 @@ class RobotDashboards extends connect(store)(LitElement) {
 
   async openPropertiesModal() {
     const widgetNode = this.widgets[this.selectedWidget];
-    const widgetConfig = dashboard.store.getState().widgets.registered[this.getSelectedWidgetType()];
-    const propsNodeName = widgetConfig.properties.tag;
+    const widgetType = this.getSelectedWidgetType();
+    const propsNodeName = `${widgetType}-props`;
     const propsNode = window.document.createElement(propsNodeName);
     propsNode.widgetProps = widgetNode.widgetProps;
 

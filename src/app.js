@@ -1,3 +1,4 @@
+import './assets/js/elements/components';
 import { includeStyles } from './assets/js/render-utils';
 import store from "assets/js/store/index";
 import riot from 'riot';
@@ -35,7 +36,6 @@ window.dashboard = {
 
         const widgetConfig = dashboard.store.getState().widgets.registered[this.nodeName.toLowerCase()];
 
-        console.log('widgetConfig:', this.nodeName.toLowerCase(), this);
         if (widgetConfig) {
           this.table = {};
           this.widgetProps = ObservableSlim.create({...widgetConfig.properties.defaults}, false, () => {
