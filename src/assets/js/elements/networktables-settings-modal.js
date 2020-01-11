@@ -16,6 +16,17 @@ class NetworktablesSettingsModal extends LitElement {
     super();
     this.robotIp = dashboard.storage.getRobotIp();
     NetworkTables.connect(this.robotIp);
+    
+    // Keep trying to connect if a connection hasn't been found
+    setInterval(() => {
+      if (!NetworkTables.isRobotConnected()) {
+        NetworkTables.connect(this.robotIp);
+      }
+    }, 500);
+
+    NetworkTables.addRobotConnectionListener(connected => {
+      dashboard.store.dispatch(dashboard.actions.clearNetworkTables());
+    }, true);
   }
 
   onRobotIpChange(ev) {

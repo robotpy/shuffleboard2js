@@ -1,5 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
+const { LitElement, html, css } = dashboard.lit;
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;
@@ -10,29 +9,28 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
-class BasicFmsInfo extends LitElement {
+export default class BasicFmsInfo extends LitElement {
 
   static get styles() {
     return css`
       p {
-        font-size: 15px;
+        margin: 5px 0;
       }
 
-      .fms-info-container {
+      :host {
+        text-align: center;
+        font-size: 15px;
         display: flex;
         flex-direction: column;
         justify-content: center;
-        height: 100%;
       }
 
-      .oi-check {
+      [icon="vaadin:check"] {
         color: green;
-        font-size: 13px;
       }
 
-      .oi-x {
+      [icon="vaadin:close-small"] {
         color: red;
-        font-size: 13px;
       }
     `;
   }
@@ -107,8 +105,6 @@ class BasicFmsInfo extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
-      <div class="fms-info-container">
         <p>
           <strong>
             <span>${this.getEventName()}</span>
@@ -120,16 +116,28 @@ class BasicFmsInfo extends LitElement {
         <p style="margin-bottom: 7px; font-weight: normal">
           <span style="margin-right: 5px;">
             ${this.isFmsAttached() ? html`
-              <span><span class="oi oi-check"></span> FMS connected</span>
+              <span>
+                <iron-icon icon="vaadin:check"></iron-icon>
+                FMS connected
+              </span>
             ` : html`
-              <span><span class="oi oi-x"></span> FMS disconnected</span>
+              <span>
+                <iron-icon icon="vaadin:close-small"></iron-icon> 
+                FMS disconnected
+              </span>
             `}
           </span>
           <span>
             ${this.isDsAttached() ? html`
-              <span ><span class="oi oi-check"></span> DriverStation connected</span>
+              <span>
+              <iron-icon icon="vaadin:check"></iron-icon>
+                DriverStation connected
+              </span>
             ` : html`
-              <span><span class="oi oi-x"></span> DriverStation disconnected</span>
+              <span>
+                <iron-icon icon="vaadin:close-small"></iron-icon> 
+                DriverStation disconnected
+              </span>
             `}
           </span>
         </p>
@@ -137,9 +145,6 @@ class BasicFmsInfo extends LitElement {
         <p style="font-weight: normal">
           Robot state: ${this.getRobotState()}
         </p>
-      </div>
     `;
   }
 }
-
-customElements.define('basic-fms-info', BasicFmsInfo);
