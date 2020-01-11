@@ -32,8 +32,8 @@ module.exports = class ComboboxChooser extends LitElement {
     }
   }
 
-  updated(changes) {
-    if (changes.has('table')) {
+  updated(changedProperties) {
+    if (changedProperties.has('table')) {
       this.options = this.table.options || [];
       this.selected = this.table.selected || '';
     }
