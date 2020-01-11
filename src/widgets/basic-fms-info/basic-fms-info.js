@@ -17,6 +17,14 @@ export default class BasicFmsInfo extends LitElement {
         margin: 5px 0;
       }
 
+      p:first-child {
+        margin-top: 0;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+
       :host {
         text-align: center;
         font-size: 15px;

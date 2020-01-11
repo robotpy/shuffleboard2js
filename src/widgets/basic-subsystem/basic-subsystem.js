@@ -11,7 +11,11 @@ export default class BasicSubsystem extends LitElement {
       }
 
       p {
-        margin: 5px 0;
+        margin: 0;
+      }
+
+      p:first-child {
+        margin-bottom: 5px;
       }
     `;
   }
