@@ -104,14 +104,12 @@ class NtSubtable extends LitElement {
           <span class="row-item value"></span>
         </div>
         ${map(this.values, (value, key) => html`
-          
-
           ${isPlainObject(value) ? html`
             <nt-subtable 
               level="${this.level + 1}"
               ntKey="${this.ntKey + key + '/'}"
               keyLabel="${key}"
-              .values="${value}"
+              .values="${{...value}}"
             >
             </nt-subtable>
           `: ''}
