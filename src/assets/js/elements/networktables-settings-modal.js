@@ -14,7 +14,8 @@ class NetworktablesSettingsModal extends LitElement {
 
   constructor() {
     super();
-    this.robotIp = '';
+    this.robotIp = dashboard.storage.getRobotIp();
+    NetworkTables.connect(this.robotIp);
   }
 
   onRobotIpChange(ev) {
