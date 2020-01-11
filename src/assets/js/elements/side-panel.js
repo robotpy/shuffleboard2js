@@ -15,6 +15,7 @@ class SidePanel extends LitElement {
     return css`
       .tab-body {
         margin-top: 10px;
+        overflow: auto;
       }
     `;
   }
