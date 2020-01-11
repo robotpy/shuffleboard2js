@@ -283,6 +283,7 @@ class RobotDashboards extends connect(store)(LitElement) {
           width: ${width}px;
           height: ${height}px;
           border: 2px dashed cornflowerblue;
+          pointer-events: none;
         }
       </style>
       <div class="selected-widget-rect"></div>

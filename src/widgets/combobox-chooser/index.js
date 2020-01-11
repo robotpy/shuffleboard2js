@@ -1,11 +1,10 @@
-import './combobox-chooser';
-import image from './combobox-chooser.png';
+const ComboBoxChooser = require('./combobox-chooser');
+const image = require('./combobox-chooser.png');
 
 dashboard.registerWidget('combobox-chooser', {
+  class: ComboBoxChooser,
   label: 'ComboBox Chooser',
   category: 'Basic',
   acceptedTypes: ['String Chooser'],
-  image,
-  minX: 3,
-  minY: 2
+  image
 });
