@@ -1,5 +1,5 @@
-import BasicSubsystem from './basic-subsystem';
-import image from './basic-subsystem.png';
+const BasicSubsystem = require('./basic-subsystem');
+const image = require('./basic-subsystem.png');
 
 dashboard.registerWidget('basic-subsystem', {
   class: BasicSubsystem,

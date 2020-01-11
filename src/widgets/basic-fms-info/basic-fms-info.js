@@ -9,7 +9,7 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
-export default class BasicFmsInfo extends LitElement {
+module.exports = class BasicFmsInfo extends LitElement {
 
   static get styles() {
     return css`
@@ -113,46 +113,46 @@ export default class BasicFmsInfo extends LitElement {
 
   render() {
     return html`
-        <p>
-          <strong>
-            <span>${this.getEventName()}</span>
-            <span>${this.getMatchType()}</span>
-            <span>match ${this.getMatchNumber()}</span>
-          </strong>
-        </p>
-        
-        <p style="margin-bottom: 7px; font-weight: normal">
-          <span style="margin-right: 5px;">
-            ${this.isFmsAttached() ? html`
-              <span>
-                <iron-icon icon="vaadin:check"></iron-icon>
-                FMS connected
-              </span>
-            ` : html`
-              <span>
-                <iron-icon icon="vaadin:close-small"></iron-icon> 
-                FMS disconnected
-              </span>
-            `}
-          </span>
-          <span>
-            ${this.isDsAttached() ? html`
-              <span>
+      <p>
+        <strong>
+          <span>${this.getEventName()}</span>
+          <span>${this.getMatchType()}</span>
+          <span>match ${this.getMatchNumber()}</span>
+        </strong>
+      </p>
+      
+      <p style="margin-bottom: 7px; font-weight: normal">
+        <span style="margin-right: 5px;">
+          ${this.isFmsAttached() ? html`
+            <span>
               <iron-icon icon="vaadin:check"></iron-icon>
-                DriverStation connected
-              </span>
-            ` : html`
-              <span>
-                <iron-icon icon="vaadin:close-small"></iron-icon> 
-                DriverStation disconnected
-              </span>
-            `}
-          </span>
-        </p>
+              FMS connected
+            </span>
+          ` : html`
+            <span>
+              <iron-icon icon="vaadin:close-small"></iron-icon> 
+              FMS disconnected
+            </span>
+          `}
+        </span>
+        <span>
+          ${this.isDsAttached() ? html`
+            <span>
+            <iron-icon icon="vaadin:check"></iron-icon>
+              DriverStation connected
+            </span>
+          ` : html`
+            <span>
+              <iron-icon icon="vaadin:close-small"></iron-icon> 
+              DriverStation disconnected
+            </span>
+          `}
+        </span>
+      </p>
 
-        <p style="font-weight: normal">
-          Robot state: ${this.getRobotState()}
-        </p>
+      <p style="font-weight: normal">
+        Robot state: ${this.getRobotState()}
+      </p>
     `;
   }
 }

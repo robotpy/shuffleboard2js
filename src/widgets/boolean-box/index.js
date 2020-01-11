@@ -1,6 +1,6 @@
-import BooleanBox from './boolean-box';
-import BooleanBoxProps from './boolean-box-props';
-import image from './boolean-box.png';
+const BooleanBox = require('./boolean-box');
+const BooleanBoxProps = require('./boolean-box-props')
+const image = require('./boolean-box.png');
 
 dashboard.registerWidget('boolean-box', {
   class: BooleanBox,

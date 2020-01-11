@@ -1,5 +1,5 @@
-import BasicFmsInfo from './basic-fms-info';
-import image from './basic-fms-info.png';
+const BasicFmsInfo = require('./basic-fms-info');
+const image = require('./basic-fms-info.png');
 
 dashboard.registerWidget('basic-fms-info', {
   class: BasicFmsInfo,
