@@ -1,6 +1,6 @@
 const { LitElement, html, css } = dashboard.lit;
 
-module.exposts =  class BasicSubsystem extends LitElement {
+module.exports =  class BasicSubsystem extends LitElement {
 
   static get styles() {
     return css`
