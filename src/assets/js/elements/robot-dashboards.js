@@ -7,11 +7,8 @@ import { without } from 'lodash';
 import './no-dashboard';
 import './widget-props-modal';
 const dialog = require('electron').remote.dialog;
-import '@vaadin/vaadin-context-menu';
-import '@vaadin/vaadin-list-box';
-import '@vaadin/vaadin-item';
-import '@vaadin/vaadin-button';
-import '@vaadin/vaadin-lumo-styles';
+import { getSubtable, getTypes } from 'assets/js/networktables';
+
 
 class RobotDashboards extends connect(store)(LitElement) {
 
@@ -51,7 +48,6 @@ class RobotDashboards extends connect(store)(LitElement) {
     this.selectedWidget = null;
     this.pageX = 0;
     this.pageY = 0;
-    this.i = 0;
   }
 
   async openSavedDashboard() {
@@ -143,10 +139,6 @@ class RobotDashboards extends connect(store)(LitElement) {
     }
 
     this.widgets[widgetId] = widgetNode;
-
-    $(widgetNode).on('mouseenter', () => {
-      this.selectedWidget = widgetId;
-    });
   }
 
   observeRobotDashboard(dashboardNode) {
@@ -182,10 +174,25 @@ class RobotDashboards extends connect(store)(LitElement) {
     const contextMenuNode = this.shadowRoot.getElementById('context-menu')
     observer.observe(contextMenuNode, { childList: true });
 
-    $(window).on('mousemove', (ev) => {
+    $(window).on('mousemove drag', (ev) => {
+
+      // This happens when user stops dragging mouse
+      if (ev.pageX === 0 && ev.pageY === 0) {
+        return;
+      }
+
       this.pageX = ev.pageX;
       this.pageY = ev.pageY;
-      if (!this.isPointInSelectedWidget(ev.pageX, ev.pageY) && !this.isContextMenuOpened()) {
+
+      if (!this.selectedWidget) {
+        for (let widget in this.widgets) {
+          if (this.isPointInWidget(this.pageX, this.pageY, 0, widget)) {
+            this.selectedWidget = widget;
+            break;
+          }
+        }
+      }
+      else if (!this.isPointInWidget(ev.pageX, ev.pageY) && !this.isContextMenuOpened()) {
         this.selectedWidget = null;
       }
     });
@@ -232,16 +239,17 @@ class RobotDashboards extends connect(store)(LitElement) {
 
   stateChanged() {
     this.setupExistingWidgets();
+    for (let widget in this.widgets) {
+      this.updateWidgetTable(widget);
+    }
   }
 
-  isPointInSelectedWidget(x, y) {
-    const widgetNode = this.widgets[this.selectedWidget];
+  isPointInWidget(x, y, margin = 10, widget = this.selectedWidget) {
+    const widgetNode = this.widgets[widget];
 
     if (!widgetNode) {
       return false;
     }
-
-    const margin = 10;
 
     const { left, top, right, bottom } = widgetNode.getBoundingClientRect();
 
@@ -288,8 +296,6 @@ class RobotDashboards extends connect(store)(LitElement) {
 
     const widgetType = this.getSelectedWidgetType();
 
-
-
     if (this.selectedWidget && customElements.get(`${widgetType}-props`)) {
       const contextMenuNode = this.shadowRoot.getElementById('context-menu');
       contextMenuNode.dispatchEvent(event);
@@ -299,7 +305,7 @@ class RobotDashboards extends connect(store)(LitElement) {
   onContextMenuOpenChanged(ev) {
     const opened = ev.detail.value;
     if (!opened) {
-      if (!this.isPointInSelectedWidget(this.pageX, this.pageY)) {
+      if (!this.isPointInWidget(this.pageX, this.pageY)) {
         this.selectedWidget = null;
       }
     }
@@ -328,6 +334,55 @@ class RobotDashboards extends connect(store)(LitElement) {
   closePropertiesModal() {
     const propertiesModalNode = this.shadowRoot.getElementById('properties-modal');
     propertiesModalNode.close();
+  }
+
+  isAcceptedType(ntTypes, widgetType = this.getSelectedWidgetType()) {
+    let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+
+    if (!widgetConfig) {
+      return false;
+    }
+
+    for (let i = 0; i < ntTypes.length; i++) {
+      if (widgetConfig.acceptedTypes.indexOf(ntTypes[i]) > -1) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  updateWidgetTable(widget) {
+
+    const widgetNode = this.widgets[widget];
+    const { ntRoot } = widgetNode;
+    const ntTypes = getTypes(ntRoot);
+    const widgetType = widgetNode.nodeName.toLowerCase();
+    const isAcceptedType = this.isAcceptedType(ntTypes, widgetType);
+    
+    if (isAcceptedType) {
+      const prevTable = widgetNode.table;
+      let ntValue = isAcceptedType ? getSubtable(ntRoot) : {};
+      widgetNode.table = ntValue;
+      widgetNode.requestUpdate('table', prevTable);      
+      return true;
+    }
+  }
+
+  // If ignoreType is true, set even if the type is not one of the accepted types.
+  // This is useful for saved widgets that have ntRoots that haven't been set yet.
+  setNtRoot(ntRoot, ignoreType = false, widget = this.selectedWidget) {
+    let ntTypes = getTypes(ntRoot);
+    if (ignoreType || this.isAcceptedType(ntTypes)) {
+      const widgetNode = this.widgets[widget];
+      const prevNtRoot = widgetNode.ntRoot;
+      widgetNode.ntRoot = ntRoot;     
+      widgetNode.requestUpdate('ntRoot', prevNtRoot);
+      this.updateWidgetTable(widget);
+      return true;
+    }
+
+    return false;
   }
 
   render() {

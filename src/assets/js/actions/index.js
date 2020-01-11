@@ -35,8 +35,6 @@ export function registerWidget(widgetType, config = {}) {
     acceptedTypes: [],
     defaultsFor: [],
     image: '',
-    minX: 1,
-    minY: 1,
     isCustomElement,
     ...config
   };

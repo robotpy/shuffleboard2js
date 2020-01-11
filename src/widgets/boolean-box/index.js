@@ -9,8 +9,6 @@ dashboard.registerWidget('boolean-box', {
   acceptedTypes: ['boolean'],
   defaultsFor: ['boolean'],
   image,
-  minX: 2,
-  minY: 2,
   properties: {
     class: BooleanBoxProps,
     defaults: {

@@ -17,7 +17,7 @@ import '@vaadin/vaadin-split-layout';
   </custom-widget-settings-modal>
 
   <vaadin-split-layout class="main">
-    <side-panel></side-panel>
+    <side-panel ref="sidePanel"></side-panel>
     <!--  <widget-tabs ref="widgetTabs" />  -->
     <robot-dashboards ref="dashboards"></robot-dashboards>
   </vaadin-split-layout>
@@ -62,6 +62,28 @@ import '@vaadin/vaadin-split-layout';
 
   <script>
 
+    this.on('mount', () => {
+      this.refs.sidePanel.addEventListener('ntSourceAdded', (ev) => {
+        const { ntKey, ntType } = ev.detail;
+        const dashboardsNode = this.refs.dashboards;
+        const success = dashboardsNode.setNtRoot(ntKey);
+
+        if (success) {
+          dashboard.toastr.success(`Successfully added source '${ntKey}'`);
+        }
+        else if (dashboardsNode.selectedWidget) {
+          const widgetType = dashboardsNode.getSelectedWidgetType();
+          console.log('widgetType:', widgetType);
+          const widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+          dashboard.toastr.error(`
+            Widget of type '${widgetConfig.label}' doesn't accept type 
+            '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
+        }
+        else {
+          dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget at that position can be found.`);
+        }
+      });
+    });
  
     dashboard.events.on('fileMenuSave', () => {
       let dashboardConfig = this.refs.dashboards.dashboardConfig;
