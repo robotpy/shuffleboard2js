@@ -141,38 +141,12 @@ class RobotDashboards extends connect(store)(LitElement) {
     this.widgets[widgetId] = widgetNode;
   }
 
-  observeRobotDashboard(dashboardNode) {
-    this.dashboardNode = dashboardNode;
-    const observer = new MutationObserver(mutationsList => {
-      for(let mutation of mutationsList) {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeName.toLowerCase() in this.getWidgetTypes()) {
-            this.setupWidget(node, node.nodeName.toLowerCase());
-          }
-        });
-      }
-    });
-    observer.observe(dashboardNode, { childList: true });
-
-    this.setupExistingWidgets();
-  }
-
   firstUpdated() {
     this.getSavedDashboard();
 
-    // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(mutationsList => {
-      for(let mutation of mutationsList) {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeName === 'ROBOT-DASHBOARD') {
-            this.observeRobotDashboard(node.shadowRoot);
-            observer.disconnect();
-          }
-        });
-      }
+    dashboard.events.on('widgetAdded', node => {
+      this.setupWidget(node, node.nodeName.toLowerCase());
     });
-    const contextMenuNode = this.shadowRoot.getElementById('context-menu')
-    observer.observe(contextMenuNode, { childList: true });
 
     $(window).on('mousemove drag', (ev) => {
 
@@ -231,7 +205,7 @@ class RobotDashboards extends connect(store)(LitElement) {
       const newWidgetTypes = without(widgetTypes, ...this.oldWidgetTypes);
       newWidgetTypes.forEach(widgetType => {
         const widgets = this.dashboardNode.querySelectorAll(widgetType);
-        widgets.forEach(widget => this.setupWidget(widget, widgetType));
+        //widgets.forEach(widget => this.setupWidget(widget, widgetType));
       });
       this.oldWidgetTypes = widgetTypes;
     }

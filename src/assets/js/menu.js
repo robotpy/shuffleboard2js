@@ -26,12 +26,6 @@ let fileMenuItem = new MenuItem({
         dashboard.events.trigger('fileMenuNtSettings');
       } 
     },
-    { 
-      label: 'Custom Widget Settings', 
-      click() { 
-        dashboard.events.trigger('fileMenuWidgetSettings');
-      } 
-    },
     { type: 'separator' },
     {
       label: 'Close',

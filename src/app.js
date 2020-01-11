@@ -35,13 +35,15 @@ window.dashboard = {
         this._oldWidgetProps = {};
 
         const widgetConfig = dashboard.store.getState().widgets.registered[this.nodeName.toLowerCase()];
-
         if (widgetConfig) {
           this.table = {};
           this.widgetProps = ObservableSlim.create({...widgetConfig.properties.defaults}, false, () => {
             this.requestUpdate('widgetProps', this._oldWidgetProps);
             this._oldWidgetProps = { ...this.widgetProps };
+    
           });
+          dashboard.events.trigger('widgetAdded', this);
+          console.log("WIDGET ADDED");
         }
       }
 
