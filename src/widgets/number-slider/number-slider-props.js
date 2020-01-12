@@ -1,7 +1,6 @@
-import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
+const { LitElement, html } = require('lit-element');
 
-class NumberSliderProps extends LitElement {
+module.exports = class NumberSliderProps extends LitElement {
 
   onMinChange(ev) {
     const min = parseFloat(ev.target.value);
@@ -28,7 +27,6 @@ class NumberSliderProps extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <form>
         <div class="form-group row">
           <label for="min" class="col-sm-4 col-form-label text-right">Min</label>
@@ -69,5 +67,3 @@ class NumberSliderProps extends LitElement {
     `;
   }
 }
-
-customElements.define('number-slider-props', NumberSliderProps);
