@@ -1,5 +1,4 @@
 const { LitElement, html, css } = dashboard.lit;
-const { capitalize } = _;
 
 module.exports = class RelayWidget extends LitElement {
 
