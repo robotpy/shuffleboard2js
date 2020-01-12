@@ -1,16 +1,15 @@
-import './gauge-widget';
-import './gauge-widget-props';
-import image from './gauge.png';
+const GaugeWidget =  require('./gauge-widget');
+const GaugeWidgetProps = require('./gauge-widget-props');
+const image = require('./gauge.png');
 
 dashboard.registerWidget('gauge-widget', {
+  class: GaugeWidget,
   label: 'Gauge',
   category: 'Basic',
   acceptedTypes: ['number'],
   image,
-  minX: 3,
-  minY: 2,
   properties: {
-    tag: 'gauge-widget-props',
+    class: GaugeWidgetProps,
     defaults: {
       min: 0,
       max: 100

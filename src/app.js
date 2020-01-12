@@ -40,10 +40,8 @@ window.dashboard = {
           this.widgetProps = ObservableSlim.create({...widgetConfig.properties.defaults}, false, () => {
             this.requestUpdate('widgetProps', this._oldWidgetProps);
             this._oldWidgetProps = { ...this.widgetProps };
-    
           });
           dashboard.events.trigger('widgetAdded', this);
-          console.log("sdffds:", this);
         }
       }
 

@@ -1,11 +1,14 @@
-import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
-import Gauge from 'svg-gauge';
+const { LitElement, html, css } = dashboard.lit;
+const Gauge = require('svg-gauge');
 
-class GaugeWidget extends LitElement {
+module.exports = class GaugeWidget extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: inline-block;
+      }
+
       .gauge-container-container {
         height: 100%;
         display: flex;
@@ -16,8 +19,8 @@ class GaugeWidget extends LitElement {
 
       .gauge-container {
         display: block;
-        padding: 10px;
       }
+      
       .gauge-container > .gauge > .dial {
         stroke: #ddd;
         stroke-width: 3;
@@ -65,6 +68,11 @@ class GaugeWidget extends LitElement {
 
   firstUpdated() {
     this.gaugeInit();
+
+    const resizeObserver = new ResizeObserver(() => {
+      this.setSize();
+    });
+    resizeObserver.observe(this);
   }
 
   updated(changedProperties) {
@@ -77,20 +85,11 @@ class GaugeWidget extends LitElement {
     }
   }
 
-  resized() {
-    this.setSize();
-  }
-
-
-
   render() {
     return html`
-      ${includeStyles()}
       <div class="gauge-container-container">
         <div id="gauge" class="gauge-container ${this.widgetProps.style}"></div>
       </div>
     `;
   }
 }
-
-customElements.define('gauge-widget', GaugeWidget);
