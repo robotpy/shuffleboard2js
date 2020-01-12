@@ -43,7 +43,7 @@ window.dashboard = {
     
           });
           dashboard.events.trigger('widgetAdded', this);
-          console.log("WIDGET ADDED");
+          console.log("sdffds:", this);
         }
       }
 

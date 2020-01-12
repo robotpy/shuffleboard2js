@@ -7,7 +7,6 @@ dashboard.registerWidget('boolean-box', {
   label: 'Boolean Box',
   category: 'Basic',
   acceptedTypes: ['boolean'],
-  defaultsFor: ['boolean'],
   image,
   properties: {
     class: BooleanBoxProps,

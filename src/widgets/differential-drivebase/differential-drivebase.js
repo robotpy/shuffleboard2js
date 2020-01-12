@@ -1,6 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
-import '../../assets/js/elements/components/table-axis';
+const { LitElement, html, css } = dashboard.lit;
+require('../../assets/js/elements/components/table-axis');
 
 /** 
  * Copyright (c) 2017-2018 FIRST
@@ -54,19 +53,32 @@ function generateX(width) {
     />
   `;
 
-  return `<g class="x" transform="translate(125, 125)">${lineA} ${lineB}</g>`;
+  return `<g class="x">${lineA} ${lineB}</g>`;
 }
 
-class DifferentialDrivebase extends LitElement {
+module.exports = class DifferentialDrivebase extends LitElement {
 
   static get styles() {
     return css`
+      :host {
+        display: block;
+        width: 400px;
+        height: 400px;
+      }
+
       .diff-drive-container {
           height: 100%;
+          width: 100%;
           display: flex;
           flex-direction: row;
           align-items: center;
           justify-content: center;
+      }
+
+      svg {
+        overflow: overlay;
+        flex: 1;
+        height: 100%;
       }
 
       svg .x {
@@ -78,7 +90,6 @@ class DifferentialDrivebase extends LitElement {
           stroke: rgb(50,50,255);
           stroke-width: 2;
           fill: none;
-          /*transform: rotate(-90deg);*/
       }
 
       svg .arrow polygon {
@@ -131,13 +142,19 @@ class DifferentialDrivebase extends LitElement {
 
   drawMotionVector(left, right) {
 
-    const rect = this.getBoundingClientRect();
-    const FRAME_WIDTH = 150;  //rect.width;
-    const FRAME_HEIGHT = 150; //rect.height;
+    const svgNode = this.shadowRoot.getElementById('svg');
+    const rect = svgNode.getBoundingClientRect();
+
+    const wheelWidth = rect.width * .13;
+    const padding = 20;
+    const verticalPadding = 20;
+
+    const FRAME_WIDTH = rect.width - (wheelWidth + padding) * 2;
+    const FRAME_HEIGHT = rect.height - verticalPadding * 2;
 
     // Barely moving, or not moving at all. Curved arrows look weird at low radii, so show an X instead
     if (Math.abs(left) <= 0.05 && Math.abs(right) <= 0.05) {
-      return generateX(25);
+      return generateX(rect.width * .2);
     }
 
     // Max radius is half of the narrowest dimension, minus padding to avoid clipping with the frame
@@ -149,7 +166,7 @@ class DifferentialDrivebase extends LitElement {
       // close, which can cause floating-point issues with extremely large radii (on the order of 1E15 pixels)
       // and extremely small arc lengths (on the order of 1E-15 degrees)
       let arrow = window.dashboard.CurvedArrow.createStraight(Math.abs(left * maxRadius), -Math.sign(left) * Math.PI / 2, 0, arrowheadSize);
-      return `<g class="arrow" transform="translate(125, 125)">${arrow}</g>`;
+      return `<g class="arrow">${arrow}</g>`;
     }
     // Moving in an arc
 
@@ -187,58 +204,62 @@ class DifferentialDrivebase extends LitElement {
         arrow = window.dashboard.CurvedArrow.createPolar(start, radius, turnSign * angle, centerX, arrowheadSize);
       }
     }
-    return `<g class="arrow" transform="translate(125, 125)">${arrow}</g>`;
+    return `<g class="arrow">${arrow}</g>`;
   }
 
-  drawDrivetrain(width, height, wheelRadius) {
+  drawDrivetrain() {
 
-    const left = (250 - width) / 2;
-    const top = (250 - height) / 2;
-    const right = left + width;
-    const bottom = top + height;
+    const svgNode = this.shadowRoot.getElementById('svg');
+    const rect = svgNode.getBoundingClientRect();
+
+    const wheelWidth = rect.width * .13;
+    const wheelRadius = Math.min(rect.width * .13, rect.height * .15);
+    const padding = 20;
+    const verticalPadding = 20;
+    
     
     const base = `
       <rect 
-        width="${width}" 
-        height="${height}" 
-        x="${left}" 
-        y="${top}" 
+        width="calc(100% - ${(wheelWidth + padding) * 2}px)" 
+        height="calc(100% - ${verticalPadding * 2}px)"
+        x="${wheelWidth + padding}" 
+        y="20px" 
       />
     `;
 
     const tlWheel = `
       <rect 
-        width="${30}" 
+        width="${wheelWidth}px" 
         height="${wheelRadius * 2}" 
-        x="${left - 30}" 
-        y="${top}" 
+        x="${padding}px" 
+        y="${verticalPadding}px" 
       />
     `;
 
     const trWheel = `
       <rect 
-        width="${30}" 
+        width="${wheelWidth}px" 
         height="${wheelRadius * 2}" 
-        x="${right}" 
-        y="${top}" 
+        x="calc(100% - ${wheelWidth + padding}px)" 
+        y="${verticalPadding}px" 
       />
     `;
 
     const blWheel = `
       <rect 
-        width="${30}" 
+        width="${wheelWidth}px" 
         height="${wheelRadius * 2}" 
-        x="${left - 30}" 
-        y="${bottom - wheelRadius * 2}" 
+        x="${padding}px"
+        y="calc(100% - ${wheelRadius * 2 + verticalPadding}px)"
       />
     `;
 
     const brWheel = `
       <rect 
-        width="${30}" 
+        width="${wheelWidth}px" 
         height="${wheelRadius * 2}" 
-        x="${right}" 
-        y="${bottom - wheelRadius * 2}" 
+        x="calc(100% - ${wheelWidth + padding}px)" 
+        y="calc(100% - ${wheelRadius * 2 + verticalPadding}px)"
       />
     `;
 
@@ -291,8 +312,18 @@ class DifferentialDrivebase extends LitElement {
 
   firstUpdated() {
     let drawing = this.drawMotionVector(0, 0);
-    $(this.shadowRoot.getElementById('drivetrain')).html(this.drawDrivetrain(150, 200, 35));
+    $(this.shadowRoot.getElementById('drivetrain')).html(this.drawDrivetrain());
     $(this.shadowRoot.getElementById('forceVector')).html(drawing);
+
+    const resizeObserver = new ResizeObserver(() => {
+      let drawing = this.drawMotionVector(this.left, this.right);
+      $(this.shadowRoot.getElementById('forceVector')).html(drawing);
+      const svgNode = this.shadowRoot.getElementById('svg');
+      const rect = svgNode.getBoundingClientRect();
+      $(this.shadowRoot.getElementById('forceVector')).css('transform', `translate(${rect.width * .5}px, ${rect.height * .5}px)`);
+      $(this.shadowRoot.getElementById('drivetrain')).html(this.drawDrivetrain());
+    });
+    resizeObserver.observe(this);
   }
 
   updated() {
@@ -302,17 +333,8 @@ class DifferentialDrivebase extends LitElement {
     $(this.shadowRoot.getElementById('forceVector')).html(drawing);
   }
 
-  resized() {
-    let drawing = this.drawMotionVector(this.left, this.right);
-    $(this.shadowRoot.getElementById('forceVector')).html(drawing);
-    $(this.shadowRoot).find('table-axis').each(function() {
-      this.requestUpdate();
-    });
-  }
-
   render() {
     return html`
-      ${includeStyles()}
       <div class="diff-drive-container">
 
         <div class="speed">
@@ -321,7 +343,7 @@ class DifferentialDrivebase extends LitElement {
                 <div class="foreground" style="${this.getLeftForegroundStyle()}"></div>
             </div>
         </div>
-        <svg id="svg" width="250" height="250">
+        <svg id="svg">
             <g id="forceVector"></g>
             <g id="drivetrain" class="drivetrain"></g>
         </svg>
@@ -336,5 +358,3 @@ class DifferentialDrivebase extends LitElement {
     `;
   }
 }
-
-customElements.define('differential-drivebase', DifferentialDrivebase);

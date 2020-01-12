@@ -142,6 +142,13 @@ class TableAxis extends LitElement {
     }
   }
 
+  firstUpdated() {
+    const resizeObserver = new ResizeObserver(() => {
+      this.requestUpdate();
+    });
+    resizeObserver.observe(this);
+  }
+
   updated() {
     this.setAxis();
   }
