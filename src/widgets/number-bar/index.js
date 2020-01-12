@@ -1,16 +1,15 @@
-import './number-bar';
-import './number-bar-props';
-import image from './number-bar.png';
+const NumberBar = require('./number-bar');
+const NumberBarProps = require('./number-bar-props');
+const image = require('./number-bar.png');
 
 dashboard.registerWidget('number-bar', {
+  class: NumberBar,
   label: 'Number Bar',
   category: 'Basic',
   acceptedTypes: ['number'],
   image,
-  minX: 3,
-  minY: 2,
   properties: {
-    tag: 'number-bar-props',
+    class: NumberBarProps,
     defaults: {
       min: -1,
       max: 1,

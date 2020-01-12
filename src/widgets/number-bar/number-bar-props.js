@@ -1,7 +1,6 @@
-import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
+const { LitElement, html, css } = dashboard.lit;
 
-class NumberBarProps extends LitElement {
+module.exports = class NumberBarProps extends LitElement {
 
   static get styles() {
     return css`
@@ -48,7 +47,6 @@ class NumberBarProps extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <form>
         <div class="form-group row">
           <label for="min" class="col-sm-4 col-form-label text-right">Min</label>
@@ -121,5 +119,3 @@ class NumberBarProps extends LitElement {
     `;
   }
 }
-
-customElements.define('number-bar-props', NumberBarProps);

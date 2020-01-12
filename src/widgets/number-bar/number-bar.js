@@ -1,8 +1,7 @@
-import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../assets/js/render-utils';
-import { isNumber } from 'lodash';
+const { LitElement, html, css } = dashboard.lit;
+const { isNumber } = _;
 
-class NumberBar extends LitElement {
+module.exports = class NumberBar extends LitElement {
 
   static get properties() {
     return {
@@ -12,6 +11,11 @@ class NumberBar extends LitElement {
 
   static get styles() {
     return css`
+      
+      :host {
+        display: block;
+      }
+
       .number-bar-container {
         display: flex;
         flex-direction: column;
@@ -37,6 +41,8 @@ class NumberBar extends LitElement {
       }
 
       .text {
+        text-align: center;
+        font-weight: bold;
         font-size: 15px;
         line-height: 18px;
         position: relative;
@@ -103,7 +109,6 @@ class NumberBar extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <div class="number-bar-container">
         <div class="number-bar">
           <div ref="bar" class="bar">
@@ -123,5 +128,3 @@ class NumberBar extends LitElement {
     `;
   }
 }
-
-customElements.define('number-bar', NumberBar);
