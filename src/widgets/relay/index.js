@@ -1,11 +1,10 @@
-import './relay';
-import image from './relay.png';
+const RelayWidget = require('./relay');
+const image = require('./relay.png');
 
 dashboard.registerWidget('relay-widget', {
+  class: RelayWidget,
   label: 'Relay',
   category: 'Basic',
   acceptedTypes: ['Relay'],
-  image,
-  minX: 2,
-  minY: 4,
+  image
 });
