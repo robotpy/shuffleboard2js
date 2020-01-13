@@ -1,11 +1,10 @@
-import './toggle-switch.tag';
-import image from './toggle-switch.png';
+const ToggleSwitch = require('./toggle-switch');
+const image = require('./toggle-switch.png');
 
 dashboard.registerWidget('toggle-switch', {
+  class: ToggleSwitch,
   label: 'Toggle Switch',
   category: 'Basic',
   acceptedTypes: ['boolean'],
-  image,
-  minX: 2,
-  minY: 2
+  image
 });
