@@ -28,14 +28,7 @@ module.exports = class TextView extends LitElement {
       }
     `;
   }
-
-  constructor() {
-    super();
-    this.type = 'text';
-    this.value = '';
-    this.lastTableValue = '';
-  }
-
+  
   getInputType() {
     return (typeof this.table === 'number') ? 'number' : 'text';
   }
