@@ -40,19 +40,6 @@
       window.NetworkTables = require(`${__dirname}/../networktables/networktables.js`);
     </script>
 
-    <script>
-      // https://codepen.io/Momciloo/pen/bpyMbB
-      $.fn.textWidth = function(text, font) {  
-        if (!$.fn.textWidth.fakeEl) {
-          $.fn.textWidth.fakeEl = $('<span class="fake-text-width">').hide().appendTo(document.body);
-        } 
-        var fakeElText = text || this.val() || this.text() || this.attr('placeholder');
-        $.fn.textWidth.fakeEl.text(fakeElText).css('font', font || this.css('font'));
-        
-        return $.fn.textWidth.fakeEl.width();
-      };    
-    </script>
-
     <app></app>
 
   </body>

@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { readFileSync, existsSync, watch } from 'fs';
+import { join } from 'path';
 import store from '../store';
 import { connect } from 'pwa-helpers';
 import { dirname } from 'path';
@@ -77,13 +78,19 @@ class RobotDashboards extends connect(store)(LitElement) {
       if (dashboard.storage.hasDashboardPath()) {
         const dashboardPath = dashboard.storage.getDashboardPath();
 
-        watch(dirname(dashboardPath), function (event, filename) {
+        watch(dirname(dashboardPath), { recursive: true }, function (event, filename) {
           if (filename) {
             window.location.reload();
           }
         });
 
+        //console.log('__dirname', process.cwd())
+        watch(join(process.cwd(), './widgets'), { recursive: true }, function (event, filename) {
+          window.location.reload();
+        });
+
         window.require(dashboardPath);
+        window.require('../widgets');
         this.dashboardConfig = this.getSavedDashboardConfig();
       }
     }
