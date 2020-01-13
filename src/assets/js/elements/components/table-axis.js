@@ -44,7 +44,7 @@ class TableAxis extends LitElement {
 
   setAxis() {
     let size = this.vertical ? $(this).height() : $(this).width();
-    let tickSpacing = size / (this.ticks - 1);
+    let tickSpacing = size / Math.max(1, this.ticks - 1);
     const width = this.range ? 30 : 10;
     const showNums = this.range && this.range.length === 2;
     const min = showNums ? this.range[0] : 0;
