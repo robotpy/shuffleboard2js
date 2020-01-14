@@ -4,7 +4,6 @@ import { join } from 'path';
 import store from '../redux/store';
 import { connect } from 'pwa-helpers';
 import { dirname } from 'path';
-import { without } from 'lodash';
 import './no-dashboard';
 import './widget-props-modal';
 const dialog = require('electron').remote.dialog;
@@ -29,6 +28,21 @@ class RobotDashboards extends connect(store)(LitElement) {
 
       robot-dashboard {
         display: block;
+      }
+
+      .selected-widget-rect {
+        display: none;
+      }
+
+      .selected-widget-rect.show {
+        display: block;
+        position: absolute;
+        left: var(--selected-widget-rect-left);
+        top: var(--selected-widget-rect-top);;
+        width: var(--selected-widget-rect-width);;
+        height: var(--selected-widget-rect-height);
+        border: 2px dashed cornflowerblue;
+        pointer-events: none;
       }
     `;
   }
@@ -168,57 +182,22 @@ class RobotDashboards extends connect(store)(LitElement) {
         for (let widget in this.widgets) {
           if (this.isPointInWidget(this.pageX, this.pageY, 0, widget)) {
             this.selectedWidget = widget;
+            this.setSelectedWidgetRect();
             break;
           }
         }
       }
-      else if (!this.isPointInWidget(ev.pageX, ev.pageY) && !this.isContextMenuOpened()) {
+      else if (!this.isPointInWidget(ev.pageX, ev.pageY)) {
         this.selectedWidget = null;
       }
     });
-
-    this.setupContextMenuRenderer();
-  }
-
-  setupContextMenuRenderer() {
-    const contextMenuNode = this.shadowRoot.getElementById('context-menu');
-    contextMenuNode.renderer = (root) => {
-      let listBox = root.firstElementChild;
-      // Check if there is a list-box generated with the previous renderer call to update its content instead of recreation
-      if (listBox) {
-        listBox.innerHTML = '';
-      } else {
-        listBox = window.document.createElement('vaadin-list-box');
-        root.appendChild(listBox);
-      }
-
-      const item = window.document.createElement('vaadin-item');
-      item.textContent = 'Properties';
-      item.addEventListener('click', () => {
-        this.openPropertiesModal();
-      });
-      listBox.appendChild(item);
-    };
   }
 
   dashboardExists() {
     return typeof customElements.get('robot-dashboard') !== 'undefined';
   }
 
-  setupExistingWidgets() {
-    if (this.dashboardNode) {
-      const widgetTypes = this.getWidgetTypes();
-      const newWidgetTypes = without(widgetTypes, ...this.oldWidgetTypes);
-      newWidgetTypes.forEach(widgetType => {
-        const widgets = this.dashboardNode.querySelectorAll(widgetType);
-        //widgets.forEach(widget => this.setupWidget(widget, widgetType));
-      });
-      this.oldWidgetTypes = widgetTypes;
-    }
-  }
-
   stateChanged() {
-    this.setupExistingWidgets();
     for (let widget in this.widgets) {
       this.updateWidgetTable(widget);
     }
@@ -241,80 +220,35 @@ class RobotDashboards extends connect(store)(LitElement) {
     );
   }
 
-  renderSelectedWidgetRect() {
+  setSelectedWidgetRect() {
     const widgetNode = this.widgets[this.selectedWidget];
     
     if (!widgetNode) {
-      return html``;
+      return;
     }
 
     const margin = 10;
-    const left = widgetNode.offsetLeft - margin;
-    const top = widgetNode.offsetTop - margin;
-    const width = widgetNode.offsetWidth + margin * 2;
-    const height = widgetNode.offsetHeight + margin * 2;
+    const rectNode = this.shadowRoot.querySelector('.selected-widget-rect');
 
-    return html`
-      <style>
-        .selected-widget-rect {
-          position: absolute;
-          left: ${left}px;
-          top: ${top}px;
-          width: ${width}px;
-          height: ${height}px;
-          border: 2px dashed cornflowerblue;
-          pointer-events: none;
-        }
-      </style>
-      <div class="selected-widget-rect"></div>
-    `
-  }
+    rectNode.style.setProperty(
+      '--selected-widget-rect-left', 
+      `${widgetNode.offsetLeft - margin}px`
+    );
 
-  onContextMenu(ev) {
-    var event = new Event('dashboardContextMenu');
-    event.clientX = ev.clientX;
-    event.clientY = ev.clientY;
+    rectNode.style.setProperty(
+      '--selected-widget-rect-top', 
+      `${widgetNode.offsetTop - margin}px`
+    );
 
-    const widgetType = this.getSelectedWidgetType();
+    rectNode.style.setProperty(
+      '--selected-widget-rect-width', 
+      `${widgetNode.offsetWidth + margin * 2}px`
+    );
 
-    if (this.selectedWidget && customElements.get(`${widgetType}-props`)) {
-      const contextMenuNode = this.shadowRoot.getElementById('context-menu');
-      contextMenuNode.dispatchEvent(event);
-    }
-  }
-
-  onContextMenuOpenChanged(ev) {
-    const opened = ev.detail.value;
-    if (!opened) {
-      if (!this.isPointInWidget(this.pageX, this.pageY)) {
-        this.selectedWidget = null;
-      }
-    }
-  }
-
-  isContextMenuOpened() {
-    const contextMenuNode = this.shadowRoot.getElementById('context-menu');
-    return contextMenuNode.opened;
-  }
-
-  async openPropertiesModal() {
-    const widgetNode = this.widgets[this.selectedWidget];
-    const widgetType = this.getSelectedWidgetType();
-    const propsNodeName = `${widgetType}-props`;
-    const propsNode = window.document.createElement(propsNodeName);
-    propsNode.widgetProps = widgetNode.widgetProps;
-
-    const propertiesModalNode = window.document.createElement('widget-props-modal');
-
-    propertiesModalNode.appendChild(propsNode)
-    this.shadowRoot.appendChild(propertiesModalNode);
-    await propertiesModalNode.updateComplete;
-    propertiesModalNode.open();
-  }
-
-  closePropertiesModal() {
-    const propertiesModalNode = this.shadowRoot.getElementById('properties-modal');
-    propertiesModalNode.close();
+    rectNode.style.setProperty(
+      '--selected-widget-rect-height', 
+      `${widgetNode.offsetHeight + margin * 2}px`
+    );
   }
 
   isAcceptedType(ntTypes, widgetType = this.getSelectedWidgetType()) {
@@ -368,19 +302,12 @@ class RobotDashboards extends connect(store)(LitElement) {
 
   render() {
     return html`
-      <vaadin-context-menu 
-        @contextmenu="${this.onContextMenu}" 
-        @opened-changed="${this.onContextMenuOpenChanged}"
-        open-on="dashboardContextMenu" 
-        id="context-menu"
-      >
-        ${this.dashboardExists() ? html`
-          <robot-dashboard></robot-dashboard>
-        ` : html`
-          <no-dashboard></no-dashboard>
-        `}
-        ${this.selectedWidget ? this.renderSelectedWidgetRect() : ''}
-      </vaadin-context-menu>
+      ${this.dashboardExists() ? html`
+        <robot-dashboard></robot-dashboard>
+      ` : html`
+        <no-dashboard></no-dashboard>
+      `}
+      <div class="selected-widget-rect ${this.selectedWidget ? 'show' : ''}"></div>
     `;
   }
 }
