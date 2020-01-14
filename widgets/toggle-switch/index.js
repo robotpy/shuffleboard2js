@@ -95,24 +95,22 @@ class ToggleSwitch extends LitElement {
     resizeObserver.observe(this);
   }
 
-  onChange(ev) {
-    const checked = ev.target.checked;
-
+  onClick() {
     if (typeof this.table === 'boolean') {
-      NetworkTables.putValue(this.ntRoot, checked);
+      NetworkTables.putValue(this.ntRoot, !this.checked);
     }
     else {
-      this.checked = checked;
+      this.checked = !this.checked;
     }
   }
 
   render() {
     return html`   
-      <label class="switch">
+      <label class="switch" @click="${this.onClick}">
         <input 
           type="checkbox" 
           .checked="${this.checked}" 
-          @change="${this.onChange}"
+          disabled
         />
         <span part="switch"></span>
       </label>
