@@ -51,7 +51,12 @@ class DashboardApp extends LitElement {
     });
   }
 
-  onNtSourceAdded(ev) {
+  onNtSourceDrag() {
+    const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
+    dashboardsNode.sourceBeingAdded = true;
+  }
+
+  onNtSourceAdd(ev) {
     const { ntKey, ntType } = ev.detail;
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
     const success = dashboardsNode.setNtRoot(ntKey);
@@ -69,6 +74,8 @@ class DashboardApp extends LitElement {
     else {
       dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget at that position can be found.`);
     }
+
+    dashboardsNode.sourceBeingAdded = false;
   }
 
   async saveLayout(widgetJson) {
@@ -88,7 +95,10 @@ class DashboardApp extends LitElement {
     return html`
       <networktables-settings-modal></networktables-settings-modal>
       <vaadin-split-layout>
-        <side-panel @ntSourceAdded="${this.onNtSourceAdded}"></side-panel>
+        <side-panel 
+          @ntSourceAdd="${this.onNtSourceAdd}"
+          @ntSourceDrag="${this.onNtSourceDrag}"
+        ></side-panel>
         <robot-dashboards></robot-dashboards>
       </vaadin-split-layout>
     `;

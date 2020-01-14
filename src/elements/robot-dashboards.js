@@ -61,6 +61,7 @@ class RobotDashboards extends connect(store)(LitElement) {
     this.dashboardNode = null;
     this.widgets = {};
     this.selectedWidget = null;
+    this.sourceBeingAdded = false;
     this.pageX = 0;
     this.pageY = 0;
   }
@@ -307,7 +308,10 @@ class RobotDashboards extends connect(store)(LitElement) {
       ` : html`
         <no-dashboard></no-dashboard>
       `}
-      <div class="selected-widget-rect ${this.selectedWidget ? 'show' : ''}"></div>
+      <div 
+        class="selected-widget-rect ${this.selectedWidget && this.sourceBeingAdded ? 'show' : ''}"
+      >
+      </div>
     `;
   }
 }

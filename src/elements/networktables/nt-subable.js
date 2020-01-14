@@ -45,6 +45,13 @@ class NtSubtable extends LitElement {
   addDragImage(ev) {
     ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.setDragImage(this.dragImg, 0, 0);
+
+    const event = new CustomEvent('ntSourceDrag', {
+      bubbles: true,
+      composed: true
+    });
+
+    this.dispatchEvent(event);
   }
 
   addNtSource(ev, ntKey) {
@@ -52,7 +59,7 @@ class NtSubtable extends LitElement {
     const ntTypes = getTypes(ntKey);
     const ntType = first(ntTypes);
 
-    const event = new CustomEvent('ntSourceAdded', {
+    const event = new CustomEvent('ntSourceAdd', {
       bubbles: true,
       composed: true, 
       detail: {
