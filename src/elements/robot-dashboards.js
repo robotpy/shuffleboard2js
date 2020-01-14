@@ -1,16 +1,12 @@
 import { LitElement, html, css } from 'lit-element';
 import { readFileSync, existsSync, watch } from 'fs';
 import { join } from 'path';
-import store from '../redux/store';
-import { connect } from 'pwa-helpers';
 import { dirname } from 'path';
 import './no-dashboard';
 import './widget-props-modal';
 const dialog = require('electron').remote.dialog;
-import { getSubtable, getTypes } from '../networktables';
 
-
-class RobotDashboards extends connect(store)(LitElement) {
+class RobotDashboards extends LitElement {
 
   static get styles() {
     return css`
@@ -198,12 +194,6 @@ class RobotDashboards extends connect(store)(LitElement) {
     return typeof customElements.get('robot-dashboard') !== 'undefined';
   }
 
-  stateChanged() {
-    for (let widget in this.widgets) {
-      this.updateWidgetTable(widget);
-    }
-  }
-
   isPointInWidget(x, y, margin = 10, widget = this.selectedWidget) {
     const widgetNode = this.widgets[widget];
 
@@ -252,53 +242,20 @@ class RobotDashboards extends connect(store)(LitElement) {
     );
   }
 
-  isAcceptedType(ntTypes, widgetType = this.getSelectedWidgetType()) {
-    let widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
+  setNtRoot(ntRoot) {
+    const widgetNode = this.widgets[this.selectedWidget];
 
-    if (!widgetConfig) {
+    if (!widgetNode) {
       return false;
     }
 
-    for (let i = 0; i < ntTypes.length; i++) {
-      if (widgetConfig.acceptedTypes.indexOf(ntTypes[i]) > -1) {
-        return true;
-      }
+    try {
+      widgetNode.ntRoot = ntRoot;
+    } catch(e) {
+      return false;
     }
 
-    return false;
-  }
-
-  updateWidgetTable(widget) {
-
-    const widgetNode = this.widgets[widget];
-    const { ntRoot } = widgetNode;
-    const ntTypes = getTypes(ntRoot);
-    const widgetType = widgetNode.nodeName.toLowerCase();
-    const isAcceptedType = this.isAcceptedType(ntTypes, widgetType);
-    
-    if (isAcceptedType) {
-      const prevTable = widgetNode.table;
-      let ntValue = isAcceptedType ? getSubtable(ntRoot) : {};
-      widgetNode.table = ntValue;
-      widgetNode.requestUpdate('table', prevTable);      
-      return true;
-    }
-  }
-
-  // If ignoreType is true, set even if the type is not one of the accepted types.
-  // This is useful for saved widgets that have ntRoots that haven't been set yet.
-  setNtRoot(ntRoot, ignoreType = false, widget = this.selectedWidget) {
-    let ntTypes = getTypes(ntRoot);
-    if (ignoreType || this.isAcceptedType(ntTypes)) {
-      const widgetNode = this.widgets[widget];
-      const prevNtRoot = widgetNode.ntRoot;
-      widgetNode.ntRoot = ntRoot;     
-      widgetNode.requestUpdate('ntRoot', prevNtRoot);
-      this.updateWidgetTable(widget);
-      return true;
-    }
-
-    return false;
+    return true;
   }
 
   render() {

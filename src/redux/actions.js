@@ -2,47 +2,36 @@ import * as ActionTypes from "./action-types";
 
 export function registerWidget(widgetType, config = {}) {
 
-  const isCustomElement = !!customElements.get(widgetType);
-
-  if (isCustomElement) {
-    const widget = customElements.get(widgetType);
-    if (widget.properties === undefined)
-      widget.properties = {};
-    
-    widget.properties.table = { type: Object };
-    widget.properties.widgetProps = { type: Object }; 
-    widget.properties.ntRoot = { type: String };
+  if (!config.class) {
+    return;
   }
 
+  const widgetProperties = config.class.properties || {};
 
-  config.properties = {
-    class: null,
-    defaults: {},
-    ...config.properties
-  };
-
-  if (config.properties.class) {
-    customElements.define(`${widgetType}-props`, config.properties.class);
-  }
+  Object.defineProperty(config.class, 'properties', {
+    get() {
+      return {
+        ...widgetProperties,
+        table: { type: Object, attribute: false },
+        ntRoot: { type: String, attribute: 'nt-root', reflect: true }
+      }
+    }
+  });
 
   config = { 
     class: null,
     label: widgetType,
     category: 'Unknown',
     acceptedTypes: [],
-    defaultsFor: [],
     image: '',
-    isCustomElement,
     ...config
   };
 
   // Make this happen after the action is dispatched
   // TODO: Find a better way to do this. maybe thunks?
-  if (config.class) {
-    setTimeout(() => {
-      customElements.define(widgetType, config.class);
-    });
-  }
+  setTimeout(() => {
+    customElements.define(widgetType, config.class);
+  });
 
   return {
     type: ActionTypes.REGISTER_WIDGET,

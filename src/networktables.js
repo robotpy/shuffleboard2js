@@ -47,7 +47,6 @@ export default class NetworkTablesWrapper {
   }
 } 
 
-
 export function getSubtable(root) {
   let rawValues = dashboard.store.getState().networktables.rawValues;
 
@@ -62,6 +61,10 @@ export function getSubtable(root) {
       return false;
     }
   });
+
+  if (ntKeys.length === 0) {
+    return null;
+  }
 
   if (ntKeys.length === 1) {
     return rawValues[ntKeys];
@@ -118,33 +121,6 @@ export function getTypes(key) {
 
   // Nothing in subtable, so return empty array of types
   return [];
-}
-
-export function getDefaultWidgetConfig(ntType) {
-  let widgetConfigs = dashboard.store.getState().widgets.registered;
-
-  for (let type in widgetConfigs) {
-    const config = widgetConfigs[type];
-    if (config.defaultsFor.indexOf(ntType) > -1) {
-      return {
-        type,
-        ...config
-      };
-    }
-  }
-
-  // Otherwise look for any widget that does ntType as an accepted type
-  for (let type in widgetConfigs) {
-    const config = widgetConfigs[type];
-    if (config.acceptedTypes.indexOf(ntType) > -1) {
-      return {
-        type,
-        ...config
-      };
-    }
-  }
-
-  return null;
 }
 
 function isCameraSource(key) {

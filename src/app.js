@@ -1,4 +1,5 @@
 import './elements/components';
+import Widget from './elements/widget';
 import store from "./redux/store";
 import riot from 'riot';
 import NetworkTablesWrapper from './networktables';
@@ -8,10 +9,8 @@ import toastr from 'toastr';
 import * as CurvedArrow from './curved-arrow';
 import * as storage from './storage';
 import * as Lit from 'lit-element';
-import ObservableSlim from 'observable-slim';
 require('./require-extensions');
 require('./menu');
-
 
 window.dashboard = {
   store,
@@ -25,29 +24,8 @@ window.dashboard = {
   storage,
   lit: {
     ...Lit,
-    LitElement: class ExtendedLitElement extends Lit.LitElement {
-
-      constructor() {
-        super();
-        this._oldWidgetProps = {};
-
-        const widgetConfig = dashboard.store.getState().widgets.registered[this.nodeName.toLowerCase()];
-        if (widgetConfig) {
-          this.table = {};
-          this.widgetProps = ObservableSlim.create({...widgetConfig.properties.defaults}, false, () => {
-            this.requestUpdate('widgetProps', this._oldWidgetProps);
-            this._oldWidgetProps = { ...this.widgetProps };
-          });
-          dashboard.events.trigger('widgetAdded', this);
-        }
-      }
-
-      resized() {}
-    }
+    LitElement: Widget
   }
 };
 
-
-const ntWrapper = new NetworkTablesWrapper(store);
-
-
+new NetworkTablesWrapper(store);
