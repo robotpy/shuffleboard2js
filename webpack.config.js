@@ -33,16 +33,11 @@ module.exports = (env = {}) => {
     },
     resolve: {
       alias: {
-        'assets': path.resolve(__dirname, "src/assets"),
-        'modules': path.resolve(__dirname, "src/modules")
+        'assets': path.resolve(__dirname, "src/assets")
       },
     },
     module: {
       rules: [
-        {
-          test: /\.worker\.js$/,
-          use: { loader: 'worker-loader' }
-        },
         {
           test: /\.tag$/,
           exclude: /node_modules/,

@@ -1,9 +1,7 @@
 import '../elements/side-panel';
 import '../elements/networktables-settings-modal';
 import '../elements/robot-dashboards';
-const dialog = require('electron').remote.dialog;
 import { writeFileSync } from 'fs';
-import '@vaadin/vaadin-split-layout';
 
 <app>
   <networktables-settings-modal ref="networkTablesModal">

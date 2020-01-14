@@ -191,15 +191,5 @@ dashboard.registerWidget('number-bar', {
   label: 'Number Bar',
   category: 'Basic',
   acceptedTypes: ['number'],
-  image: require('./number-bar.png'),
-  // properties: {
-  //   class: NumberBarProps,
-  //   defaults: {
-  //     min: -1,
-  //     max: 1,
-  //     center: 0,
-  //     showText: true,
-  //     numTickMarks: 5
-  //   }
-  // }
+  image: require('./number-bar.png')
 });

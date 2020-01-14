@@ -84,19 +84,18 @@ class RobotDashboards extends connect(store)(LitElement) {
           }
         });
 
-        //console.log('__dirname', process.cwd())
         watch(join(process.cwd(), './widgets'), { recursive: true }, function (event, filename) {
           window.location.reload();
         });
 
         window.require(dashboardPath);
-        window.require('../widgets');
         this.dashboardConfig = this.getSavedDashboardConfig();
       }
     }
     catch(e) {
       console.error('Error opening dashboard', e.message);
     }
+    window.require('../widgets');
   }
 
   async getSavedDashboardConfig() {
