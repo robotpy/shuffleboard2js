@@ -1,4 +1,4 @@
-import * as actions from './actions';
+import * as actions from './redux/actions';
 import _ from 'lodash';
 
 export default class NetworkTablesWrapper {

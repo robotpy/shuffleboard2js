@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs';
-import { basename, dirname } from 'path';
+import { dirname } from 'path';
 
 
 const getFileContent = (module, filename) => {

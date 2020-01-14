@@ -1,7 +1,6 @@
 import { LitElement, html } from 'lit-element';
-import { clearNetworkTables } from '../actions';
-import store from '../store';
-import { includeStyles } from '../render-utils';
+import { clearNetworkTables } from '../redux/actions';
+import store from '../redux/store';
 import './components/dashboard-modal';
 
 class NetworktablesSettingsModal extends LitElement {
@@ -48,7 +47,6 @@ class NetworktablesSettingsModal extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <dashboard-modal id="modal" title="NetworkTables Settings">
         <div class="modal-body">
           <form>

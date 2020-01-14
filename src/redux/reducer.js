@@ -1,4 +1,4 @@
-import * as ActionTypes from "../constants/action-types";
+import * as ActionTypes from "./action-types";
 import { set } from 'lodash';
 
 const initialState = {

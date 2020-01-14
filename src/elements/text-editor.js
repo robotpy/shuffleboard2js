@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../render-utils';
 import '@vaadin/vaadin-menu-bar';
 import '@vaadin/vaadin-icons';
 import '@vaadin/vaadin-lumo-styles';
@@ -10,8 +9,8 @@ window.CodeMirror = CodeMirror;
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
 require('codemirror-grammar-mode');
-require('../../../../vendor/codemirror-modes/google-javascript');
-require('../../../../vendor/codemirror-modes/google-html');
+require('../../vendor/codemirror-modes/google-javascript');
+require('../../vendor/codemirror-modes/google-html');
 require('codemirror/mode/css/css');
 
 
@@ -101,7 +100,7 @@ class TextEditor extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
+      <link type="text/css" rel="stylesheet" href="${getStylesheetPath('node_modules/codemirror/lib/codemirror.css')}">
       <div id="editor"></div>
     `;
   }

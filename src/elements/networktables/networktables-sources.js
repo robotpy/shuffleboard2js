@@ -1,8 +1,7 @@
 import { LitElement, html } from 'lit-element';
 import { ntStyles } from './networktables-styles';
-import store from '../../store';
+import store from '../../redux/store';
 import { connect } from 'pwa-helpers';
-import { includeStyles } from '../../render-utils';
 import './nt-subable';
 
 class NetworktablesSources extends connect(store)(LitElement) {
@@ -28,7 +27,6 @@ class NetworktablesSources extends connect(store)(LitElement) {
 
   render() {
     return html`
-      ${includeStyles()}
       <div class="table">
         <div class="table-row header">
           <span class="row-item key">Key</span>

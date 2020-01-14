@@ -1,10 +1,9 @@
 import { LitElement, html, css } from 'lit-element';
-import store from '../store';
+import store from '../redux/store';
 import { connect } from 'pwa-helpers';
-import { includeStyles } from '../render-utils';
-import { getSubtable, getTypes } from 'assets/js/networktables';
+import { getSubtable, getTypes } from '../networktables';
 import ObservableSlim from 'observable-slim';
-import '../elements/components/dashboard-modal';
+import './components/dashboard-modal';
 import { forEach } from 'lodash';
 
 class DashboardWidget extends connect(store)(LitElement) {
@@ -258,7 +257,6 @@ class DashboardWidget extends connect(store)(LitElement) {
 
   render() {
     return html`
-      ${includeStyles()}
       <div class="widget-type" id="widgetType" .tables="${this.ntValue}"></div>
       
       <dashboard-modal id="propertiesModal" title="Properties">

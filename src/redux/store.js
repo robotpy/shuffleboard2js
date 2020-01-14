@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from "redux";
-import rootReducer from "../reducers/index"; 
-import * as ActionTypes from "../constants/action-types";
+import rootReducer from "./reducer"; 
+import * as ActionTypes from "./action-types";
 
 const fireEventsMiddleware = store => next => action => {
 

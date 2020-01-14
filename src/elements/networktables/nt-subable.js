@@ -2,8 +2,7 @@ import { LitElement, html } from 'lit-element';
 import { ntStyles, ntSubtableStyles } from './networktables-styles';
 import { range, isPlainObject, isArray, map, first } from 'lodash';
 import fileImage from 'open-iconic/png/file-8x.png';
-import { includeStyles } from '../../render-utils';
-import { getTypes } from 'assets/js/networktables';
+import { getTypes } from '../../networktables';
 
 class NtSubtable extends LitElement {
 
@@ -83,7 +82,6 @@ class NtSubtable extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <div class="wrapper ${this.expanded ? 'expanded' : 'collapsed'}">
         <div 
           class="table-row subtable-header" 
@@ -96,8 +94,8 @@ class NtSubtable extends LitElement {
               <span class="level-space"></span>
             `)}
             <span class="caret" @click="${this.toggleExpand}">
-              <span class="oi oi-caret-right"></span>
-              <span class="oi oi-caret-bottom"></span>
+              <iron-icon icon="vaadin:caret-right"></iron-icon>
+              <iron-icon icon="vaadin:caret-down"></iron-icon>
             </span>
             ${this.keyLabel}
           </span>

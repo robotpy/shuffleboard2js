@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
 import fileImage from 'open-iconic/png/file-8x.png';
-import { includeStyles } from '../render-utils';
 
 class WidgetMenuItem extends LitElement {
 
@@ -58,7 +57,6 @@ class WidgetMenuItem extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <div @dragstart="${this.onDragStart}" @dragend="${this.onDragEnd}" draggable="true">
         <img src="${this.image || 'unknown'}" draggable="false" />
       </div>

@@ -1,9 +1,8 @@
 import { LitElement, html, css } from 'lit-element';
-import store from '../store';
+import store from '../redux/store';
 import { connect } from 'pwa-helpers';
-import { includeStyles } from '../render-utils';
 import { map } from 'lodash';
-import '../elements/widget-menu-item';
+import './widget-menu-item';
 import '@vaadin/vaadin-accordion';
 
 class WidgetMenu extends connect(store)(LitElement) {
@@ -52,7 +51,6 @@ class WidgetMenu extends connect(store)(LitElement) {
 
   render() {
     return html`
-      ${includeStyles()}
       <vaadin-accordion>
         ${this.categories.map(category => html`
           <vaadin-accordion-panel>

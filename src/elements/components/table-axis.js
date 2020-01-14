@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { includeStyles } from '../../render-utils';
 
 class TableAxis extends LitElement {
 
@@ -155,7 +154,6 @@ class TableAxis extends LitElement {
 
   render() {
     return html`
-      ${includeStyles()}
       <svg id="svg"></svg>
     `;
   }

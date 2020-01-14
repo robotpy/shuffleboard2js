@@ -1,14 +1,14 @@
 import { LitElement, html, css } from 'lit-element';
 import { readFileSync, existsSync, watch } from 'fs';
 import { join } from 'path';
-import store from '../store';
+import store from '../redux/store';
 import { connect } from 'pwa-helpers';
 import { dirname } from 'path';
 import { without } from 'lodash';
 import './no-dashboard';
 import './widget-props-modal';
 const dialog = require('electron').remote.dialog;
-import { getSubtable, getTypes } from 'assets/js/networktables';
+import { getSubtable, getTypes } from '../networktables';
 
 
 class RobotDashboards extends connect(store)(LitElement) {

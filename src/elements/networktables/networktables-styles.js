@@ -59,18 +59,20 @@ export const ntSubtableStyles = css`
     display: none;
   }
 
-  .wrapper > .subtable-header .caret .oi {
+  .wrapper > .subtable-header .caret [icon] {
     cursor: pointer;
     font-size: 12px;
     display: none;
   }
 
-  .wrapper.expanded > .subtable-header .caret .oi-caret-bottom {
+  .wrapper.expanded > .subtable-header .caret [icon$="caret-down"] {
     display: inline-block;
+    width: 17px;
   }
 
-  .wrapper.collapsed > .subtable-header .caret .oi-caret-right {
+  .wrapper.collapsed > .subtable-header .caret [icon$="caret-right"] {
     display: inline-block;
+    width: 17px;
   }
 
   .row-item.array {

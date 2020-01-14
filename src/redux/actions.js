@@ -1,7 +1,4 @@
-import * as ActionTypes from "../constants/action-types";
-import pathModule from 'path';
-import { get } from 'lodash';
-
+import * as ActionTypes from "./action-types";
 
 export function registerWidget(widgetType, config = {}) {
 

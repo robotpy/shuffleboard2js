@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
+      <style>
+        body {
+          font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+          font-size: 1rem;
+          font-weight: 400;
+          line-height: 1.5;
+        }  
+      </style>
+
       <script>
         function addVendorScript(path) {
           const script = document.createElement('script');
@@ -20,17 +29,11 @@
           return `${__dirname}/../${stylesheet}`;
         }
 
-        addStyleSheet('vendor/bootstrap.min.css');
-        addStyleSheet('vendor/select2.min.css');
+    
         addStyleSheet('node_modules/toastr/build/toastr.css');
-        addStyleSheet('node_modules/open-iconic/font/css/open-iconic-bootstrap.css');
-        addStyleSheet('vendor/select2-bootstrap4.min.css');
         addVendorScript('riot.min.js');
         window.riot = require(`${__dirname}/../vendor/riot.min.js`);
         window.$ = window.jQuery = require(`${__dirname}/../vendor/jquery-3.3.1.min.js`);
-        addVendorScript('popper.min.js');
-        addVendorScript('bootstrap.min.js');
-        addVendorScript('select2.min.js');
         addVendorScript('d3.v4.min.js');
       </script>
   </head>

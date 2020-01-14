@@ -1,18 +1,16 @@
-import './assets/js/elements/components';
-import { includeStyles } from './assets/js/render-utils';
-import store from "assets/js/store/index";
+import './elements/components';
+import store from "./redux/store";
 import riot from 'riot';
-import NetworkTablesWrapper from './assets/js/networktables';
-import './assets/js/elements/dashboard-app';
-import * as actions from  './assets/js/actions';
-import 'assets/scss/app.scss';
+import NetworkTablesWrapper from './networktables';
+import './elements/dashboard-app';
+import * as actions from  './redux/actions';
 import toastr from 'toastr';
-import * as CurvedArrow from 'assets/js/curved-arrow';
-import * as storage from 'assets/js/storage';
+import * as CurvedArrow from './curved-arrow';
+import * as storage from './storage';
 import * as Lit from 'lit-element';
 import ObservableSlim from 'observable-slim';
-require('assets/js/require-extensions');
-require('assets/js/menu');
+require('./require-extensions');
+require('./menu');
 
 
 window.dashboard = {
@@ -45,8 +43,7 @@ window.dashboard = {
       }
 
       resized() {}
-    },
-    includeStyles
+    }
   }
 };
 
