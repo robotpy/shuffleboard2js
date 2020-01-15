@@ -1,4 +1,5 @@
 import { join, dirname } from 'path';
+import { get } from 'lodash';
 
 export const getRobotIp = () => {
   return localStorage.robotIp || 'localhost';
@@ -22,6 +23,20 @@ export const setDashboardPath = (path) => {
 
 export const getDashboardConfigPath = () => {
   return join(dirname(getDashboardPath()), 'dashboard-config.json');
+};
+
+export const setDashboardConfig = (config) => {
+  localStorage.dashboardConfig = JSON.stringify(config);
+};
+
+export const getWidgetSource = (widgetId) => {
+  try {
+    const config = JSON.parse(localStorage.dashboardConfig);
+    return get(config, `widgetSources["${widgetId}"]`, null);
+  }
+  catch(e) {
+    return null;
+  }
 };
 
 export const getDefaultWidgetFolder = () => {

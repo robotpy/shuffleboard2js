@@ -36,8 +36,7 @@ class DashboardApp extends LitElement {
     const ntModalNode = this.shadowRoot.querySelector('networktables-settings-modal');
 
     dashboard.events.on('fileMenuSave', () => {
-      let dashboardConfig = dashboardsNode.dashboardConfig;
-      this.saveLayout(dashboardConfig);
+      dashboardsNode.saveDashboardConfig();
     });
 
     dashboard.events.on('fileMenuLoad', () => {
@@ -76,19 +75,6 @@ class DashboardApp extends LitElement {
     }
 
     dashboardsNode.sourceBeingAdded = false;
-  }
-
-  async saveLayout(widgetJson) {
-
-    const configPath = dashboard.storage.getDashboardConfigPath();
-
-    try {
-      writeFileSync(configPath, JSON.stringify(widgetJson), 'utf-8');
-      dashboard.toastr.success(`Layout saved to ${configPath}`); 
-    }
-    catch(e) {
-      dashboard.toastr.error(`Failed to save layout: ${e.message}`);
-    }
   }
 
   render() {

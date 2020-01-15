@@ -4,6 +4,13 @@ import { isNull } from 'lodash';
 import { connect } from 'pwa-helpers';
 import { getSubtable, getTypes } from '../networktables';
 
+class UnexpectedType extends Error {
+  constructor(message = "", ...args) {
+    super(message, ...args);
+    this.name = 'UnexpectedType';
+  }
+}
+
 export default class Widget extends connect(store)(LitElement) {
 
   constructor() {
@@ -13,15 +20,16 @@ export default class Widget extends connect(store)(LitElement) {
       return;
     }
 
-    this.table = {};
-    this.ntRoot = null;
-    dashboard.events.trigger('widgetAdded', this);
-
     Object.defineProperty(this, 'ntRoot', {
       get() {
         return this._ntRoot;
       },
       set(value) {
+
+        if (isNull(value)) {
+          return;
+        }
+
         const oldValue = this._ntRoot;
         const subtable = getSubtable(value);
         if (isNull(subtable)) {
@@ -30,7 +38,8 @@ export default class Widget extends connect(store)(LitElement) {
           this.table = {};
         } else {          
           if (!this.isAcceptedType(getTypes(value))) {
-            throw new Error('Unexpected type');
+            const widgetId = this.getAttribute('widget-id');
+            throw new UnexpectedType(`Unexpected type for widget with widget-id '${widgetId}'`);
           }
           this._ntRoot = value;     
           this.requestUpdate('ntRoot', oldValue);
@@ -38,6 +47,20 @@ export default class Widget extends connect(store)(LitElement) {
         }
       }
     });
+
+    this.table = {};
+    this.ntRoot = null;
+    dashboard.events.trigger('widgetAdded', this);
+    this.setInitialNtRoot();
+  }
+
+  async setInitialNtRoot() {
+    await this.updateComplete;
+    const widgetId = this.getAttribute('widget-id');
+    const source = dashboard.storage.getWidgetSource(widgetId);
+    if (source) {
+      this.ntRoot = source;
+    }
   }
 
   isAcceptedType(ntTypes) {

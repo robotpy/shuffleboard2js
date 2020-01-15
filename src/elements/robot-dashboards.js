@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import { readFileSync, existsSync, watch } from 'fs';
+import { readFileSync, writeFileSync, existsSync, watch } from 'fs';
 import { join } from 'path';
 import { dirname } from 'path';
 import './no-dashboard';
@@ -34,8 +34,8 @@ class RobotDashboards extends LitElement {
         display: block;
         position: absolute;
         left: var(--selected-widget-rect-left);
-        top: var(--selected-widget-rect-top);;
-        width: var(--selected-widget-rect-width);;
+        top: var(--selected-widget-rect-top);
+        width: var(--selected-widget-rect-width);
         height: var(--selected-widget-rect-height);
         border: 2px dashed cornflowerblue;
         pointer-events: none;
@@ -45,14 +45,12 @@ class RobotDashboards extends LitElement {
 
   static get properties() { 
     return {
-      dashboardConfig: { type: Object },
       selectedWidget: { type: String }
     }
   }
 
   constructor() {
     super();
-    this.dashboardConfig = {};
     this.oldWidgetTypes = [];
     this.dashboardNode = null;
     this.widgets = {};
@@ -90,7 +88,7 @@ class RobotDashboards extends LitElement {
         const dashboardPath = dashboard.storage.getDashboardPath();
 
         watch(dirname(dashboardPath), { recursive: true }, function (event, filename) {
-          if (filename) {
+          if (filename && filename !== 'dashboard-config.json') {
             window.location.reload();
           }
         });
@@ -99,8 +97,12 @@ class RobotDashboards extends LitElement {
           window.location.reload();
         });
 
+        dashboard.storage.setDashboardConfig(
+          this.getSavedDashboardConfig()
+        );
+
         window.require(dashboardPath);
-        this.dashboardConfig = this.getSavedDashboardConfig();
+        this.requestUpdate();
       }
     }
     catch(e) {
@@ -109,7 +111,26 @@ class RobotDashboards extends LitElement {
     window.require('../widgets');
   }
 
-  async getSavedDashboardConfig() {
+  async saveDashboardConfig() {
+    const config = {
+      widgetSources: {}
+    };
+
+    for (let widgetId in this.widgets) {
+      config.widgetSources[widgetId] = this.widgets[widgetId].ntRoot;
+    }
+
+    const configPath = dashboard.storage.getDashboardConfigPath();
+    try {
+      writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8');
+      dashboard.toastr.success(`Layout saved to ${configPath}`); 
+    }
+    catch(e) {
+      dashboard.toastr.error(`Failed to save layout: ${e.message}`);
+    }
+  }
+
+  getSavedDashboardConfig() {
 
     const configPath = dashboard.storage.getDashboardConfigPath();
 
