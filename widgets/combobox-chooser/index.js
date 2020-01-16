@@ -26,7 +26,7 @@ class ComboboxChooser extends LitElement {
   }
 
   onChange(ev) {
-    if (this.ntRoot) {
+    if (this.hasNtSource()) {
       const value = ev.detail.value;
       NetworkTables.putValue(this.ntRoot + 'selected', value);
     }

@@ -59,15 +59,15 @@ class BasicFmsInfo extends LitElement {
   }
 
   getMatchType() {
-    return this.hasSource() ? this.table.MatchType : '';
+    return this.hasNtSource() ? this.table.MatchType : '';
   }
 
   getMatchNumber() {
-    return this.hasSource() ? this.table.MatchNumber : 0;
+    return this.hasNtSource() ? this.table.MatchNumber : 0;
   }
 
   getEventName() {
-    return this.hasSource() ? this.table.EventName : '';
+    return this.hasNtSource() ? this.table.EventName : '';
   }
 
   isEnabled() {

@@ -89,7 +89,7 @@ export default class Widget extends connect(store)(LitElement) {
     return this.isAcceptedType(isArray(this.ntTypes) ? this.ntTypes : []);
   }
 
-  hasSource() {
+  hasNtSource() {
     return !isNull(this.ntRoot) && typeof this.ntRoot !== 'undefined';
   }
 
