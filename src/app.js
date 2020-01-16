@@ -9,6 +9,7 @@ import toastr from 'toastr';
 import * as CurvedArrow from './curved-arrow';
 import * as storage from './storage';
 import * as Lit from 'lit-element';
+import * as mouse from './mouse';
 require('./require-extensions');
 require('./menu');
 
@@ -25,7 +26,8 @@ window.dashboard = {
   lit: {
     ...Lit,
     LitElement: Widget
-  }
+  },
+  mouse
 };
 
 new NetworkTablesWrapper(store);

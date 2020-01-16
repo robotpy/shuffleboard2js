@@ -45,7 +45,8 @@ class RobotDashboards extends LitElement {
 
   static get properties() { 
     return {
-      selectedWidget: { type: String }
+      selectedWidget: { type: String },
+      sourceBeingAdded: { type: Boolean }
     }
   }
 
@@ -56,8 +57,6 @@ class RobotDashboards extends LitElement {
     this.widgets = {};
     this.selectedWidget = null;
     this.sourceBeingAdded = false;
-    this.pageX = 0;
-    this.pageY = 0;
   }
 
   async openSavedDashboard() {
@@ -188,24 +187,19 @@ class RobotDashboards extends LitElement {
 
     $(window).on('mousemove drag', (ev) => {
 
-      // This happens when user stops dragging mouse
-      if (ev.pageX === 0 && ev.pageY === 0) {
-        return;
-      }
-
-      this.pageX = ev.pageX;
-      this.pageY = ev.pageY;
+      const x = dashboard.mouse.getPageX();
+      const y = dashboard.mouse.getPageY();
 
       if (!this.selectedWidget) {
         for (let widget in this.widgets) {
-          if (this.isPointInWidget(this.pageX, this.pageY, 0, widget)) {
+          if (this.isPointInWidget(x, y, 0, widget)) {
             this.selectedWidget = widget;
             this.setSelectedWidgetRect();
             break;
           }
         }
       }
-      else if (!this.isPointInWidget(ev.pageX, ev.pageY)) {
+      else if (!this.isPointInWidget(x, y)) {
         this.selectedWidget = null;
       }
     });
@@ -223,12 +217,12 @@ class RobotDashboards extends LitElement {
     }
 
     const { left, top, right, bottom } = widgetNode.getBoundingClientRect();
-
+    const { scrollY, scrollX } = window;
     return (
-      left - margin <= x &&
-      x <= right + margin &&
-      top -margin <= y &&
-      y <= bottom + margin
+      left - margin + scrollX <= x &&
+      x <= right + margin + scrollX &&
+      top -margin + scrollY <= y &&
+      y <= bottom + margin + scrollY
     );
   }
 
