@@ -46,3 +46,15 @@ export const getDefaultWidgetFolder = () => {
 export const setDefaultWidgetFolder = (path) => {
   localStorage.defaultWidgetFolder = path;
 };
+
+export const isEditModeOn = () => {
+  return localStorage.editModeOn !== 'false';
+};
+
+export const turnEditModeOn = () => {
+  localStorage.editModeOn = true;
+};
+
+export const turnEditModeOff = () => {
+  localStorage.editModeOn = false;
+};

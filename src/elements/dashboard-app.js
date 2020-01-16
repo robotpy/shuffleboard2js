@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import { isEditModeOn, turnEditModeOn, turnEditModeOff } from '../storage';
 import './side-panel';
 import './networktables-settings-modal';
 import './robot-dashboards';
@@ -28,8 +29,15 @@ class DashboardApp extends LitElement {
     `;
   }
 
+  static get properties() {
+    return {
+      showSidePanel: { type: Boolean }
+    };
+  }
+
   constructor() {
     super();
+    this.showSidePanel = isEditModeOn();
   }
 
   firstUpdated() {
@@ -41,7 +49,7 @@ class DashboardApp extends LitElement {
       dashboardsNode.saveDashboardConfig();
     });
 
-    dashboard.events.on('fileMenuLoad', () => {
+    dashboard.events.on('fileMenuOpen', () => {
       dashboardsNode.openSavedDashboard();
     });
 
@@ -49,6 +57,15 @@ class DashboardApp extends LitElement {
       const robotIp = dashboard.storage.getRobotIp();
       ntModalNode.robotIp = robotIp;
       ntModalNode.open();
+    });
+
+    dashboard.events.on('fileMenuEditMode', editModeOn => {
+      this.showSidePanel = editModeOn;
+      if (editModeOn) {
+        turnEditModeOn();
+      } else {
+        turnEditModeOff();
+      }
     });
 
     let observer = new MutationObserver(mutations => {
@@ -117,7 +134,7 @@ class DashboardApp extends LitElement {
   render() {
     return html`
       <networktables-settings-modal></networktables-settings-modal>
-      <mwc-drawer hasHeader type="dismissible" open>
+      <mwc-drawer hasHeader type="dismissible" ?open="${this.showSidePanel}">
         <span slot="header">
           <vaadin-tabs @selected-changed="${this.onTabSelection}">
             <vaadin-tab>Sources</vaadin-tab>
