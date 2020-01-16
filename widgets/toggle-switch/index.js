@@ -75,7 +75,7 @@ class ToggleSwitch extends LitElement {
   }
 
   updated() {
-    if (typeof this.table === 'boolean') {
+    if (this.isNtType('boolean')) {
       this.checked = this.table;
     }
   }
@@ -93,7 +93,7 @@ class ToggleSwitch extends LitElement {
   }
 
   onClick() {
-    if (typeof this.table === 'boolean') {
+    if (this.isNtType('boolean')) {
       NetworkTables.putValue(this.ntRoot, !this.checked);
     }
     else {

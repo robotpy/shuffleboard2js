@@ -85,7 +85,7 @@ class NumberSlider extends LitElement {
   }
 
   updated() {
-    if (typeof this.table === 'number')
+    if (this.isNtType('number'))
       this.value = this.table;
   }
 

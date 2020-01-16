@@ -37,7 +37,7 @@ class ToggleButton extends LitElement {
   }
 
   onClick() {
-    if (typeof this.table === 'boolean') {
+    if (this.isNtType('boolean')) {
       NetworkTables.putValue(this.ntRoot, !this.value);
     }
     else {

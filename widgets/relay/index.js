@@ -34,7 +34,7 @@ class RelayWidget extends LitElement {
   }
 
   setValue(value) {
-    if ('Value' in this.table) {
+    if (this.isNtType('Relay')) {
       NetworkTables.putValue(this.ntRoot + 'Value', value);
     }
     else {
@@ -43,7 +43,7 @@ class RelayWidget extends LitElement {
   }
 
   updated() {
-    if ('Value' in this.table) {
+    if (this.isNtType('Relay')) {
       this.value = this.table.Value;
     }
   }

@@ -108,7 +108,7 @@ class GaugeWidget extends LitElement {
       this.gaugeInit();
     }
 
-    if (this.gauge && typeof this.table === 'number') {
+    if (this.gauge && this.isNtType('number')) {
       this.gauge.setValue(this.table);
     }
   }

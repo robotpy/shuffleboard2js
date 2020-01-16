@@ -1,5 +1,4 @@
 const { LitElement, html, css } = dashboard.lit;
-const { isNumber } = _;
 
 class NumberBar extends LitElement {
 
@@ -157,7 +156,7 @@ class NumberBar extends LitElement {
 
   updated() {
     const defaultValue = Math.clamp(this.center, this.min, this.max);
-    this.value = isNumber(this.table) ? this.table : defaultValue;
+    this.value = this.isNtType('number') ? this.table : defaultValue;
     this.updateForeground();
   }
 

@@ -7,8 +7,6 @@ const EMERGENCY_STOP_FLAG = 0x08;
 const FMS_ATTACHED_FLAG = 0x10;
 const DS_ATTACHED_FLAG = 0x20;
 
-const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
-
 class BasicFmsInfo extends LitElement {
 
   static get styles() {
@@ -61,30 +59,15 @@ class BasicFmsInfo extends LitElement {
   }
 
   getMatchType() {
-    if ('MatchType' in this.table) {
-      return MATCH_TYPES[this.table.MatchType];
-    }
-    else {
-      return 'Unknown';
-    }
+    return this.hasSource() ? this.table.MatchType : '';
   }
 
   getMatchNumber() {
-    if ('MatchNumber' in this.table) {
-      return this.table.MatchNumber;
-    }
-    else {
-      return 0;
-    }
+    return this.hasSource() ? this.table.MatchNumber : 0;
   }
 
   getEventName() {
-    if ('EventName' in this.table) {
-      return this.table.EventName;
-    }
-    else {
-      return '';
-    }
+    return this.hasSource() ? this.table.EventName : '';
   }
 
   isEnabled() {

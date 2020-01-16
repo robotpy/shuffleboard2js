@@ -30,29 +30,27 @@ class TextView extends LitElement {
   }
   
   getInputType() {
-    return (typeof this.table === 'number') ? 'number' : 'text';
+    return this.isNtType('number') ? 'number' : 'text';
   }
 
   getInputValue() {
-    return (typeof this.table === 'object') ? '' : this.table.toString();
+    return this.hasAcceptedNtType() ? this.table.toString() : '';
   }
 
   onChange(ev) {
-    const tableValueType = typeof this.table;
     const value = ev.target.value;
 
-    if (tableValueType === 'string') {
+    if (this.isNtType('string')) {
         NetworkTables.putValue(this.ntRoot, value);
     }
-    else if (tableValueType === 'number') {
+    else if (this.isNtType('number')) {
         NetworkTables.putValue(this.ntRoot, parseFloat(value));
     }
-    else if (tableValueType === 'boolean') {
+    else if (this.isNtType('boolean')) {
       if (value === 'true') {
-          NetworkTables.putValue(this.ntRoot, true);
-      }
-      else if (value === 'false') {
-          NetworkTables.putValue(this.ntRoot, false);
+        NetworkTables.putValue(this.ntRoot, true);
+      } else if (value === 'false') {
+        NetworkTables.putValue(this.ntRoot, false);
       }
     }
   }
