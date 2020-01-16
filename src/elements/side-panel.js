@@ -14,8 +14,8 @@ class SidePanel extends LitElement {
   static get styles() {
     return css`
       .tab-body {
-        margin-top: 10px;
-        overflow: auto;
+        position: relative;
+        display: block;
       }
     `;
   }
@@ -25,18 +25,8 @@ class SidePanel extends LitElement {
     this.selectedTab = 0;
   }
 
-
-  onChange(ev) {
-    this.selectedTab = ev.detail.value;
-  }
-
   render() {
     return html`
-      <vaadin-tabs @selected-changed="${this.onChange}">
-        <vaadin-tab>Sources</vaadin-tab>
-        <vaadin-tab>Widgets</vaadin-tab>
-      </vaadin-tabs>
-
       <div class="tab-body">
         ${this.selectedTab === 0 ? html`
           <networktables-sources></networktables-sources>

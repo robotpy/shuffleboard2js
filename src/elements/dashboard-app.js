@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import './side-panel';
 import './networktables-settings-modal';
 import './robot-dashboards';
-import { writeFileSync } from 'fs';
+import '@material/mwc-drawer';
 
 class DashboardApp extends LitElement {
 
@@ -19,7 +19,8 @@ class DashboardApp extends LitElement {
       }
 
       side-panel {
-        width: 25%;
+        /* width: 25%; */
+        width: 350px;
         display: block;
         overflow: auto;
         height: 100vh;
@@ -34,6 +35,7 @@ class DashboardApp extends LitElement {
   firstUpdated() {
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
     const ntModalNode = this.shadowRoot.querySelector('networktables-settings-modal');
+    const drawerNode = this.shadowRoot.querySelector('mwc-drawer');
 
     dashboard.events.on('fileMenuSave', () => {
       dashboardsNode.saveDashboardConfig();
@@ -47,6 +49,36 @@ class DashboardApp extends LitElement {
       const robotIp = dashboard.storage.getRobotIp();
       ntModalNode.robotIp = robotIp;
       ntModalNode.open();
+    });
+
+    let observer = new MutationObserver(mutations => {
+      for (let mutation of mutations) {
+        if (mutation.type === 'childList') {
+          for (let node of mutation.addedNodes) {
+            if (node.nodeName === 'ASIDE') {
+              const drawerTitle = node.querySelector('.mdc-drawer__title');
+              const drawerSubtitle = node.querySelector('.mdc-drawer__subtitle');
+              node.style.position = 'fixed';
+              node.style.width = '300px';
+              drawerTitle.remove();
+              drawerSubtitle.remove();
+              observer.disconnect();
+            } else if(node.className === 'mdc-drawer-app-content') {
+              const styleNode = document.createElement("style");
+              styleNode.appendChild(document.createTextNode(`
+                .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content {
+                  margin-left: 300px !important;
+                }
+              `));
+              node.appendChild(styleNode);
+            }
+          }
+        }
+      }
+    });
+    
+    observer.observe(drawerNode.shadowRoot, {
+      childList: true
     });
   }
 
@@ -77,16 +109,29 @@ class DashboardApp extends LitElement {
     dashboardsNode.sourceBeingAdded = false;
   }
 
+  onTabSelection(ev) {
+    const sidePanelNode = this.shadowRoot.querySelector('side-panel');
+    sidePanelNode.selectedTab = ev.detail.value;
+  }
+
   render() {
     return html`
       <networktables-settings-modal></networktables-settings-modal>
-      <vaadin-split-layout>
-        <side-panel 
+      <mwc-drawer hasHeader type="dismissible" open>
+        <span slot="header">
+          <vaadin-tabs @selected-changed="${this.onTabSelection}">
+            <vaadin-tab>Sources</vaadin-tab>
+            <vaadin-tab>Widgets</vaadin-tab>
+          </vaadin-tabs>
+        </span>
+        <side-panel style="width: 350px"
           @ntSourceAdd="${this.onNtSourceAdd}"
           @ntSourceDrag="${this.onNtSourceDrag}"
         ></side-panel>
-        <robot-dashboards></robot-dashboards>
-      </vaadin-split-layout>
+        <div slot="appContent">
+          <robot-dashboards></robot-dashboards>
+        </div>
+      </mwc-drawer>
     `;
   }
 }
