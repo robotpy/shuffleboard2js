@@ -97,11 +97,10 @@ class GaugeWidget extends LitElement {
 
   firstUpdated() {
     this.gaugeInit();
+  }
 
-    const resizeObserver = new ResizeObserver(() => {
-      this.setSize();
-    });
-    resizeObserver.observe(this);
+  resized() {
+    this.setSize();
   }
 
   updated(changedProperties) {

@@ -52,6 +52,11 @@ export default class Widget extends connect(store)(LitElement) {
     this.ntRoot = null;
     dashboard.events.trigger('widgetAdded', this);
     this.setInitialNtRoot();
+
+    const resizeObserver = new ResizeObserver(() => {
+      this.resized();
+    });
+    resizeObserver.observe(this);
   }
 
   async setInitialNtRoot() {

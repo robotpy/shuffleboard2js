@@ -95,11 +95,8 @@ class VoltageView extends LitElement {
     return Math.max(this._min, this._max);
   }
 
-  firstUpdated() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.updateForeground();
-    });
-    resizeObserver.observe(this);
+  resized() {
+    this.updateForeground();
   }
 
   updated() {

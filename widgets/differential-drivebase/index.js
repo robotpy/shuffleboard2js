@@ -313,16 +313,15 @@ class DifferentialDrivebase extends LitElement {
     let drawing = this.drawMotionVector(0, 0);
     $(this.shadowRoot.getElementById('drivetrain')).html(this.drawDrivetrain());
     $(this.shadowRoot.getElementById('forceVector')).html(drawing);
+  }
 
-    const resizeObserver = new ResizeObserver(() => {
-      let drawing = this.drawMotionVector(this.left, this.right);
-      $(this.shadowRoot.getElementById('forceVector')).html(drawing);
-      const svgNode = this.shadowRoot.getElementById('svg');
-      const rect = svgNode.getBoundingClientRect();
-      $(this.shadowRoot.getElementById('forceVector')).css('transform', `translate(${rect.width * .5}px, ${rect.height * .5}px)`);
-      $(this.shadowRoot.getElementById('drivetrain')).html(this.drawDrivetrain());
-    });
-    resizeObserver.observe(this);
+  resized() {
+    let drawing = this.drawMotionVector(this.left, this.right);
+    $(this.shadowRoot.getElementById('forceVector')).html(drawing);
+    const svgNode = this.shadowRoot.getElementById('svg');
+    const rect = svgNode.getBoundingClientRect();
+    $(this.shadowRoot.getElementById('forceVector')).css('transform', `translate(${rect.width * .5}px, ${rect.height * .5}px)`);
+    $(this.shadowRoot.getElementById('drivetrain')).html(this.drawDrivetrain());
   }
 
   updated() {

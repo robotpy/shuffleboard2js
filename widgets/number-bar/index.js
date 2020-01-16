@@ -150,12 +150,9 @@ class NumberBar extends LitElement {
       );
     }
   }
-
-  firstUpdated() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.updateForeground();
-    });
-    resizeObserver.observe(this);
+  
+  resized() {
+    this.updateForeground();
   }
 
   updated() {

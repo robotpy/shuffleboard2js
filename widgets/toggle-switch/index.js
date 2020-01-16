@@ -80,19 +80,16 @@ class ToggleSwitch extends LitElement {
     }
   }
 
-  firstUpdated() {
-    const resizeObserver = new ResizeObserver(() => {
-      this.rect = this.getBoundingClientRect();
-      const { width, height } = this.rect;
-      const slider = this.shadowRoot.querySelector('[part=switch]');
-      slider.style.borderRadius = `${width}px`;
-      slider.style.setProperty('--circle-width', `${height * .8}px`);
-      slider.style.setProperty('--circle-height', `${height * .8}px`);
-      slider.style.setProperty('--circle-left', `${width / 2 - height * .8}px`);
-      slider.style.setProperty('--circle-top', `${height * .1}px`);
-      slider.style.setProperty('--circle-translate-x', `${width - height}px`);
-    });
-    resizeObserver.observe(this);
+  resized() {
+    this.rect = this.getBoundingClientRect();
+    const { width, height } = this.rect;
+    const slider = this.shadowRoot.querySelector('[part=switch]');
+    slider.style.borderRadius = `${width}px`;
+    slider.style.setProperty('--circle-width', `${height * .8}px`);
+    slider.style.setProperty('--circle-height', `${height * .8}px`);
+    slider.style.setProperty('--circle-left', `${width / 2 - height * .8}px`);
+    slider.style.setProperty('--circle-top', `${height * .1}px`);
+    slider.style.setProperty('--circle-translate-x', `${width - height}px`);
   }
 
   onClick() {
