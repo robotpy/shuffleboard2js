@@ -2,12 +2,6 @@ import * as ActionTypes from "./action-types";
 
 export function registerWidget(widgetType, config = {}) {
 
-  const { widgets } = dashboard.store.getState();
-  const widgetExists = widgetType in widgets.registered;
-  if (!config.class || widgetExists) {
-    return;
-  }
-
   const widgetProperties = config.class.properties || {};
 
   Object.defineProperty(config.class, 'properties', {

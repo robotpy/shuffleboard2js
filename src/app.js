@@ -20,7 +20,11 @@ window.dashboard = {
   toastr,
   CurvedArrow,
   registerWidget: function(tagName, config) {
-    store.dispatch(actions.registerWidget(tagName, config));
+    const { widgets } = store.getState();
+    const widgetExists = tagName in widgets.registered;
+    if (config.class && !widgetExists) {
+      store.dispatch(actions.registerWidget(tagName, config));
+    }
   },
   storage,
   lit: {
