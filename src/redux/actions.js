@@ -12,8 +12,15 @@ export function registerWidget(widgetType, config = {}) {
     get() {
       return {
         ...widgetProperties,
-        table: { type: Object, attribute: false },
-        ntRoot: { type: String, attribute: 'nt-root', reflect: true }
+        table: { 
+          type: Object, 
+          attribute: false
+        },
+        ntRoot: { 
+          type: String, 
+          attribute: 'nt-root', 
+          reflect: true
+        }
       }
     }
   });

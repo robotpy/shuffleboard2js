@@ -20,6 +20,18 @@ export default class Widget extends connect(store)(LitElement) {
       return;
     }
 
+    Object.defineProperty(this, 'table', {
+      get() {
+        return this._table;
+      },
+      set(value) {
+        const oldValue = this._value;
+        this._table = value;
+        this.requestUpdate('table', oldValue);
+        this._dispatchTableChange();
+      }
+    });
+
     Object.defineProperty(this, 'ntRoot', {
       get() {
         return this._ntRoot;
@@ -37,6 +49,7 @@ export default class Widget extends connect(store)(LitElement) {
           this.ntTypes = ntTypes;
           this._ntRoot = value;
           this.requestUpdate('ntRoot', oldValue);
+          this._dispatchNtRootChange();
           this.table = {};
         } else {          
           if (!this.isAcceptedType(ntTypes)) {
@@ -46,6 +59,7 @@ export default class Widget extends connect(store)(LitElement) {
           this.ntTypes = ntTypes;
           this._ntRoot = value;     
           this.requestUpdate('ntRoot', oldValue);
+          this._dispatchNtRootChange();
           this.table = subtable;
         }
       }
@@ -69,6 +83,28 @@ export default class Widget extends connect(store)(LitElement) {
     if (source) {
       this.ntRoot = source;
     }
+  }
+
+  _dispatchNtRootChange() {
+    const event = new CustomEvent('nt-root-change', {
+      detail: {
+        ntRoot: this.ntRoot
+      },
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
+  }
+
+  _dispatchTableChange() {
+    const event = new CustomEvent('table-change', {
+      detail: {
+        table: this.table
+      },
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
   }
 
   isAcceptedType(ntTypes) {
