@@ -261,16 +261,13 @@ class RobotDashboards extends LitElement {
     const widgetNode = this.widgets[this.selectedWidget];
 
     if (!widgetNode) {
-      return false;
+      dashboard.toastr.error(`
+        Failed to add source '${ntKey}'. No widget at that 
+        position can be found.`
+      );
     }
 
-    try {
-      widgetNode.ntRoot = ntRoot;
-    } catch(e) {
-      return false;
-    }
-
-    return true;
+    widgetNode.ntRoot = ntRoot;
   }
 
   render() {

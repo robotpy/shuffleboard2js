@@ -4,12 +4,6 @@ import { isNull, isArray } from 'lodash';
 import { connect } from 'pwa-helpers';
 import { getSubtable, getTypes } from '../networktables';
 
-class UnexpectedType extends Error {
-  constructor(message = "", ...args) {
-    super(message, ...args);
-    this.name = 'UnexpectedType';
-  }
-}
 
 export default class Widget extends connect(store)(LitElement) {
 
@@ -45,22 +39,28 @@ export default class Widget extends connect(store)(LitElement) {
         const oldValue = this._ntRoot;
         const subtable = getSubtable(value);
         const ntTypes = getTypes(value);
+        const widgetId = this.getAttribute('widget-id');
         if (isNull(subtable)) {
           this.ntTypes = ntTypes;
           this._ntRoot = value;
           this.requestUpdate('ntRoot', oldValue);
           this._dispatchNtRootChange();
           this.table = {};
-        } else {          
-          if (!this.isAcceptedType(ntTypes)) {
-            const widgetId = this.getAttribute('widget-id');
-            throw new UnexpectedType(`Unexpected type for widget with widget-id '${widgetId}'`);
-          }
+        } else if (!this.isAcceptedType(ntTypes)) {
+          dashboard.toastr.error(`
+            Can't add source to widget with ID '${widgetId}'. Widgets of type '${this.widgetConfig.label}' 
+            doesn't accept type '${value}'. Accepted types are '${this.widgetConfig.acceptedTypes.join(', ')}'
+          `);
+        } else {
           this.ntTypes = ntTypes;
           this._ntRoot = value;     
           this.requestUpdate('ntRoot', oldValue);
           this._dispatchNtRootChange();
           this.table = subtable;
+          dashboard.toastr.success(`
+            Successfully added source '${value}' to widget
+            with ID '${widgetId}'
+          `);
         }
       }
     });

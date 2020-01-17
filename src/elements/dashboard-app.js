@@ -105,24 +105,9 @@ class DashboardApp extends LitElement {
   }
 
   onNtSourceAdd(ev) {
-    const { ntKey, ntType } = ev.detail;
+    const { ntKey } = ev.detail;
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
-    const success = dashboardsNode.setNtRoot(ntKey);
-
-    if (success) {
-      dashboard.toastr.success(`Successfully added source '${ntKey}'`);
-    }
-    else if (dashboardsNode.selectedWidget) {
-      const widgetType = dashboardsNode.getSelectedWidgetType();
-      const widgetConfig = dashboard.store.getState().widgets.registered[widgetType];
-      dashboard.toastr.error(`
-        Widget of type '${widgetConfig.label}' doesn't accept type 
-        '${ntType}'. Accepted types are '${widgetConfig.acceptedTypes.join(', ')}'`);
-    }
-    else {
-      dashboard.toastr.error(`Failed to add source '${ntKey}'. No widget at that position can be found.`);
-    }
-
+    dashboardsNode.setNtRoot(ntKey);
     dashboardsNode.sourceBeingAdded = false;
   }
 
