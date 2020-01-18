@@ -1,5 +1,6 @@
 import * as ActionTypes from "./action-types";
-import { set, forEach, camelCase } from 'lodash';
+import { set, forEach } from 'lodash';
+import { normalizeKey } from '../sources';
 
 const initialState = {
   networktables: {
@@ -140,13 +141,6 @@ const rootReducer = (state = initialState, action) => {
 
       let sources = { ...state.sources };
       let { sourceChanges } = action.payload;
-
-      const normalizeKey = (key) => {
-        return key
-          .split('/')
-          .map(keyPart => camelCase(keyPart))
-          .join('/');
-      };
 
       forEach(sourceChanges, ({ value, type, name }, key) => {
         const normalizedKey = normalizeKey(key);

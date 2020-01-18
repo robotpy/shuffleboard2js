@@ -12,6 +12,7 @@ class RobotDashboards extends LitElement {
     return css`
       :host {
         position: relative;
+        display: block;
       }
 
       no-dashboard {
@@ -37,8 +38,9 @@ class RobotDashboards extends LitElement {
         top: var(--selected-widget-rect-top);
         width: var(--selected-widget-rect-width);
         height: var(--selected-widget-rect-height);
-        border: 2px dashed cornflowerblue;
         pointer-events: none;
+        background: cornflowerblue;
+        opacity: .2;
       }
     `;
   }
@@ -233,41 +235,50 @@ class RobotDashboards extends LitElement {
       return;
     }
 
-    const margin = 10;
+    const maxWidth = this.offsetWidth;
+    const maxHeight = this.offsetHeight;
+
     const rectNode = this.shadowRoot.querySelector('.selected-widget-rect');
+
+    const width = Math.min(widgetNode.offsetWidth, maxWidth);
+    const height = Math.min(widgetNode.offsetHeight, maxHeight);
+
+    const marginLeftRight = 10;
+    const marginTopBottom = 10;
+
 
     rectNode.style.setProperty(
       '--selected-widget-rect-left', 
-      `${widgetNode.offsetLeft - margin}px`
+      `${widgetNode.offsetLeft - marginLeftRight}px`
     );
 
     rectNode.style.setProperty(
       '--selected-widget-rect-top', 
-      `${widgetNode.offsetTop - margin}px`
+      `${widgetNode.offsetTop - marginTopBottom}px`
     );
 
     rectNode.style.setProperty(
       '--selected-widget-rect-width', 
-      `${widgetNode.offsetWidth + margin * 2}px`
+      `${width + marginLeftRight * 2}px`
     );
 
     rectNode.style.setProperty(
       '--selected-widget-rect-height', 
-      `${widgetNode.offsetHeight + margin * 2}px`
+      `${height + marginTopBottom * 2}px`
     );
   }
 
-  setNtRoot(ntRoot) {
+  setNtRoot(sourceKey) {
     const widgetNode = this.widgets[this.selectedWidget];
 
     if (!widgetNode) {
       dashboard.toastr.error(`
-        Failed to add source '${ntKey}'. No widget at that 
+        Failed to add source '${sourceKey}'. No widget at that 
         position can be found.`
       );
     }
 
-    widgetNode.ntRoot = ntRoot;
+    widgetNode.sourceKey = sourceKey;
   }
 
   render() {

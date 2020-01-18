@@ -20,8 +20,7 @@ class DashboardApp extends LitElement {
       }
 
       side-panel {
-        /* width: 25%; */
-        width: 350px;
+        width: 400px;
         display: block;
         overflow: auto;
         height: 100vh;
@@ -76,7 +75,7 @@ class DashboardApp extends LitElement {
               const drawerTitle = node.querySelector('.mdc-drawer__title');
               const drawerSubtitle = node.querySelector('.mdc-drawer__subtitle');
               node.style.position = 'fixed';
-              node.style.width = '300px';
+              node.style.width = '400px';
               drawerTitle.remove();
               drawerSubtitle.remove();
               observer.disconnect();
@@ -84,7 +83,7 @@ class DashboardApp extends LitElement {
               const styleNode = document.createElement("style");
               styleNode.appendChild(document.createTextNode(`
                 .mdc-drawer.mdc-drawer--open:not(.mdc-drawer--closing) + .mdc-drawer-app-content {
-                  margin-left: 300px !important;
+                  margin-left: 400px !important;
                 }
               `));
               node.appendChild(styleNode);
@@ -126,7 +125,7 @@ class DashboardApp extends LitElement {
             <vaadin-tab>Widgets</vaadin-tab>
           </vaadin-tabs>
         </span>
-        <side-panel style="width: 350px"
+        <side-panel
           @ntSourceAdd="${this.onNtSourceAdd}"
           @ntSourceDrag="${this.onNtSourceDrag}"
         ></side-panel>

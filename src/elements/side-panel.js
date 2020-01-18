@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import './widget-menu';
-import './networktables/networktables-sources';
+import './sources-view';
 import '@vaadin/vaadin-tabs';
 
 class SidePanel extends LitElement {
@@ -29,7 +29,7 @@ class SidePanel extends LitElement {
     return html`
       <div class="tab-body">
         ${this.selectedTab === 0 ? html`
-          <networktables-sources></networktables-sources>
+          <sources-view></sources-view>
         ` : html`
           <widget-menu></widget-menu>
         `}

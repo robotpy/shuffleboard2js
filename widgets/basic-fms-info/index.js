@@ -59,39 +59,39 @@ class BasicFmsInfo extends LitElement {
   }
 
   getMatchType() {
-    return this.hasNtSource() ? this.table.MatchType : '';
+    return this.hasSource() ? this.sourceValue.matchType : '';
   }
 
   getMatchNumber() {
-    return this.hasNtSource() ? this.table.MatchNumber : 0;
+    return this.hasSource() ? this.sourceValue.matchNumber : 0;
   }
 
   getEventName() {
-    return this.hasNtSource() ? this.table.EventName : '';
+    return this.hasSource() ? this.sourceValue.eventName : '';
   }
 
   isEnabled() {
-    return !!(this.table.FMSControlData & ENABLED_FLAG);
+    return !!(this.sourceValue.fmsControlData & ENABLED_FLAG);
   }
 
   isAuto() {
-    return !!(this.table.FMSControlData & AUTO_FLAG);
+    return !!(this.sourceValue.fmsControlData & AUTO_FLAG);
   }
 
   isTest() {
-    return !!(this.table.FMSControlData & TEST_FLAG);
+    return !!(this.sourceValue.fmsControlData & TEST_FLAG);
   };
 
   isEmergencyStopped() {
-    return !!(this.table.FMSControlData & EMERGENCY_STOP_FLAG);
+    return !!(this.sourceValue.fmsControlData & EMERGENCY_STOP_FLAG);
   }
 
   isFmsAttached() {
-    return !!(this.table.FMSControlData & FMS_ATTACHED_FLAG);
+    return !!(this.sourceValue.fmsControlData & FMS_ATTACHED_FLAG);
   }
 
   isDsAttached() {
-    return !!(this.table.FMSControlData & DS_ATTACHED_FLAG);
+    return !!(this.sourceValue.fmsControlData & DS_ATTACHED_FLAG);
   }
 
   render() {

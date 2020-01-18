@@ -1,11 +1,11 @@
 import store from "./redux/store";
 import { sourcesChanged } from './redux/actions';
-import { forEach } from 'lodash';
+import { forEach, camelCase } from 'lodash';
 
 let sourceUpdates = {};
 
 export const updateSource = (key, { value, type, name }) => {
-  //const normalizedKey = normalizeKey(key);
+
   if (sourceUpdates[key] === undefined) {
     sourceUpdates[key] = {
       first: { value, type, name }
@@ -17,6 +17,36 @@ export const updateSource = (key, { value, type, name }) => {
     };
   }
 }
+
+export const normalizeKey = (key) => {
+  return key
+    .split('/')
+    .map(keyPart => camelCase(keyPart))
+    .join('/');
+};
+
+export const getSource = (key = '') => {
+  const { sources } = dashboard.store.getState();
+  const keyParts = normalizeKey(key).split('/');
+
+  let table = sources.__table__;
+
+  for (let index in keyParts) {
+    const keyPart = keyParts[index];
+
+    if (keyParts.length - 1 === parseInt(index)) {
+      return (keyPart in table) ? table[keyPart] : null;
+    }
+
+    if (keyPart in table) {
+      table = table[keyPart].__table__;
+    } else {
+      return null;
+    }
+  }
+
+  return null;
+};
 
 
 // Sending NetworkTable updates too quickly causes the dashboard to freeze.

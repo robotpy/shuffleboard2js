@@ -44,4 +44,3 @@ sourceProviders.get('networktables')
   .updateFromProvider(updateSource)
 
 new NetworkTablesWrapper(store);
-

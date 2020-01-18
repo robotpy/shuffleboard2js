@@ -8,14 +8,18 @@ export function registerWidget(widgetType, config = {}) {
     get() {
       return {
         ...widgetProperties,
-        table: { 
-          type: Object, 
+        sourceKey: {
+          type: String,
+          attribute: 'source-key',
+          reflect: true
+        },
+        sourceValue: {
+          type: Object,
           attribute: false
         },
-        ntRoot: { 
-          type: String, 
-          attribute: 'nt-root', 
-          reflect: true
+        sourceType: {
+          type: String,
+          attribute: false
         }
       }
     }
@@ -133,7 +137,7 @@ export function sourcesChanged() {
     const value = arguments[1];
     sourceChanges[key] = value;
   }
-  
+
   return {
     type: ActionTypes.SOURCES_CHANGED,
     payload: {
