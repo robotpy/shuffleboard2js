@@ -10,6 +10,9 @@ import * as CurvedArrow from './curved-arrow';
 import * as storage from './storage';
 import * as Lit from 'lit-element';
 import * as mouse from './mouse';
+import * as sourceProviders from './source-providers';
+import networktablesProvider from './providers/networktables';
+import { updateSource } from './sources';
 require('./require-extensions');
 require('./menu');
 
@@ -31,7 +34,14 @@ window.dashboard = {
     ...Lit,
     LitElement: Widget
   },
-  mouse
+  mouse,
+  sourceProviders
 };
 
+sourceProviders.add('networktables', networktablesProvider);
+
+sourceProviders.get('networktables')
+  .updateFromProvider(updateSource)
+
 new NetworkTablesWrapper(store);
+

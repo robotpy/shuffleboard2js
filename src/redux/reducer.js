@@ -1,5 +1,5 @@
 import * as ActionTypes from "./action-types";
-import { set } from 'lodash';
+import { set, forEach, camelCase } from 'lodash';
 
 const initialState = {
   networktables: {
@@ -7,6 +7,15 @@ const initialState = {
     rawValues: {},
     robotConnected: false
   },
+  sources: {
+    __normalizedKey__: undefined,
+    __key__: undefined,
+    __value__: undefined,
+    __type__: undefined,
+    __name__: undefined,
+    __table__: {}
+  },
+
   widgets: {
     categories: ['Unknown'],
     registered: {},
@@ -124,6 +133,68 @@ const rootReducer = (state = initialState, action) => {
             ...state.networktables.rawValues,
             ...valueChanges
           }
+        }
+      };
+
+    case ActionTypes.SOURCES_CHANGED:
+
+      let sources = { ...state.sources };
+      let { sourceChanges } = action.payload;
+
+      const normalizeKey = (key) => {
+        return key
+          .split('/')
+          .map(keyPart => camelCase(keyPart))
+          .join('/');
+      };
+
+      forEach(sourceChanges, ({ value, type, name }, key) => {
+        const normalizedKey = normalizeKey(key);
+        const keyParts = normalizedKey.split('/');
+
+        let table = sources.__table__;
+
+        keyParts.forEach((keyPart, index) => {
+          const inSources = keyPart in table;
+
+          if (!inSources) {
+            table[keyPart] = {
+              __normalizedKey__: undefined,
+              __key__: undefined,
+              __value__: undefined,
+              __type__: undefined,
+              __name__: undefined,
+              __table__: {}
+            }
+          }
+
+          if (keyParts.length - 1 === index) {
+
+            table[keyPart].__normalizedKey__ = normalizedKey;
+            table[keyPart].__key__ = key;
+
+            if (typeof key !== 'undefined') {
+              table[keyPart].__key__ = key;
+            }
+            if (typeof value !== 'undefined') {
+              table[keyPart].__value__ = value;
+            }
+            if (typeof type !== 'undefined') {
+              table[keyPart].__type__ = type;
+            }
+            if (typeof name !== 'undefined') {
+              table[keyPart].__name__ = name;
+            }
+          } else {
+            table = table[keyPart].__table__;
+          }
+        });
+      });
+
+      return {
+        ...state,
+        sources: {
+          ...sources
         }
       };
 

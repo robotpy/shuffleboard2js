@@ -118,3 +118,26 @@ export function clearNetworkTables() {
     type: ActionTypes.CLEAR_NETWORKTABLES
   };
 };
+
+
+
+export function sourcesChanged() {
+
+  let sourceChanges = {};
+
+  if (arguments.length === 1) {
+    sourceChanges = arguments[0];
+  } 
+  else {
+    const key = arguments[0];
+    const value = arguments[1];
+    sourceChanges[key] = value;
+  }
+  
+  return {
+    type: ActionTypes.SOURCES_CHANGED,
+    payload: {
+      sourceChanges
+    }
+  };
+}
