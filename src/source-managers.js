@@ -1,6 +1,8 @@
-import store from "./redux/store";
 import { sourcesChanged } from './redux/actions';
 import { forEach, camelCase } from 'lodash';
+import { has as hasProvider } from './source-providers'
+import store from './redux/store';
+import { removeSources } from './redux/actions';
 
 let managers = {};
 
@@ -12,6 +14,23 @@ export const get = (providerName) => {
   return managers[providerName];
 };
 
+export const add = (providerName) => {
+  if (has(providerName) || !hasProvider(providerName)) {
+    return;
+  }
+  managers[providerName] = new SourceManager(providerName);
+};
+
+export const remove = (providerName) => {
+  if (!has(providerName)) {
+    return;
+  }
+  const manager = get(providerName);
+  manager.disconnect();
+  store.dispatch(removeSources(providerName));
+  delete managers[providerName];
+};
+
 export const normalizeKey = (key) => {
   return key
     .split('/')
@@ -19,18 +38,20 @@ export const normalizeKey = (key) => {
     .join('/');
 };
 
-export class SourceManager {
+class SourceManager {
 
   constructor(providerName) {
     this.providerName = providerName;
     this.provider = dashboard.sourceProviders.get(providerName);
     this.sourceUpdates = {};
 
-    managers[providerName] = this;
-
     this.provider.updateFromProvider(this.updateSource.bind(this));
 
-    setInterval(this._sendUpdates.bind(this), 100);
+    this.interval = setInterval(this._sendUpdates.bind(this), 100);
+  }
+
+  disconnect() {
+    clearTimeout(this.interval);
   }
 
   updateSource(key, {value, type, name }) {

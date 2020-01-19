@@ -94,8 +94,6 @@ const rootReducer = (state = initialState, action) => {
 
         let table = sources.__table__;
 
-        //console.log("SOURCES:", sources);
-
         keyParts.forEach((keyPart, index) => {
           const inSources = keyPart in table;
 
@@ -158,8 +156,20 @@ const rootReducer = (state = initialState, action) => {
         }
       };
 
+    case ActionTypes.REMOVE_SOURCES:
+
+      let allSources = { ...state.sources };
+      delete allSources[action.payload.providerName];
+      
+      return {
+        ...state,
+        sources: allSources
+      };
+
     default:
       return state;
+
+
   }
 }
 

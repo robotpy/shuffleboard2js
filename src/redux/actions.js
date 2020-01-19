@@ -86,6 +86,15 @@ export function clearSources(providerName) {
   };
 };
 
+export function removeSources(providerName) {
+  return {
+    type: ActionTypes.REMOVE_SOURCES,
+    payload: {
+      providerName
+    }
+  };
+};
+
 export function sourcesChanged(providerName, sourceChanges) {
   return {
     type: ActionTypes.SOURCES_CHANGED,
