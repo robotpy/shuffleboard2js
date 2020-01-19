@@ -94,7 +94,11 @@ class RobotDashboards extends LitElement {
           }
         });
 
-        watch(join(process.cwd(), './widgets'), { recursive: true }, function (event, filename) {
+        watch(join(process.cwd(), './widgets'), { recursive: true }, () => {
+          window.location.reload();
+        });
+
+        watch(join(process.cwd(), './source-providers'), { recursive: true }, () => {
           window.location.reload();
         });
 

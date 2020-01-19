@@ -6,7 +6,7 @@ export default class Dashboard extends LitElement {
 
   constructor() {
     super();
-    let providerNames = ['networktables'];
+    let providerNames = ['NetworkTables'];
     if (typeof this.providerNames === 'string') {
       providerNames = [this.providerNames];
     } else if (isArray(this.providerNames)) {
