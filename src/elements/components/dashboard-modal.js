@@ -59,9 +59,59 @@ class DashboardModal extends LitElement {
     this.slotNode = this.shadowRoot.getElementById('slot');
 
     this.modalNode.renderer = (root, dialog) => {
-      this.slotNode.assignedElements().forEach(element => {
-        root.appendChild(element);
+
+      // remove previous header and footer
+      const prevHeaderNode = root.querySelector('.modal-header');
+      if (prevHeaderNode) {
+        prevHeaderNode.remove();
+      }
+
+      const prevFooterNode = root.querySelector('.modal-footer');
+      if (prevFooterNode) {
+        prevFooterNode.remove();
+      }
+      
+      // Add header
+      const headerNode = document.createElement("header");
+      headerNode.classList = "modal-header";
+      headerNode.style.display = 'flex';
+      headerNode.style.justifyContent = 'space-between';
+      headerNode.style.alignItems = 'center';
+      headerNode.style.borderBottom = '1px solid #eee';
+      headerNode.innerHTML = `
+        <h4 style="margin: 0">${this.title}</h4>
+        <vaadin-button style="align-self: start;" theme="icon large tertiary" aria-label="Close modal">
+          <iron-icon icon="lumo:cross" slot="prefix"></iron-icon>
+        </vaadin-button>  
+        <hr />
+      `;
+      const headerCloseButtonNode = headerNode.querySelector('vaadin-button');
+      headerCloseButtonNode.addEventListener('click', () => {
+        this.close();
       });
+      root.prepend(headerNode);
+
+      this.slotNode.assignedElements().forEach(element => {
+        root.append(element);
+      });
+
+      // Add footer
+      const footerNode = document.createElement("footer");
+      footerNode.classList = "modal-footer";
+      footerNode.style.display = 'flex';
+      footerNode.style.justifyContent = 'flex-end';
+      footerNode.style.borderTop = '1px solid #eee';
+      footerNode.style.paddingTop = '10px';
+      footerNode.innerHTML = `
+        <vaadin-button aria-label="Close modal">
+          Close
+        </vaadin-button>  
+      `;
+      const footerCloseButtonNode = footerNode.querySelector('vaadin-button');
+      footerCloseButtonNode.addEventListener('click', () => {
+        this.close();
+      });
+      root.append(footerNode);
     };
   }
 
@@ -77,7 +127,14 @@ class DashboardModal extends LitElement {
 
   render() {
     return html`
-      <vaadin-dialog id="dashboard-modal" @opened-changed="${this.openChanged}"> 
+      <vaadin-dialog id="dashboard-modal" @opened-changed="${this.openChanged}">
+
+        <header style="display: flex; justify-content: space-between; align-items: center;">
+          <h4>Properties</h4>
+          <vaadin-button style="align-self: start;" theme="icon large tertiary" aria-label="Close modal">
+            <iron-icon icon="lumo:cross" slot="prefix"></iron-icon>
+          </vaadin-button>  
+        </header>
         <slot id="slot"></slot>
       </vaadin-dialog>
     `;

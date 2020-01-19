@@ -23,13 +23,6 @@ let fileMenuItem = new MenuItem({
         dashboard.events.trigger('fileMenuOpen');
       } 
     },
-    { 
-      label: 'NetworkTables Settings',
-      accelerator: 'CommandOrControl+N', 
-      click() { 
-        dashboard.events.trigger('fileMenuNtSettings');
-      } 
-    },
     { type: 'separator' },
     {
       label: 'Close',
@@ -50,6 +43,12 @@ let dashboardMenuItem = new MenuItem({
       accelerator: 'CommandOrControl+E',
       click(event) {
         dashboard.events.trigger('fileMenuEditMode', event.checked);
+      } 
+    },
+    { 
+      label: 'Source Settings',
+      click() { 
+        dashboard.events.trigger('fileMenuSourceProviderSettings');
       } 
     },
   ] 

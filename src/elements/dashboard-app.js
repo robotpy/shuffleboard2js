@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit-element';
 import { isEditModeOn, turnEditModeOn, turnEditModeOff } from '../storage';
 import './side-panel';
 import './robot-dashboards';
+import './source-provider-settings-modal';
 import '@material/mwc-drawer';
 
 class DashboardApp extends LitElement {
@@ -40,7 +41,7 @@ class DashboardApp extends LitElement {
 
   firstUpdated() {
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
-    const sourceSettingsModalNode = this.shadowRoot.querySelector('source-settings-modal');
+    const sourceProviderSettingsModalNode = this.shadowRoot.querySelector('source-provider-settings-modal');
     const drawerNode = this.shadowRoot.querySelector('mwc-drawer');
 
     dashboard.events.on('fileMenuSave', () => {
@@ -51,8 +52,8 @@ class DashboardApp extends LitElement {
       dashboardsNode.openSavedDashboard();
     });
 
-    dashboard.events.on('fileMenuSourceSettings', () => {
-      sourceSettingsModalNode.open();
+    dashboard.events.on('fileMenuSourceProviderSettings', () => {
+      sourceProviderSettingsModalNode.open();
     });
 
     dashboard.events.on('fileMenuEditMode', editModeOn => {
@@ -113,7 +114,7 @@ class DashboardApp extends LitElement {
 
   render() {
     return html`
-      <source-settings-modal></source-settings-modal>
+      <source-provider-settings-modal></source-provider-settings-modal>
       <mwc-drawer hasHeader type="dismissible" ?open="${this.showSidePanel}">
         <span slot="header">
           <vaadin-tabs @selected-changed="${this.onTabSelection}">
