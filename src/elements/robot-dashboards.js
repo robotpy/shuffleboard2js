@@ -3,7 +3,6 @@ import { readFileSync, writeFileSync, existsSync, watch } from 'fs';
 import { join } from 'path';
 import { dirname } from 'path';
 import './no-dashboard';
-import './widget-props-modal';
 const dialog = require('electron').remote.dialog;
 
 class RobotDashboards extends LitElement {
