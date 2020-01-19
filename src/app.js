@@ -2,7 +2,6 @@ import './elements/components';
 import Widget from './elements/widget';
 import store from "./redux/store";
 import riot from 'riot';
-import NetworkTablesWrapper from './networktables';
 import './elements/dashboard-app';
 import * as actions from  './redux/actions';
 import toastr from 'toastr';
@@ -42,5 +41,3 @@ sourceProviders.add('networktables', networktablesProvider);
 
 sourceProviders.get('networktables')
   .updateFromProvider(updateSource)
-
-new NetworkTablesWrapper(store);

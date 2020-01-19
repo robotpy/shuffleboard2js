@@ -72,58 +72,11 @@ export function removeWidget(widgetId) {
   };
 }
 
-
-/**
- * NetworkTables actions
- */
-
-export function ntRobotConnectionChanged(connected) {
+export function clearSources() {
   return {
-    type: ActionTypes.NT_ROBOT_CONNECTION_CHANGED,
-    payload: {
-      connected
-    }
-  };
-}
-
-export function ntValueChanged() {
-
-  let valueChanges = {};
-
-  if (arguments.length === 1) {
-    valueChanges = arguments[0];
-  } 
-  else {
-    const key = arguments[0];
-    const value = arguments[1];
-    valueChanges[key] = value;
-  }
-
-
-  return {
-    type: ActionTypes.NT_VALUE_CHANGED,
-    payload: {
-      valueChanges
-    },
-    meta: {
-      record: true
-    }
-  };
-}
-
-export function initNetworktTables() {
-  return {
-    type: ActionTypes.INIT_NETWORKTABLES
+    type: ActionTypes.CLEAR_SOURCES
   };
 };
-
-export function clearNetworkTables() {
-  return {
-    type: ActionTypes.CLEAR_NETWORKTABLES
-  };
-};
-
-
 
 export function sourcesChanged() {
 

@@ -3,11 +3,6 @@ import { set, forEach } from 'lodash';
 import { normalizeKey } from '../sources';
 
 const initialState = {
-  networktables: {
-    values: {},
-    rawValues: {},
-    robotConnected: false
-  },
   sources: {
     __normalizedKey__: undefined,
     __key__: undefined,
@@ -16,7 +11,6 @@ const initialState = {
     __name__: undefined,
     __table__: {}
   },
-
   widgets: {
     categories: ['Unknown'],
     registered: {},
@@ -77,66 +71,6 @@ const rootReducer = (state = initialState, action) => {
         }
       };
 
-    case ActionTypes.NT_ROBOT_CONNECTION_CHANGED:
-      return {
-        ...state,
-        networktables: {
-          ...state.networktables,
-          robotConnected: action.payload.connected
-        }
-      };
-    case ActionTypes.CLEAR_NETWORKTABLES:
-      return {
-        ...state,
-        networktables: {
-          ...state.networktables,
-          values: {},
-          rawValues: {}
-        }
-      }
-    case ActionTypes.NT_VALUE_CHANGED:
-
-      let values = { ...state.networktables.values };
-      let valueChanges = action.payload.valueChanges;
-
-      for (let key in valueChanges) {
-
-        let value = valueChanges[key];
-
-        let segments = key.split('/')
-          .filter(segment => {
-            return segment !== '';
-          });
-
-        if (segments.length > 0 && !key.endsWith('/')) {
-          segments[segments.length - 1] += '/';
-        }
-
-        let path = segments
-          .map(segment => {
-            return `['${segment}']`;
-          })
-          .join('');
-
-        if (key.endsWith('/')) {
-          path += "['/']";
-        }
-
-        set(values, path, value);
-      }
-
-      return {
-        ...state,
-        networktables: {
-          ...state.networktables,
-          values,
-          rawValues: {
-            ...state.networktables.rawValues,
-            ...valueChanges
-          }
-        }
-      };
-
     case ActionTypes.SOURCES_CHANGED:
 
       let sources = { ...state.sources };
@@ -192,14 +126,16 @@ const rootReducer = (state = initialState, action) => {
         }
       };
 
-    case ActionTypes.INIT_NETWORKTABLES:
-
+    case ActionTypes.CLEAR_SOURCES:
       return {
         ...state,
-        networktables: {
-          ...state.networktables,
-          values: {},
-          rawValues: {}
+        sources: {
+          __normalizedKey__: undefined,
+          __key__: undefined,
+          __value__: undefined,
+          __type__: undefined,
+          __name__: undefined,
+          __table__: {}
         }
       };
 

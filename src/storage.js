@@ -1,24 +1,32 @@
 import { join, dirname } from 'path';
-import { get } from 'lodash';
+import { get as lodashGet } from 'lodash';
 
-export const getRobotIp = () => {
-  return localStorage.robotIp || 'localhost';
+export const set = (key, value) => {
+  localStorage[key] = JSON.stringify(value);
 };
 
-export const setRobotIp = (robotIp) => {
-  localStorage.robotIp = robotIp;
+export const has = (key) => {
+  return key in localStorage;
+};
+
+export const get = (key, defaultValue) => {
+  try {
+    return has(key) ? JSON.parse(localStorage[key]) : defaultValue;
+  } catch(e) {
+    return null;
+  }
 };
 
 export const hasDashboardPath = () => {
-  return 'dashboardPath' in localStorage;
+  return has('dashboardPath');
 };
 
 export const getDashboardPath = () => {
-  return localStorage.dashboardPath;
+  return get('dashboardPath');
 };
 
 export const setDashboardPath = (path) => {
-  localStorage.dashboardPath = path;
+  set('dashboardPath', path);
 };
 
 export const getDashboardConfigPath = () => {
@@ -26,35 +34,30 @@ export const getDashboardConfigPath = () => {
 };
 
 export const setDashboardConfig = (config) => {
-  localStorage.dashboardConfig = JSON.stringify(config);
+  set('dashboardConfig', config);
 };
 
 export const getWidgetSource = (widgetId) => {
-  try {
-    const config = JSON.parse(localStorage.dashboardConfig);
-    return get(config, `widgetSources["${widgetId}"]`, null);
-  }
-  catch(e) {
-    return null;
-  }
+  const config = get('dashboardConfig');
+  return lodashGet(config, `widgetSources["${widgetId}"]`, null);
 };
 
 export const getDefaultWidgetFolder = () => {
-  return localStorage.defaultWidgetFolder;
+  return get('defaultWidgetFolder');
 };
 
 export const setDefaultWidgetFolder = (path) => {
-  localStorage.defaultWidgetFolder = path;
+  set('defaultWidgetFolder', path);
 };
 
 export const isEditModeOn = () => {
-  return localStorage.editModeOn !== 'false';
+  return get('editModeOn', true);
 };
 
 export const turnEditModeOn = () => {
-  localStorage.editModeOn = true;
+  set('editModeOn', true);
 };
 
 export const turnEditModeOff = () => {
-  localStorage.editModeOn = false;
+  set('editModeOn', false);
 };

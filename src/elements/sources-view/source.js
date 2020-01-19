@@ -106,7 +106,7 @@ class SourceView extends LitElement {
     ev.dataTransfer.setData("text/plain", ev.target.id);
     ev.dataTransfer.setDragImage(this.dragImg, 0, 0);
 
-    const event = new CustomEvent('sourceDrag', {
+    const event = new CustomEvent('source-drag', {
       bubbles: true,
       composed: true
     });
@@ -115,14 +115,14 @@ class SourceView extends LitElement {
   }
 
   addSource() {
-    const sourceKey = source.__key__;
-    const sourceType = source.__type__;
+    const sourceKey = this.source.__key__;
+    const sourceType = this.source.__type__;
 
     if (typeof sourceKey !== 'string') {
       return;
     }
 
-    const event = new CustomEvent('sourceAdd', {
+    const event = new CustomEvent('source-add', {
       bubbles: true,
       composed: true, 
       detail: {

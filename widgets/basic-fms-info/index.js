@@ -7,6 +7,8 @@ const EMERGENCY_STOP_FLAG = 0x08;
 const FMS_ATTACHED_FLAG = 0x10;
 const DS_ATTACHED_FLAG = 0x20;
 
+const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
+
 class BasicFmsInfo extends LitElement {
 
   static get styles() {
@@ -59,7 +61,7 @@ class BasicFmsInfo extends LitElement {
   }
 
   getMatchType() {
-    return this.hasSource() ? this.sourceValue.matchType : '';
+    return this.hasSource() ? MATCH_TYPES[this.sourceValue.matchType] : '';
   }
 
   getMatchNumber() {

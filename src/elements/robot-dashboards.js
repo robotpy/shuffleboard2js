@@ -118,7 +118,7 @@ class RobotDashboards extends LitElement {
     };
 
     for (let widgetId in this.widgets) {
-      config.widgetSources[widgetId] = this.widgets[widgetId].ntRoot;
+      config.widgetSources[widgetId] = this.widgets[widgetId].sourceKey;
     }
 
     const configPath = dashboard.storage.getDashboardConfigPath();
@@ -268,7 +268,7 @@ class RobotDashboards extends LitElement {
     );
   }
 
-  setNtRoot(sourceKey) {
+  setSourceKey(sourceKey) {
     const widgetNode = this.widgets[this.selectedWidget];
 
     if (!widgetNode) {

@@ -53,8 +53,6 @@ class DashboardApp extends LitElement {
     });
 
     dashboard.events.on('fileMenuNtSettings', () => {
-      const robotIp = dashboard.storage.getRobotIp();
-      ntModalNode.robotIp = robotIp;
       ntModalNode.open();
     });
 
@@ -98,15 +96,14 @@ class DashboardApp extends LitElement {
     });
   }
 
-  onNtSourceDrag() {
+  onSourceDrag() {
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
     dashboardsNode.sourceBeingAdded = true;
   }
 
-  onNtSourceAdd(ev) {
-    const { ntKey } = ev.detail;
+  onSourceAdd(ev) {
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
-    dashboardsNode.setNtRoot(ntKey);
+    dashboardsNode.setSourceKey(ev.detail.key);
     dashboardsNode.sourceBeingAdded = false;
   }
 
@@ -126,8 +123,8 @@ class DashboardApp extends LitElement {
           </vaadin-tabs>
         </span>
         <side-panel
-          @ntSourceAdd="${this.onNtSourceAdd}"
-          @ntSourceDrag="${this.onNtSourceDrag}"
+          @source-drag="${this.onSourceDrag}"
+          @source-add="${this.onSourceAdd}"
         ></side-panel>
         <div slot="appContent">
           <robot-dashboards></robot-dashboards>

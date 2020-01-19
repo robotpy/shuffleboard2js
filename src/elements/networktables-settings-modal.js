@@ -13,7 +13,7 @@ class NetworktablesSettingsModal extends LitElement {
 
   constructor() {
     super();
-    this.robotIp = dashboard.storage.getRobotIp();
+    this.robotIp = dashboard.storage.get('robotIp', 'localhost');
     NetworkTables.connect(this.robotIp);
     
     // Keep trying to connect if a connection hasn't been found
@@ -24,18 +24,19 @@ class NetworktablesSettingsModal extends LitElement {
     }, 500);
 
     NetworkTables.addRobotConnectionListener(connected => {
-      dashboard.store.dispatch(dashboard.actions.clearNetworkTables());
+      dashboard.store.dispatch(dashboard.actions.clearSources());
     }, true);
   }
 
   onRobotIpChange(ev) {
     this.robotIp = ev.target.value;
-    store.dispatch(clearNetworkTables());
+    store.dispatch(dashboard.actions.clearSources());
     NetworkTables.connect(this.robotIp);
-    dashboard.storage.setRobotIp(this.robotIp);
+    dashboard.storage.set('robotIp', this.robotIp);
   };
 
   open() {
+    this.robotIp = dashboard.storage.get('robotIp', 'localhost');
     const modal = this.shadowRoot.getElementById('modal');
     modal.open();
   }

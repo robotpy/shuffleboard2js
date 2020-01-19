@@ -21,7 +21,6 @@ export default class Widget extends connect(store)(LitElement) {
         return this._sourceValue;
       },
       set(value) {
-        console.log('set value:', value);
         if ('__generated__' in value) {
           const oldValue = this._value;
           this._sourceValue = value;
@@ -49,7 +48,7 @@ export default class Widget extends connect(store)(LitElement) {
         const oldValue = this._sourceKey;
         const source = getSource(value);
         const widgetId = this.getAttribute('widget-id');
-        console.log("SOURCE:", source, value);
+
         if (isNull(source)) {
           this.sourceType = null;
           this._sourceKey = value;
@@ -130,14 +129,12 @@ export default class Widget extends connect(store)(LitElement) {
     } else if (sourceType === 'Number') {
       value = new Number(rawValue);
     } else if (sourceType === 'String') {
-      value = rawValue;
+      value = new String(rawValue);
     } else if (sourceType === 'Array') {
       value = [...rawValue];
     }
 
     value.__generated__ = true;
-
-    console.log("TABLE:", table);
 
     forEach(table, (source, propertyName) => {
       const tableValue = this._generateSourceValue(source);
@@ -178,7 +175,6 @@ export default class Widget extends connect(store)(LitElement) {
 
   stateChanged() {
     if (this.hasAcceptedType()) {
-      console.log('accepted type');
       const source = getSource(this.sourceKey);
       this.sourceValue = this._generateSourceValue(source);
     }
