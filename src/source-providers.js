@@ -1,6 +1,11 @@
 const providers = {};
 
 export const add = (providerName, config) => {
+
+  if (providerName in providers) {
+    return;
+  }
+  
   providers[providerName] = {
     updateFromProvider: () => {},
     updateFromDashboard: () => {},

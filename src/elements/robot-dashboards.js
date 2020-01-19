@@ -103,13 +103,14 @@ class RobotDashboards extends LitElement {
         );
 
         window.require(dashboardPath);
-        this.requestUpdate();
       }
     }
     catch(e) {
       console.error('Error opening dashboard', e.message);
     }
     window.require('../widgets');
+    window.require('../source-providers');
+    this.requestUpdate();
   }
 
   async saveDashboardConfig() {

@@ -1,5 +1,6 @@
 import './elements/components';
 import Widget from './elements/widget';
+import Dashboard from './elements/dashboard';
 import store from "./redux/store";
 import riot from 'riot';
 import './elements/dashboard-app';
@@ -10,8 +11,7 @@ import * as storage from './storage';
 import * as Lit from 'lit-element';
 import * as mouse from './mouse';
 import * as sourceProviders from './source-providers';
-import networktablesProvider from './providers/networktables';
-import { updateSource } from './sources';
+
 require('./require-extensions');
 require('./menu');
 
@@ -31,13 +31,9 @@ window.dashboard = {
   storage,
   lit: {
     ...Lit,
-    LitElement: Widget
+    Widget,
+    Dashboard
   },
   mouse,
   sourceProviders
 };
-
-sourceProviders.add('networktables', networktablesProvider);
-
-sourceProviders.get('networktables')
-  .updateFromProvider(updateSource)

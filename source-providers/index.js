@@ -1,5 +1,1 @@
-
-const NetworkTables = require('./networktables');
-
-
-window.NetworkTables = NetworkTables;
+require('./networktables');

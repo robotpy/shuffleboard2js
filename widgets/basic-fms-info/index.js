@@ -1,4 +1,4 @@
-const { LitElement, html, css } = dashboard.lit;
+const { Widget, html, css } = dashboard.lit;
 
 const ENABLED_FLAG = 0x01;
 const AUTO_FLAG = 0x02;
@@ -9,7 +9,7 @@ const DS_ATTACHED_FLAG = 0x20;
 
 const MATCH_TYPES = ['Unknown', 'Practice', 'Qualification', 'Elimination'];
 
-class BasicFmsInfo extends LitElement {
+class BasicFmsInfo extends Widget {
 
   static get styles() {
     return css`

@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { isEditModeOn, turnEditModeOn, turnEditModeOff } from '../storage';
 import './side-panel';
-import './networktables-settings-modal';
 import './robot-dashboards';
 import '@material/mwc-drawer';
 
@@ -41,7 +40,7 @@ class DashboardApp extends LitElement {
 
   firstUpdated() {
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
-    const ntModalNode = this.shadowRoot.querySelector('networktables-settings-modal');
+    const sourceSettingsModalNode = this.shadowRoot.querySelector('source-settings-modal');
     const drawerNode = this.shadowRoot.querySelector('mwc-drawer');
 
     dashboard.events.on('fileMenuSave', () => {
@@ -52,8 +51,8 @@ class DashboardApp extends LitElement {
       dashboardsNode.openSavedDashboard();
     });
 
-    dashboard.events.on('fileMenuNtSettings', () => {
-      ntModalNode.open();
+    dashboard.events.on('fileMenuSourceSettings', () => {
+      sourceSettingsModalNode.open();
     });
 
     dashboard.events.on('fileMenuEditMode', editModeOn => {
@@ -114,7 +113,7 @@ class DashboardApp extends LitElement {
 
   render() {
     return html`
-      <networktables-settings-modal></networktables-settings-modal>
+      <source-settings-modal></source-settings-modal>
       <mwc-drawer hasHeader type="dismissible" ?open="${this.showSidePanel}">
         <span slot="header">
           <vaadin-tabs @selected-changed="${this.onTabSelection}">

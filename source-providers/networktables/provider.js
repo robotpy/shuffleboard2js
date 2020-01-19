@@ -45,5 +45,6 @@ module.exports = {
   },
   updateFromDashboard: (key, value) => {
 		NetworkTables.putValue(key, value);
-	}
+  },
+  settingsElement: 'networktables-settings'
 };
