@@ -122,7 +122,10 @@ class RobotDashboards extends LitElement {
     };
 
     for (let widgetId in this.widgets) {
-      config.widgetSources[widgetId] = this.widgets[widgetId].sourceKey;
+      config.widgetSources[widgetId] = {
+        key: this.widgets[widgetId].sourceKey,
+        sourceProvider: this.widgets[widgetId].sourceProvider
+      };
     }
 
     const configPath = dashboard.storage.getDashboardConfigPath();
@@ -272,7 +275,7 @@ class RobotDashboards extends LitElement {
     );
   }
 
-  setSourceKey(sourceKey) {
+  setSourceKey(providerName, sourceKey) {
     const widgetNode = this.widgets[this.selectedWidget];
 
     if (!widgetNode) {
@@ -280,8 +283,10 @@ class RobotDashboards extends LitElement {
         Failed to add source '${sourceKey}'. No widget at that 
         position can be found.`
       );
+      return;
     }
 
+    widgetNode.sourceProvider = providerName;
     widgetNode.sourceKey = sourceKey;
   }
 

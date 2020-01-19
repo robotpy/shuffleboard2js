@@ -14,6 +14,10 @@ class WidgetMenu extends connect(store)(LitElement) {
         margin-left: 15px;
       }
 
+      vaadin-accordion-panel {
+        border: none;
+      }
+
       widget-menu-item {
         display: flex;
         flex-direction: column;

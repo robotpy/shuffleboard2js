@@ -1,6 +1,7 @@
 import { LitElement } from 'lit-element';
 import { isArray } from 'lodash';
-import { updateSource } from '../sources';
+import { SourceManager } from '../source-managers';
+import { has as hasProvider } from '../source-providers'
 
 export default class Dashboard extends LitElement {
 
@@ -14,9 +15,8 @@ export default class Dashboard extends LitElement {
     }
 
     for (let name of providerNames) {
-      const provider = dashboard.sourceProviders.get(name);
-      if (provider) {
-        provider.updateFromProvider(updateSource);
+      if (hasProvider(name)) {
+        new SourceManager(name);
       }
     }
   }

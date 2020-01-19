@@ -2,7 +2,7 @@ import { LitElement } from 'lit-element';
 import store from "../redux/store";
 import { isNull, forEach } from 'lodash';
 import { connect } from 'pwa-helpers';
-import { getSource } from '../sources';
+import { has as hasManager, get as getManager } from '../source-managers';
 import { get as getProvider } from '../source-providers';
 
 
@@ -11,7 +11,6 @@ export default class Widget extends connect(store)(LitElement) {
   constructor() {
     super();
     this.widgetConfig = dashboard.store.getState().widgets.registered[this.nodeName.toLowerCase()];
-    this.sourceProviderName = 'networktables';
     if (!this.widgetConfig) {
       return;
     }
@@ -21,16 +20,31 @@ export default class Widget extends connect(store)(LitElement) {
         return this._sourceValue;
       },
       set(value) {
-        if ('__generated__' in value) {
+        if (typeof value === 'object' && '__generated__' in value) {
           const oldValue = this._value;
           this._sourceValue = value;
           this.requestUpdate('sourceValue', oldValue);
           this._dispatchSourceValueChange();
         } else {
-          const sourceProvider = getProvider(this.sourceProviderName);
+          const sourceProvider = getProvider(this.sourceProvider);
           if (typeof this.sourceKey === 'string' && sourceProvider) {
             sourceProvider.updateFromDashboard(this.sourceKey, value);
           }
+        }
+      }
+    });
+
+    Object.defineProperty(this, 'sourceProvider', {
+      get() {
+        return this._sourceProvider;
+      },
+      set(value) {
+        if (hasManager(value)) {
+          const oldValue = this._sourceProvider;
+          this._sourceProvider = value;
+          this.sourceManager = getManager(value);
+          this.requestUpdate('sourceProvider', oldValue);
+          this._dispatchSourceProviderChange();
         }
       }
     });
@@ -41,12 +55,12 @@ export default class Widget extends connect(store)(LitElement) {
       },
       set(value) {
 
-        if (isNull(value)) {
+        if (isNull(value) || isNull(this.sourceManager)) {
           return;
         }
 
         const oldValue = this._sourceKey;
-        const source = getSource(value);
+        const source = this.sourceManager.getSource(value);
         const widgetId = this.getAttribute('widget-id');
 
         if (isNull(source)) {
@@ -75,6 +89,8 @@ export default class Widget extends connect(store)(LitElement) {
     });
 
     this.sourceValue = { __generated__: true };
+    this.sourceProvider = null;
+    this.sourceManager = null;
     this.sourceKey = null;
     this.sourceType = null;
     dashboard.events.trigger('widgetAdded', this);
@@ -91,7 +107,8 @@ export default class Widget extends connect(store)(LitElement) {
     const widgetId = this.getAttribute('widget-id');
     const source = dashboard.storage.getWidgetSource(widgetId);
     if (source) {
-      this.sourceKey = source;
+      this.sourceProvider = source.sourceProvider;
+      this.sourceKey = source.key;
     }
   }
 
@@ -117,8 +134,19 @@ export default class Widget extends connect(store)(LitElement) {
     this.dispatchEvent(event);
   }
 
+  _dispatchSourceProviderChange() {
+    const event = new CustomEvent('source-provider-change', {
+      detail: {
+        sourceProvider: this.sourceProvider
+      },
+      bubbles: true,
+      composed: true
+    });
+    this.dispatchEvent(event);
+  }
+
   _generateSourceValue(source) {
-    const sourceProvider = getProvider(this.sourceProviderName);
+    const sourceProvider = getProvider(this.sourceProvider);
     const rawValue = source.__value__;
     const sourceType = source.__type__;
     const table = source.__table__;
@@ -174,8 +202,13 @@ export default class Widget extends connect(store)(LitElement) {
   resized() {}
 
   stateChanged() {
-    if (this.hasAcceptedType()) {
-      const source = getSource(this.sourceKey);
+    if (!this.sourceManager) {
+      return;
+    }
+
+    const source = this.sourceManager.getSource(this.sourceKey);
+    if (source && this.isAcceptedType(source.__type__)) {
+      this.sourceType = source.__type__;
       this.sourceValue = this._generateSourceValue(source);
     }
   }

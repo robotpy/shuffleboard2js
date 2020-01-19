@@ -103,7 +103,7 @@ class DashboardApp extends LitElement {
 
   onSourceAdd(ev) {
     const dashboardsNode = this.shadowRoot.querySelector('robot-dashboards');
-    dashboardsNode.setSourceKey(ev.detail.key);
+    dashboardsNode.setSourceKey(ev.detail.providerName, ev.detail.key);
     dashboardsNode.sourceBeingAdded = false;
   }
 

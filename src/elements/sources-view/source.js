@@ -88,6 +88,7 @@ class SourceView extends LitElement {
   static get properties() {
     return {
       label: { type: String },
+      providerName: { type: String, attribute: 'provider-name' },
       source: { type: Object },
       level: { type: Number }
     };
@@ -95,10 +96,12 @@ class SourceView extends LitElement {
 
   constructor() {
     super();
-    this.values = {};
     this.dragImg = document.createElement("img");
     this.dragImg.src = fileImage;
     this.expanded = false;
+    this.label = '';
+    this.providerName = '';
+    this.source = {};
     this.level = 0;
   }
 
@@ -126,6 +129,7 @@ class SourceView extends LitElement {
       bubbles: true,
       composed: true, 
       detail: {
+        providerName: this.providerName,
         key: sourceKey,
         type: sourceType
       }
@@ -213,6 +217,7 @@ class SourceView extends LitElement {
                 label="${name}" 
                 .source="${{...source}}"
                 level="${this.level + 1}"
+                provider-name="${this.providerName}"
               >
               </source-view>
             `)}

@@ -1,6 +1,6 @@
-const { LitElement, html, css } = dashboard.lit;
+const { Widget, html, css } = dashboard.lit;
 
-class BooleanBox extends LitElement {
+class BooleanBox extends Widget {
 
   static get styles() {
     return css`
@@ -40,10 +40,10 @@ class BooleanBox extends LitElement {
   updated() {
     const backgroundNode = this.shadowRoot.querySelector('[part=box]');
     let backgroundColor = this.defaultColor;
-    if (this.table === true) {
+    if (this.sourceValue == true) {
       backgroundColor = this.trueColor;
     }
-    else if (this.table === false) {
+    else if (this.sourceValue == false) {
       backgroundColor = this.falseColor;
     }
     backgroundNode.style.setProperty('--box-color', backgroundColor);
@@ -62,6 +62,6 @@ dashboard.registerWidget('boolean-box', {
   class: BooleanBox,
   label: 'Boolean Box',
   category: 'Basic',
-  acceptedTypes: ['boolean'],
+  acceptedTypes: ['Boolean'],
   image: require('./boolean-box.png')
 });

@@ -8,6 +8,11 @@ export function registerWidget(widgetType, config = {}) {
     get() {
       return {
         ...widgetProperties,
+        sourceProvider: {
+          type: String,
+          attribute: 'source-provider',
+          reflect: true
+        },
         sourceKey: {
           type: String,
           attribute: 'source-key',
@@ -72,28 +77,20 @@ export function removeWidget(widgetId) {
   };
 }
 
-export function clearSources() {
+export function clearSources(providerName) {
   return {
-    type: ActionTypes.CLEAR_SOURCES
+    type: ActionTypes.CLEAR_SOURCES,
+    payload: {
+      providerName
+    }
   };
 };
 
-export function sourcesChanged() {
-
-  let sourceChanges = {};
-
-  if (arguments.length === 1) {
-    sourceChanges = arguments[0];
-  } 
-  else {
-    const key = arguments[0];
-    const value = arguments[1];
-    sourceChanges[key] = value;
-  }
-
+export function sourcesChanged(providerName, sourceChanges) {
   return {
     type: ActionTypes.SOURCES_CHANGED,
     payload: {
+      providerName,
       sourceChanges
     }
   };

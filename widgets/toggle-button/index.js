@@ -1,6 +1,6 @@
-const { LitElement, html, css } = dashboard.lit;
+const { Widget, html, css } = dashboard.lit;
 
-class ToggleButton extends LitElement {
+class ToggleButton extends Widget {
 
   static get styles() {
     return css`
@@ -31,24 +31,25 @@ class ToggleButton extends LitElement {
   }
 
   updated() {
-    if (this.ntRoot) {
-      this.value = this.table;
+    if (this.hasSource()) {
+      this.value = this.sourceValue;
     }
   }
 
   onClick() {
-    if (this.isNtType('boolean')) {
-      NetworkTables.putValue(this.ntRoot, !this.value);
+    const newValue = this.sourceValue == true ? false : true;
+    if (this.sourceType === 'Boolean') {
+      this.sourceValue = newValue;
     }
     else {
-      this.value = !this.value;
+      this.value = newValue;
     }
   };
 
   render() {
     return html`   
       <vaadin-button 
-        theme="${this.theme} ${this.value ? 'primary' : ''}"
+        theme="${this.theme} ${this.value == true ? 'primary' : ''}"
         part="button"
         @click="${this.onClick}"
       >
@@ -63,6 +64,6 @@ dashboard.registerWidget('toggle-button', {
   class: ToggleButton,
   label: 'Toggle Button',
   category: 'Basic',
-  acceptedTypes: ['boolean'],
+  acceptedTypes: ['Boolean'],
   image: require('./toggle-button.png')
 });

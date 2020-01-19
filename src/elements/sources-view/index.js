@@ -39,17 +39,30 @@ class SourcesView extends connect(store)(LitElement) {
 
   static get properties() {
     return {
-      sources: { type: Object }
+      sources: { type: Object },
+      providerName : { type: String, attribute: 'provider-name' }
     };
   }
 
   constructor() {
     super();
     this.sources = {};
+    this.providerName = null;
+  }
+
+  get providerName() {
+    return this._providerName;
+  }
+
+  set providerName(value) {
+    const oldValue = this._providerName;
+    this._providerName = value;
+    this.requestUpdate('providerName', oldValue);
+    this.sources = dashboard.store.getState().sources[value] || {};
   }
 
   stateChanged(state) {
-    this.sources = state.sources;
+    this.sources = state.sources[this.providerName] || {};
   }
 
   render() {
@@ -59,9 +72,10 @@ class SourcesView extends connect(store)(LitElement) {
         <span class="value">Value</span>
       </header>
 
-      ${map(this.sources.__table__, (source, name) => html`
+      ${map(this.sources.__table__ || [], (source, name) => html`
         <source-view 
           label="${name}" 
+          provider-name="${this.providerName}"
           .source="${{...source}}"
         >
         </source-view>

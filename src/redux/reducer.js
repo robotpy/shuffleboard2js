@@ -1,16 +1,17 @@
 import * as ActionTypes from "./action-types";
-import { set, forEach } from 'lodash';
-import { normalizeKey } from '../sources';
+import { forEach, isEmpty } from 'lodash';
+import { normalizeKey } from '../source-managers';
 
 const initialState = {
-  sources: {
-    __normalizedKey__: undefined,
-    __key__: undefined,
-    __value__: undefined,
-    __type__: undefined,
-    __name__: undefined,
-    __table__: {}
-  },
+  // sources: {
+  //   __normalizedKey__: undefined,
+  //   __key__: undefined,
+  //   __value__: undefined,
+  //   __type__: undefined,
+  //   __name__: undefined,
+  //   __table__: {}
+  // },
+  sources: {},
   widgets: {
     categories: ['Unknown'],
     registered: {},
@@ -73,14 +74,27 @@ const rootReducer = (state = initialState, action) => {
 
     case ActionTypes.SOURCES_CHANGED:
 
-      let sources = { ...state.sources };
-      let { sourceChanges } = action.payload;
+      let { sourceChanges, providerName } = action.payload;
+      let sources = { ...state.sources[providerName] };
+
+      if (isEmpty(sources)) {
+        sources = {
+          __normalizedKey__: undefined,
+          __key__: undefined,
+          __value__: undefined,
+          __type__: undefined,
+          __name__: undefined,
+          __table__: {}
+        };
+      }
 
       forEach(sourceChanges, ({ value, type, name }, key) => {
         const normalizedKey = normalizeKey(key);
         const keyParts = normalizedKey.split('/');
 
         let table = sources.__table__;
+
+        //console.log("SOURCES:", sources);
 
         keyParts.forEach((keyPart, index) => {
           const inSources = keyPart in table;
@@ -122,20 +136,25 @@ const rootReducer = (state = initialState, action) => {
       return {
         ...state,
         sources: {
-          ...sources
+          ...state.sources,
+          [providerName]: sources
         }
       };
 
     case ActionTypes.CLEAR_SOURCES:
+      
       return {
         ...state,
         sources: {
-          __normalizedKey__: undefined,
-          __key__: undefined,
-          __value__: undefined,
-          __type__: undefined,
-          __name__: undefined,
-          __table__: {}
+          ...state.sources,
+          [action.payload.providerName]: {
+            __normalizedKey__: undefined,
+            __key__: undefined,
+            __value__: undefined,
+            __type__: undefined,
+            __name__: undefined,
+            __table__: {}
+          }
         }
       };
 

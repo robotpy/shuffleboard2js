@@ -11,6 +11,7 @@ import * as storage from './storage';
 import * as Lit from 'lit-element';
 import * as mouse from './mouse';
 import * as sourceProviders from './source-providers';
+import * as sourceManagers from './source-managers';
 
 require('./require-extensions');
 require('./menu');
@@ -35,5 +36,6 @@ window.dashboard = {
     Dashboard
   },
   mouse,
-  sourceProviders
+  sourceProviders,
+  sourceManagers
 };
