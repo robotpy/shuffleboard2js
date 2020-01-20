@@ -1,8 +1,12 @@
 import { sourcesChanged } from './redux/actions';
 import { forEach, camelCase } from 'lodash';
-import { has as hasProvider } from './source-providers'
+import { 
+  has as hasProvider, 
+  hasType as hasProviderType,
+  add as addProvider 
+} from './source-providers'
 import store from './redux/store';
-import { removeSources } from './redux/actions';
+import { initSources, removeSources } from './redux/actions';
 
 let managers = {};
 
@@ -14,11 +18,17 @@ export const get = (providerName) => {
   return managers[providerName];
 };
 
-export const add = (providerName) => {
-  if (has(providerName) || !hasProvider(providerName)) {
+export const add = (providerType, providerName, settings) => {
+  providerName = providerName || providerType;
+  if (
+    has(providerName) 
+    || hasProvider(providerName) 
+    || !hasProviderType(providerType)
+  ) {
     return;
   }
-  managers[providerName] = new SourceManager(providerName);
+  managers[providerName] = new SourceManager(providerType, providerName, settings);
+  store.dispatch(initSources(providerName));
 };
 
 export const remove = (providerName) => {
@@ -40,9 +50,11 @@ export const normalizeKey = (key) => {
 
 class SourceManager {
 
-  constructor(providerName) {
+  constructor(providerType, providerName, settings) {
     this.providerName = providerName;
-    this.provider = dashboard.sourceProviders.get(providerName);
+    this.provider = addProvider(
+      providerType, providerName, settings
+    );
     this.sourceUpdates = {};
 
     this.provider.updateFromProvider(this.updateSource.bind(this));

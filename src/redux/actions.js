@@ -77,6 +77,15 @@ export function removeWidget(widgetId) {
   };
 }
 
+export function initSources(providerName) {
+  return {
+    type: ActionTypes.INIT_SOURCES,
+    payload: {
+      providerName
+    }
+  };
+}
+
 export function clearSources(providerName) {
   return {
     type: ActionTypes.CLEAR_SOURCES,

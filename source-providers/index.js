@@ -1,2 +1,2 @@
 require('./networktables');
-require('./example');
+require('./preview');

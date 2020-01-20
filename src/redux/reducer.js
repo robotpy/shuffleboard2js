@@ -3,14 +3,6 @@ import { forEach, isEmpty } from 'lodash';
 import { normalizeKey } from '../source-managers';
 
 const initialState = {
-  // sources: {
-  //   __normalizedKey__: undefined,
-  //   __key__: undefined,
-  //   __value__: undefined,
-  //   __type__: undefined,
-  //   __name__: undefined,
-  //   __table__: {}
-  // },
   sources: {},
   widgets: {
     categories: ['Unknown'],
@@ -69,6 +61,29 @@ const rootReducer = (state = initialState, action) => {
             ...state.widgets.registered,
             [action.payload.widgetType]: action.payload.config
           }
+        }
+      };
+
+    case ActionTypes.INIT_SOURCES:
+
+      let newSources = { ...state.sources[action.payload.providerName] };
+
+      if (isEmpty(newSources)) {
+        newSources = {
+          __normalizedKey__: undefined,
+          __key__: undefined,
+          __value__: undefined,
+          __type__: undefined,
+          __name__: undefined,
+          __table__: {}
+        };
+      }
+
+      return {
+        ...state,
+        sources: {
+          ...state.sources,
+          [action.payload.providerName]: newSources
         }
       };
 

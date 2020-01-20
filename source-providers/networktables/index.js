@@ -1,8 +1,7 @@
 const NetworkTables = require('./networktables');
-const provider = require('./provider.js');
+const NetworkTablesProvider = require('./provider.js');
 require('./settings-element');
 
-dashboard.sourceProviders.add('NetworkTables', provider);
-NetworkTables.connect(dashboard.storage.get('robotIp', 'localhost'));
+dashboard.sourceProviders.addType('NetworkTables', NetworkTablesProvider);
 window.NetworkTables = NetworkTables;
 

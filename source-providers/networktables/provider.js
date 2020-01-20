@@ -1,8 +1,20 @@
 const { isString, isNumber, isBoolean, isArray } = _;
 const NetworkTables = require('./networktables.js');
+const { SourceProvider } = dashboard.sourceProviders;
 
-module.exports = {
-	updateFromProvider: updateSource => {
+module.exports = class NetworkTablesProvider extends SourceProvider {
+
+	get settingsElement() {
+		return 'networktables-settings';
+	}
+
+	constructor(settings) {
+		super();
+		this.address = settings.address || 'localhost';
+		NetworkTables.connect(this.address);
+	}
+
+	updateFromProvider(updateSource) {
 		NetworkTables.addGlobalListener((key, value) => {
 			if (key.endsWith('/.type')) {
 				updateSource(key, {
@@ -42,9 +54,9 @@ module.exports = {
         });
 			}
 	  }, true);
-  },
-  updateFromDashboard: (key, value) => {
+	}
+
+	updateFromDashboard(key, value) {
 		NetworkTables.putValue(key, value);
-  },
-  settingsElement: 'networktables-settings'
-};
+  }
+}
