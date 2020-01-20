@@ -1,17 +1,38 @@
 const { isString, isNumber, isBoolean, isArray } = _;
 const NetworkTables = require('./networktables.js');
+const SettingsElement = require('./settings-element');
 const { SourceProvider } = dashboard.sourceProviders;
 
 module.exports = class NetworkTablesProvider extends SourceProvider {
 
-	get settingsElement() {
-		return 'networktables-settings';
+	static get typeName() {
+		return 'NetworkTables';
+	}
+
+	static get settingsElement() {
+		return SettingsElement;
+	}
+
+	static get settingsDefaults() {
+		return {
+			address: 'localhost'
+		};
 	}
 
 	constructor(settings) {
 		super();
-		this.address = settings.address || 'localhost';
+		this.address = dashboard.storage.get('robotAddress', settings.address);
 		NetworkTables.connect(this.address);
+	}
+
+	get settings() {
+		return {
+			address: this.address
+		}
+	}
+
+	onSettingsChange(settings) {
+		this.address = settings.address;
 	}
 
 	updateFromProvider(updateSource) {

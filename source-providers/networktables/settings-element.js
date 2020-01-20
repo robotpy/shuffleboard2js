@@ -1,7 +1,15 @@
-const { LitElement, html } = dashboard.lit;
+const { ProviderSettings, html, css } = dashboard.lit;
 const NetworkTables = require('./networktables');
 
-class NetworkTablesSettings extends LitElement {
+module.exports = class NetworkTablesSettings extends ProviderSettings {
+
+  static get styles() {
+    return css`
+      vaadin-text-field {
+        padding-top: 3px;
+      }
+    `
+  }
 
   static get properties() { 
     return {
@@ -11,40 +19,33 @@ class NetworkTablesSettings extends LitElement {
 
   constructor() {
     super();
-    this.robotIp = dashboard.storage.get('robotIp', 'localhost');
     
     // Keep trying to connect if a connection hasn't been found
     setInterval(() => {
       if (!NetworkTables.isRobotConnected()) {
-        NetworkTables.connect(this.robotIp);
+        NetworkTables.connect(this.settings.address);
       }
     }, 500);
 
     NetworkTables.addRobotConnectionListener(connected => {
-      dashboard.store.dispatch(dashboard.actions.clearSources());
+      dashboard.store.dispatch(dashboard.actions.clearSources('NetworkTables'));
     }, true);
   }
 
-  onRobotIpChange(ev) {
-    this.robotIp = ev.target.value;
-    dashboard.store.dispatch(dashboard.actions.clearSources());
-    NetworkTables.connect(this.robotIp);
-    dashboard.storage.set('robotIp', this.robotIp);
+  onAddressChange(ev) {
+    this.settings.address = ev.target.value;
+    dashboard.store.dispatch(dashboard.actions.clearSources('NetworkTables'));
+    NetworkTables.connect(this.settings.address);
+    dashboard.storage.set('robotAddress', this.settings.address);
   };
-
-  onOpen() {
-    this.robotIp = dashboard.storage.get('robotIp', 'localhost');
-  }
 
   render() {
     return html`
       <vaadin-text-field 
         label="Server"
-        .value="${this.robotIp}"
-        @change="${this.onRobotIpChange}"
+        .value="${this.settings.address}"
+        @change="${this.onAddressChange}"
       ></vaadin-text-field>
     `;
   }
 }
-
-customElements.define('networktables-settings', NetworkTablesSettings);

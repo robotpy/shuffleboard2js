@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+import './source-provider-settings';
 import './components/dashboard-modal';
 
 class SourceProviderSettingsModal extends LitElement {
@@ -11,7 +12,7 @@ class SourceProviderSettingsModal extends LitElement {
 
   constructor() {
     super();
-    
+    this.settingsNode = null;
   }
 
   static get styles() {
@@ -22,6 +23,7 @@ class SourceProviderSettingsModal extends LitElement {
 
   open() {
     const modalNode = this.shadowRoot.getElementById('modal');
+    this.settingsNode.requestUpdate();
     modalNode.open();
   }
 
@@ -30,10 +32,14 @@ class SourceProviderSettingsModal extends LitElement {
     modalNode.close();
   }
 
+  firstUpdated() {
+    this.settingsNode = this.shadowRoot.querySelector('source-provider-settings');
+  }
+
   render() {
     return html`
       <dashboard-modal id="modal" title="Source Provider Settings">
-        <p>Settings</p>
+        <source-provider-settings></source-provider-settings>
       </dashboard-modal>
     `;
   }

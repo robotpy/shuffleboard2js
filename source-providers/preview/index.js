@@ -3,14 +3,24 @@ const { SourceProvider } = dashboard.sourceProviders;
 
 class PreviewProvider extends SourceProvider {
 
+	static get typeName() {
+		return 'Preview';
+	}
+
+	static get settingsDefaults() {
+		return {
+			sources: {}
+		};
+  }
+
 	constructor(settings) {
 		super();
-		this.settings = settings;
+		this.initSources = settings.sources;
 		this.sources = {};
 	}
 
 	updateFromProvider(updateSource) {
-		this.sources = new Proxy(this.settings.sources || {}, {
+		this.sources = new Proxy(this.initSources || {}, {
 			get: (sources, key) => {
 				return sources[key];
 			},
@@ -62,4 +72,4 @@ class PreviewProvider extends SourceProvider {
 	}
 }
 
-dashboard.sourceProviders.addType('Preview', PreviewProvider);
+dashboard.sourceProviders.addType(PreviewProvider);

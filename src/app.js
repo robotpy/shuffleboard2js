@@ -1,6 +1,7 @@
 import './elements/components';
 import Widget from './elements/widget';
 import Dashboard from './elements/dashboard';
+import ProviderSettings from './elements/provider-settings';
 import store from "./redux/store";
 import riot from 'riot';
 import './elements/dashboard-app';
@@ -33,7 +34,8 @@ window.dashboard = {
   lit: {
     ...Lit,
     Widget,
-    Dashboard
+    Dashboard,
+    ProviderSettings
   },
   mouse,
   sourceProviders,

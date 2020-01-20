@@ -83,7 +83,6 @@ class DashboardModal extends LitElement {
         <vaadin-button style="align-self: start;" theme="icon large tertiary" aria-label="Close modal">
           <iron-icon icon="lumo:cross" slot="prefix"></iron-icon>
         </vaadin-button>  
-        <hr />
       `;
       const headerCloseButtonNode = headerNode.querySelector('vaadin-button');
       headerCloseButtonNode.addEventListener('click', () => {

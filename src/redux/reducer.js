@@ -155,6 +155,12 @@ const rootReducer = (state = initialState, action) => {
       };
 
     case ActionTypes.CLEAR_SOURCES:
+
+      const shouldClear = action.payload.providerName in state.sources;
+
+      if (!shouldClear) {
+        return state;
+      }
       
       return {
         ...state,

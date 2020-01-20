@@ -1,13 +1,55 @@
-import { isString, isNumber, isBoolean, isArray } from 'lodash';
+import { 
+  isString, 
+  isNumber, 
+  isBoolean, 
+  isArray, 
+  isNull, 
+  kebabCase 
+} from 'lodash';
+import ProviderSettings from './elements/provider-settings';
 
 const providerTypes = {};
 const providers = {};
 
+
+const getSettingsElementName = constructor => {
+  const { settingsElement, typeName } = constructor;
+  if (isNull(settingsElement) || isNull(typeName)) {
+    return null;
+  }
+  const isProviderSettings = 
+    settingsElement.prototype instanceof ProviderSettings;
+
+  if (!isProviderSettings) {
+    return null;
+  }
+
+  return kebabCase(typeName) + '-settings'; 
+};
+
 export class SourceProvider {
   
-  get settingsElement() {
-    return 'div';
+  static get typeName() {
+    return null;
   }
+
+  static get settingsElement() {
+    return null;
+  }
+
+  static get settingsDefaults() {
+		return {};
+  }
+
+  get settings() {
+    return {};
+  }
+
+  get settingsElementName() {
+    return getSettingsElementName(this.constructor);
+  }
+
+  onSettingsChange(settings) {}
 
   updateFromProvider() {}
   updateFromDashboard() {}
@@ -26,7 +68,9 @@ export class SourceProvider {
   }
 }
 
-export const addType = (typeName, constructor) => {
+export const addType = (constructor) => {
+
+  const { typeName } = constructor;
 
   if (hasType(typeName)) {
     return;
@@ -34,6 +78,28 @@ export const addType = (typeName, constructor) => {
 
   if (constructor.prototype instanceof SourceProvider) {
     providerTypes[typeName] = constructor;
+    const settingsElementName = getSettingsElementName(constructor);
+    if (!isNull(settingsElementName)) {
+
+      const { settingsElement } = constructor;
+      const settingsElementProperties = constructor.properties || {};
+
+      Object.defineProperty(settingsElement, 'properties', {
+        get() {
+          return {
+            ...settingsElementProperties,
+            settings: {
+              type: Object
+            }
+          }
+        }
+      });
+
+      customElements.define(
+        settingsElementName, 
+        constructor.settingsElement
+      );
+    }
   }
 }
 
