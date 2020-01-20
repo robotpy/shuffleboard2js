@@ -42,6 +42,11 @@ export const getWidgetSource = (widgetId) => {
   return lodashGet(config, `widgetSources["${widgetId}"]`, null);
 };
 
+export const getProviderSettings = (providerName) => {
+  const config = get('dashboardConfig');
+  return lodashGet(config, `providerSettings["${providerName}"]`, {});
+};
+
 export const getDefaultWidgetFolder = () => {
   return get('defaultWidgetFolder');
 };

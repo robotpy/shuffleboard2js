@@ -3,6 +3,10 @@ import { readFileSync, writeFileSync, existsSync, watch } from 'fs';
 import { join } from 'path';
 import { dirname } from 'path';
 import './no-dashboard';
+import { 
+  get as getProvider, 
+  getNames as getProviderNames 
+} from '../source-providers';
 const dialog = require('electron').remote.dialog;
 
 class RobotDashboards extends LitElement {
@@ -118,7 +122,8 @@ class RobotDashboards extends LitElement {
 
   async saveDashboardConfig() {
     const config = {
-      widgetSources: {}
+      widgetSources: {},
+      providerSettings: {}
     };
 
     for (let widgetId in this.widgets) {
@@ -127,6 +132,11 @@ class RobotDashboards extends LitElement {
         sourceProvider: this.widgets[widgetId].sourceProvider
       };
     }
+
+    getProviderNames().map(name => {
+      const provider = getProvider(name);
+      config.providerSettings[name] = provider.settings;
+    });
 
     const configPath = dashboard.storage.getDashboardConfigPath();
     try {

@@ -1,16 +1,14 @@
 import { LitElement } from 'lit-element';
 import { isArray } from 'lodash';
 import { add as addManager } from '../source-managers';
+import { getProviderSettings } from '../storage';
 
 export default class Dashboard extends LitElement {
 
   constructor() {
     super();
     let providers = [{ 
-      type: 'NetworkTables',
-      settings: {
-        address: 'localhost'
-      }
+      type: 'NetworkTables'
     }];
     if (!isArray(this.providers) && typeof this.providers === 'object') {
       providers = [this.providers];
@@ -19,7 +17,10 @@ export default class Dashboard extends LitElement {
     }
 
     for (let { type, name, settings } of providers) {
-      addManager(type, name, settings);
+      addManager(type, name, {
+        ...settings,
+        ...getProviderSettings(name)
+      });
     }
   }
 }
