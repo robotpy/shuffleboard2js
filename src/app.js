@@ -3,7 +3,6 @@ import Widget from './elements/widget';
 import Dashboard from './elements/dashboard';
 import ProviderSettings from './elements/provider-settings';
 import store from "./redux/store";
-import riot from 'riot';
 import './elements/dashboard-app';
 import * as actions from  './redux/actions';
 import toastr from 'toastr';
@@ -13,6 +12,7 @@ import * as Lit from 'lit-element';
 import * as mouse from './mouse';
 import * as sourceProviders from './source-providers';
 import * as sourceManagers from './source-managers';
+import * as events from './events';
 
 require('./require-extensions');
 require('./menu');
@@ -20,7 +20,7 @@ require('./menu');
 window.dashboard = {
   store,
   actions,
-  events: riot.observable(),
+  events,
   toastr,
   CurvedArrow,
   registerWidget: function(tagName, config) {

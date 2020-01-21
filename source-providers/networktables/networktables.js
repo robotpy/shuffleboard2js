@@ -67,6 +67,7 @@ function onFlagChange({ key, flags }) {
 module.exports = {
 
     connect(address, port) {
+        robotAddress = address;
         const callback = (con, err) => {
             connected = con;
             connectionListeners.map(e => e(con));

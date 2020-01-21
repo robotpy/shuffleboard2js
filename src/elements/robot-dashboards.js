@@ -1,13 +1,13 @@
 import { LitElement, html, css } from 'lit-element';
 import { readFileSync, writeFileSync, existsSync, watch } from 'fs';
-import { join } from 'path';
 import { dirname } from 'path';
 import './no-dashboard';
 import { 
   get as getProvider, 
   getNames as getProviderNames 
 } from '../source-providers';
-const dialog = require('electron').remote.dialog;
+const { dialog } = require('electron').remote;
+
 
 class RobotDashboards extends LitElement {
 
@@ -97,14 +97,14 @@ class RobotDashboards extends LitElement {
           }
         });
 
-        watch(join(process.cwd(), './widgets'), { recursive: true }, () => {
-          window.location.reload();
-        });
-
-        watch(join(process.cwd(), './source-providers'), { recursive: true }, () => {
-          window.location.reload();
-        });
-
+        try {
+          if (existsSync(join(process.cwd(), 'watch.js'))) {
+            window.require('../watch');
+          }
+        } catch(e) {
+          
+        }
+        
         dashboard.storage.setDashboardConfig(
           this.getSavedDashboardConfig()
         );
@@ -113,7 +113,7 @@ class RobotDashboards extends LitElement {
       }
     }
     catch(e) {
-      console.error('Error opening dashboard', e.message);
+      console.error('Error opening dashboard', e);
     }
     window.require('../widgets');
     window.require('../source-providers');

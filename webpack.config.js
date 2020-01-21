@@ -29,7 +29,7 @@ module.exports = (env = {}) => {
     entry: ['babel-polyfill', './app.js'],
     output: {
       filename: "[name].bundle.js",
-      path: path.resolve(__dirname, 'dist')
+      path: path.resolve(__dirname, 'built-app')
     },
     resolve: {
       alias: {
@@ -104,10 +104,13 @@ module.exports = (env = {}) => {
         { context: 'assets/media/', from: '**', to: 'assets/media/' }
       ]),
       new webpack.DefinePlugin(envKeys),
-      ElectronReloadWebpackPlugin()
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+      }),
+      ElectronReloadWebpackPlugin(),
     ],
     devServer: {
-      contentBase: path.resolve(__dirname, "dist/assets/media"),
+      contentBase: path.resolve(__dirname, "built-app/assets/media"),
       stats: 'errors-only',
       open: true,
       port: 12000,

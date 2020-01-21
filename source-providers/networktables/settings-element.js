@@ -19,17 +19,7 @@ module.exports = class NetworkTablesSettings extends ProviderSettings {
 
   constructor() {
     super();
-    
-    // Keep trying to connect if a connection hasn't been found
-    setInterval(() => {
-      if (!NetworkTables.isRobotConnected()) {
-        NetworkTables.connect(this.settings.address);
-      }
-    }, 500);
 
-    NetworkTables.addRobotConnectionListener(connected => {
-      dashboard.store.dispatch(dashboard.actions.clearSources('NetworkTables'));
-    }, true);
   }
 
   onAddressChange(ev) {

@@ -7,8 +7,38 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -d --config webpack.config.js --watch",
     "build:prod": "webpack -p --config webpack.config.js",
-    "watch": "webpack --watch -d --config webpack.config.js",
-    "dev": "webpack-dev-server -d --config webpack.config.js --env.socket_port=8888"
+    "pack": "build --dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "yourappid",
+    "files": [
+      "!watch.js"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "NSIS",
+      "icon": "build/icon.ico"
+    }
   },
   "repository": {
     "type": "git",
@@ -27,7 +57,6 @@
     "@babel/plugin-transform-regenerator": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.3.1",
-    "@babel/preset-react": "^7.0.0",
     "@babel/types": "^7.0.0",
     "babel-loader": "^8.0.4",
     "babel-polyfill": "^6.26.0",
@@ -38,7 +67,7 @@
     "css-loader": "^0.28.11",
     "dotenv": "^6.1.0",
     "electron": "^7.0.0",
-    "electron-connect": "^0.6.3",
+    "electron-builder": "^22.2.0",
     "electron-reload-webpack-plugin": "^2.0.4",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
@@ -46,13 +75,6 @@
     "html-webpack-plugin": "^3.2.0",
     "node-sass": "^4.9.0",
     "npm-run-all": "^4.1.5",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0",
-    "riot": "^3.12.0",
-    "riot-hot-reload": "^1.0.0",
-    "riot-tag-loader": "^2.1.0",
     "sass-loader": "^7.0.3",
     "script-ext-html-webpack-plugin": "^2.1.4",
     "style-loader": "^0.21.0",
@@ -64,20 +86,18 @@
   "dependencies": {
     "@material/mwc-drawer": "^0.12.0",
     "@vaadin/vaadin": "^14.1.3",
-    "axios": "^0.18.1",
-    "bootstrap": "^4.3.1",
     "codemirror": "^5.50.2",
     "codemirror-grammar-mode": "^0.1.9",
-    "dsmorse-gridster": "^0.8.0",
+    "electron-connect": "^0.6.3",
+    "electron-is-dev": "^1.1.0",
     "jquery": "^3.4.0",
     "lit-element": "^2.2.1",
     "lodash": "^4.17.13",
     "observable-slim": "^0.1.4",
     "open-iconic": "^1.1.1",
     "path-webpack": "0.0.3",
-    "popper.js": "^1.14.4",
     "pwa-helpers": "^0.9.1",
-    "riot-redux-connect": "^1.1.8",
+    "redux": "^4.0.0",
     "svg-gauge": "^1.0.5",
     "toastr": "^2.1.4",
     "wpilib-nt-client": "^1.7.1"

@@ -22,7 +22,17 @@ module.exports = class NetworkTablesProvider extends SourceProvider {
 	constructor(settings) {
 		super();
 		this.address = dashboard.storage.get('robotAddress', settings.address);
-		NetworkTables.connect(this.address);
+		
+		// Keep trying to connect if a connection hasn't been found
+    setInterval(() => {
+      if (!NetworkTables.isRobotConnected()) {
+        NetworkTables.connect(this.address);
+      }
+    }, 500);
+
+    NetworkTables.addRobotConnectionListener(connected => {
+      dashboard.store.dispatch(dashboard.actions.clearSources('NetworkTables'));
+    }, true);
 	}
 
 	get settings() {
