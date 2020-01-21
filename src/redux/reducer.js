@@ -75,7 +75,7 @@ const rootReducer = (state = initialState, action) => {
           __value__: undefined,
           __type__: undefined,
           __name__: undefined,
-          __table__: {}
+          __sources__: {}
         };
       }
 
@@ -90,16 +90,16 @@ const rootReducer = (state = initialState, action) => {
     case ActionTypes.SOURCES_CHANGED:
 
       let { sourceChanges, providerName } = action.payload;
-      let sources = { ...state.sources[providerName] };
+      let sourcesRoot = { ...state.sources[providerName] };
 
-      if (isEmpty(sources)) {
-        sources = {
+      if (isEmpty(sourcesRoot)) {
+        sourcesRoot = {
           __normalizedKey__: undefined,
           __key__: undefined,
           __value__: undefined,
           __type__: undefined,
           __name__: undefined,
-          __table__: {}
+          __sources__: {}
         };
       }
 
@@ -107,41 +107,41 @@ const rootReducer = (state = initialState, action) => {
         const normalizedKey = normalizeKey(key);
         const keyParts = normalizedKey.split('/');
 
-        let table = sources.__table__;
+        let sources = sourcesRoot.__sources__;
 
         keyParts.forEach((keyPart, index) => {
-          const inSources = keyPart in table;
+          const inSources = keyPart in sources;
 
           if (!inSources) {
-            table[keyPart] = {
+            sources[keyPart] = {
               __normalizedKey__: undefined,
               __key__: undefined,
               __value__: undefined,
               __type__: undefined,
               __name__: undefined,
-              __table__: {}
+              __sources__: {}
             }
           }
 
           if (keyParts.length - 1 === index) {
 
-            table[keyPart].__normalizedKey__ = normalizedKey;
-            table[keyPart].__key__ = key;
+            sources[keyPart].__normalizedKey__ = normalizedKey;
+            sources[keyPart].__key__ = key;
 
             if (typeof key !== 'undefined') {
-              table[keyPart].__key__ = key;
+              sources[keyPart].__key__ = key;
             }
             if (typeof value !== 'undefined') {
-              table[keyPart].__value__ = value;
+              sources[keyPart].__value__ = value;
             }
             if (typeof type !== 'undefined') {
-              table[keyPart].__type__ = type;
+              sources[keyPart].__type__ = type;
             }
             if (typeof name !== 'undefined') {
-              table[keyPart].__name__ = name;
+              sources[keyPart].__name__ = name;
             }
           } else {
-            table = table[keyPart].__table__;
+            sources = sources[keyPart].__sources__;
           }
         });
       });
@@ -150,7 +150,7 @@ const rootReducer = (state = initialState, action) => {
         ...state,
         sources: {
           ...state.sources,
-          [providerName]: sources
+          [providerName]: sourcesRoot
         }
       };
 
@@ -172,7 +172,7 @@ const rootReducer = (state = initialState, action) => {
             __value__: undefined,
             __type__: undefined,
             __name__: undefined,
-            __table__: {}
+            __sources__: {}
           }
         }
       };

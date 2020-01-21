@@ -144,8 +144,8 @@ class SourceView extends LitElement {
   }
 
   hasSources() {
-    const table = this.source.__table__;
-    return table && Object.keys(table).length  > 0;
+    const sources = this.source.__sources__;
+    return sources && Object.keys(sources).length  > 0;
   }
 
   hasValue() {
@@ -212,7 +212,7 @@ class SourceView extends LitElement {
         </header>
         ${this.hasSources() && this.expanded ? html`
           <div class="sources">
-            ${map(this.source.__table__, (source, name) => html`
+            ${map(this.source.__sources__, (source, name) => html`
               <source-view 
                 label="${name}" 
                 .source="${{...source}}"

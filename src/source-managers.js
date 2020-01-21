@@ -80,25 +80,25 @@ class SourceManager {
   }
 
   getSource(key = '') {
-    const sources = dashboard.store.getState().sources[this.providerName];
+    let sourcesRoot = dashboard.store.getState().sources[this.providerName];
 
-    if (typeof sources === 'undefined') {
+    if (typeof sourcesRoot === 'undefined') {
       return null;
     }
 
     const keyParts = normalizeKey(key).split('/');
   
-    let table = sources.__table__;
+    let sources = sourcesRoot.__sources__;
   
     for (let index in keyParts) {
       const keyPart = keyParts[index];
   
       if (keyParts.length - 1 === parseInt(index)) {
-        return (keyPart in table) ? table[keyPart] : null;
+        return (keyPart in sources) ? sources[keyPart] : null;
       }
   
-      if (keyPart in table) {
-        table = table[keyPart].__table__;
+      if (keyPart in sources) {
+        sources = sources[keyPart].__sources__;
       } else {
         return null;
       }

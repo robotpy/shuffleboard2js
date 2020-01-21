@@ -149,7 +149,7 @@ export default class Widget extends connect(store)(LitElement) {
     const sourceProvider = getProvider(this.sourceProvider);
     const rawValue = source.__value__;
     const sourceType = source.__type__;
-    const table = source.__table__;
+    const sources = source.__sources__;
     let value = {};
 
     if (sourceType === 'Boolean') {
@@ -164,11 +164,11 @@ export default class Widget extends connect(store)(LitElement) {
 
     value.__generated__ = true;
 
-    forEach(table, (source, propertyName) => {
-      const tableValue = this._generateSourceValue(source);
+    forEach(sources, (source, propertyName) => {
+      const sourceValue = this._generateSourceValue(source);
       Object.defineProperty(value, propertyName, {
         get() {
-          return tableValue;
+          return sourceValue;
         },
         set(value) {
           const sourceKey = source.__key__;

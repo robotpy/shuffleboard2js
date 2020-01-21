@@ -72,7 +72,7 @@ class SourcesView extends connect(store)(LitElement) {
         <span class="value">Value</span>
       </header>
 
-      ${map(this.sources.__table__ || [], (source, name) => html`
+      ${map(this.sources.__sources__ || [], (source, name) => html`
         <source-view 
           label="${name}" 
           provider-name="${this.providerName}"
