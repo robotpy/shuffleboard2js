@@ -1,5 +1,4 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -38,18 +37,6 @@ module.exports = (env = {}) => {
     },
     module: {
       rules: [
-        {
-          test: /\.tag$/,
-          exclude: /node_modules/,
-          use: [{
-            loader: 'riot-tag-loader',
-            options: {
-              hot: true, // set it to true if you are using hmr
-              // add here all the other riot-compiler options riot.js.org/guide/compiler/
-              // template: 'pug' for example
-            }
-          }],
-        },
         { test: /\.html$/, use: ['html-loader'] },
         {
           test: /\.(scss|css)$/,
@@ -120,10 +107,6 @@ module.exports = (env = {}) => {
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
         "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
       }
-    },
-    externals: {
-      riot: 'riot',
-      jquery: 'jQuery'
     },
     devtool: 'inline-source-map'
   };

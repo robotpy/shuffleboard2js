@@ -1,4 +1,6 @@
 const { app, BrowserWindow } = require('electron');
+const { client } = require('electron-connect');
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -24,6 +26,8 @@ function createWindow () {
     // when you should delete the corresponding element.
     win = null;
   });
+
+  client.create(win);
 }
 
 // This method will be called when Electron has finished

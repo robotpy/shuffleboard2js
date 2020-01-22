@@ -1,3 +1,4 @@
+import './styles.css';
 import './elements/components';
 import Widget from './elements/widget';
 import Dashboard from './elements/dashboard';
@@ -6,6 +7,7 @@ import store from "./redux/store";
 import './elements/dashboard-app';
 import * as actions from  './redux/actions';
 import toastr from 'toastr';
+import 'toastr/build/toastr.css';
 import * as CurvedArrow from './curved-arrow';
 import * as storage from './storage';
 import * as Lit from 'lit-element';
@@ -16,6 +18,9 @@ import * as events from './events';
 
 require('./require-extensions');
 require('./menu');
+window.$ = window.jQuery = require('jquery');
+window.d3 = require('d3');
+
 
 window.dashboard = {
   store,

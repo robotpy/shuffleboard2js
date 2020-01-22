@@ -1,4 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
+const d3 = require('d3');
 
 class TableAxis extends LitElement {
 

@@ -88,6 +88,7 @@
     "@vaadin/vaadin": "^14.1.3",
     "codemirror": "^5.50.2",
     "codemirror-grammar-mode": "^0.1.9",
+    "d3": "^5.15.0",
     "electron-connect": "^0.6.3",
     "electron-is-dev": "^1.1.0",
     "jquery": "^3.4.0",

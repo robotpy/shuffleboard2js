@@ -1,3 +1,5 @@
+import $ from 'jQuery';
+
 let pageX = 0;
 let pageY = 0;
 let prevPageX = 0;

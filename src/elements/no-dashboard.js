@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import './text-editor';
+import './text-editor/index';
 
 const dashboardText = `
 const { LitElement, html, css } = dashboard.lit;

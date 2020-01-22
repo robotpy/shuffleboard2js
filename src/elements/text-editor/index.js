@@ -6,13 +6,12 @@ import '@vaadin/vaadin-lumo-styles';
 import CodeMirror from 'codemirror';
 window.CodeMirror = CodeMirror;
 
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
 require('codemirror-grammar-mode');
-require('../../vendor/codemirror-modes/google-javascript');
-require('../../vendor/codemirror-modes/google-html');
+require('./google-javascript');
+require('./google-html');
 require('codemirror/mode/css/css');
 
+const cssPath = require.resolve('codemirror/lib/codemirror.css');
 
 class TextEditor extends LitElement {
 
@@ -100,7 +99,7 @@ class TextEditor extends LitElement {
 
   render() {
     return html`
-      <link type="text/css" rel="stylesheet" href="${getStylesheetPath('node_modules/codemirror/lib/codemirror.css')}">
+      <link type="text/css" rel="stylesheet" href="${cssPath}">
       <div id="editor"></div>
     `;
   }

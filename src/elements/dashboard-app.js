@@ -44,6 +44,7 @@ class DashboardApp extends LitElement {
     const sourceProviderSettingsModalNode = this.shadowRoot.querySelector('source-provider-settings-modal');
     const drawerNode = this.shadowRoot.querySelector('mwc-drawer');
 
+    
     dashboard.events.on('fileMenuSave', () => {
       dashboardsNode.saveDashboardConfig();
     });

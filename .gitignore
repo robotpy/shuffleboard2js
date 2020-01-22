@@ -1,5 +1,6 @@
 *.py[cod]
 dist
+built-app
 build
 MANIFEST
 __pycache__
