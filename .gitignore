@@ -1,7 +1,7 @@
 *.py[cod]
 dist
-built-app
-build
+build/*
+!build/index.html
 MANIFEST
 __pycache__
 *.egg-info

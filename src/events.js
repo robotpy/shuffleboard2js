@@ -17,5 +17,3 @@ export const trigger = (eventName, ...args) => {
     });
   }
 };
-
-console.log('...');

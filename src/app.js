@@ -1,3 +1,6 @@
+import './require-extensions';
+import './menu';
+
 import './styles.css';
 import './elements/components';
 import Widget from './elements/widget';
@@ -16,8 +19,6 @@ import * as sourceProviders from './source-providers';
 import * as sourceManagers from './source-managers';
 import * as events from './events';
 
-require('./require-extensions');
-require('./menu');
 window.$ = window.jQuery = require('jquery');
 window.d3 = require('d3');
 

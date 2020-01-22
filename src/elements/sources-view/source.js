@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { map } from 'lodash';
-import fileImage from 'open-iconic/png/file-8x.png';
+const fileImage = window.require('open-iconic/png/file-8x.png');
 
 class SourceView extends LitElement {
 

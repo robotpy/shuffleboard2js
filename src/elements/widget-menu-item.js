@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import fileImage from 'open-iconic/png/file-8x.png';
+const fileImage = window.require('open-iconic/png/file-8x.png');
 
 class WidgetMenuItem extends LitElement {
 

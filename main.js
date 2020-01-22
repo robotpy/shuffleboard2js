@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const { client } = require('electron-connect');
+const isDev = require('electron-is-dev');
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -17,7 +18,7 @@ function createWindow () {
   });
 
   // and load the index.html of the app.
-  win.loadFile('built-app/index.html');
+  win.loadFile('build/index.html');
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -27,7 +28,9 @@ function createWindow () {
     win = null;
   });
 
-  client.create(win);
+  if (isDev) {
+    client.create(win);
+  }
 }
 
 // This method will be called when Electron has finished

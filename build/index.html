@@ -7,13 +7,17 @@
       if (typeof window.require === 'undefined') {
         const tarpRequireScript = document.createElement("script");
         tarpRequireScript.src = "../node_modules/@tarp/require/require.min.js";
-        document.body.prepend(tarpRequireScript);
+        document.body.append(tarpRequireScript);
         console.log("tarpRequireScript:", tarpRequireScript);
         tarpRequireScript.onload = () => {
           Tarp.require({
-            main: "./main.bundle.js"
+            main: "./app.js"
           });
         };
+      } else {
+        const appScript = document.createElement("script");
+        appScript.src = "./app.js";
+        document.body.append(appScript);
       }
     </script>
   </body>

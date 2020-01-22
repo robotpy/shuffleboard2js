@@ -13,7 +13,11 @@
   "build": {
     "appId": "yourappid",
     "files": [
-      "!watch.js"
+      "build/",
+      "node_modules/",
+      "source-providers/",
+      "widgets/",
+      "main.js"
     ],
     "dmg": {
       "contents": [
@@ -85,6 +89,7 @@
   },
   "dependencies": {
     "@material/mwc-drawer": "^0.12.0",
+    "@tarp/require": "^1.3.0",
     "@vaadin/vaadin": "^14.1.3",
     "codemirror": "^5.50.2",
     "codemirror-grammar-mode": "^0.1.9",
